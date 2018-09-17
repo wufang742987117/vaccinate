@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.invoicing.dao.BsInvoicingDao">
+    
+	<sql id="bsInvoicingColumns">
+		a.id AS "id",
+		a.product_id AS "productId",
+		a.vaccineid AS "vaccineid",
+		a.vacc_name AS "vaccName",
+		a.batchno AS "batchno",
+		a.specification AS "specification",
+		a.manufacturer AS "manufacturer",
+		a.vacc_exp_date AS "vaccExpDate",
+		a.sellprice AS "sellprice",
+		a.costprice AS "costprice",
+		a.old_storenum AS "oldStorenum",
+		a.new_storenum AS "newStorenum",
+		a.receive AS "receive",
+		a.consume AS "consume",
+		a.apply AS "apply",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.status AS "status",
+		a.localcode AS "localcode",
+		<!-- a.histroydate AS "histroydate" -->
+	</sql>
+	
+	<sql id="bsManageProductColumns">
+		p.sellprice AS "sellpriceNew",
+		p.costprice AS "costpriceNew"
+	</sql>
+	
+	<sql id="bsInvoicingJoins">
+		LEFT JOIN BS_MANAGE_PRODUCT p on p."ID" = a.product_id
+	</sql>
+    
+	<select id="get" resultType="BsInvoicing">
+		SELECT 
+			<include refid="bsInvoicingColumns"/>,
+			<include refid="bsManageProductColumns"/>
+		FROM bs_invoicing a
+		<include refid="bsInvoicingJoins"/>
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsInvoicing">
+		SELECT 
+			DISTINCT a.vaccineid AS "vaccineid",
+			a.vacc_name AS "vaccName",
+			a.batchno AS "batchno",
+			a.specification AS "specification",
+			a.manufacturer AS "manufacturer",
+			a.vacc_exp_date AS "vaccExpDate",
+			"NVL"(bk_a."OLD_STORENUM", 0) AS "oldStorenum",  /* 期初库存 */
+			"NVL"(bk_b."NEW_STORENUM", bi."NEW_STORENUM") AS "newStorenum",  /* 期末库存 */
+			bk_c."RECEIVE" AS "receive",  /* 入库 */
+			bk_d."CONSUME" AS "consume", /* 出库 */
+			bk_e."APPLY" AS "apply",   /* 使用 */
+			a.localcode AS "localcode",
+			<include refid="bsManageProductColumns"/>
+		FROM bs_invoicing a
+		<include refid="bsInvoicingJoins"/>
+		LEFT JOIN bs_invoicing bi ON BI.PRODUCT_ID = a.PRODUCT_ID AND "TRUNC"(BI.histroydate) = "TRUNC"(SYSDATE - 1) 
+		LEFT JOIN 
+		(
+			/* 期初库存 */
+			SELECT
+				a."PRODUCT_ID" AS "PRODUCT_ID",
+				"NVL"(a.NEW_STORENUM, 0) AS "OLD_STORENUM"
+			FROM
+				bs_invoicing a
+			<where>
+				<if test="beginTime != null and beginTime != ''">
+					AND "TRUNC"(a.histroydate) = "TRUNC"(#{beginTime} - 1)
+				</if>
+				AND a.localcode = #{localCode}
+			</where>
+		) bk_a ON bk_a."PRODUCT_ID" = a."PRODUCT_ID"
+		LEFT JOIN 
+		(
+			/* 期末库存 */
+			SELECT
+				a."PRODUCT_ID" AS "PRODUCT_ID",
+				"NVL"(a.NEW_STORENUM, 0) AS "NEW_STORENUM"
+			FROM
+				bs_invoicing a
+			<where>
+				<if test="endTime != null and endTime != ''">
+					AND "TRUNC"(a.histroydate) = "TRUNC"(#{endTime})
+				</if>
+				AND a.localcode = #{localCode}
+			</where>
+		) bk_b ON bk_b."PRODUCT_ID" = a."PRODUCT_ID"
+		LEFT JOIN 
+		(
+			/* 入库 */
+			SELECT
+				a."PRODUCT_ID" AS "PRODUCT_ID",
+				"NVL"("SUM"(a.RECEIVE), 0) AS "RECEIVE"
+			FROM
+				bs_invoicing a
+			<where>
+				<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					AND a.histroydate between #{beginTime} and #{endTime}
+				</if>
+				AND a.localcode = #{localCode}
+			</where>
+			GROUP BY a."PRODUCT_ID"
+		) bk_c ON bk_c."PRODUCT_ID" = a."PRODUCT_ID"
+		LEFT JOIN 
+		(
+			/* 出库 */
+			SELECT
+				a."PRODUCT_ID" AS "PRODUCT_ID",
+				"NVL"("SUM"(a.CONSUME), 0) AS "CONSUME"
+			FROM
+				bs_invoicing a
+			<where>
+				<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					AND a.histroydate between #{beginTime} and #{endTime}
+				</if>
+				AND a.localcode = #{localCode}
+			</where>
+			GROUP BY a."PRODUCT_ID"
+		) bk_d ON bk_d."PRODUCT_ID" = a."PRODUCT_ID"
+		LEFT JOIN 
+		(
+			/* 使用 */
+			SELECT
+				a."PRODUCT_ID" AS "PRODUCT_ID",
+				"NVL"("SUM"(a.APPLY), 0) AS "APPLY"
+			FROM
+				bs_invoicing a
+			<where>
+				<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					AND a.histroydate between #{beginTime} and #{endTime}
+				</if>
+				AND a.localcode = #{localCode}
+			</where>
+			GROUP BY a."PRODUCT_ID"
+		) bk_e ON bk_e."PRODUCT_ID" = a."PRODUCT_ID"
+		<where>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.histroydate between #{beginTime} and #{endTime}
+			</if>
+			<if test="vaccineidIn != null and vaccineidIn != ''">
+				AND a.vaccineid in 
+					<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.vaccineid
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsInvoicing">
+		SELECT 
+			<include refid="bsInvoicingColumns"/>
+		FROM bs_invoicing a
+		<include refid="bsInvoicingJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_invoicing(
+			id,
+			product_id,
+			vaccineid,
+			vacc_name,
+			batchno,
+			specification,
+			manufacturer,
+			vacc_exp_date,
+			sellprice,
+			costprice,
+			old_storenum,
+			new_storenum,
+			receive,
+			consume,
+			apply,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			status,
+			localcode,
+			histroydate
+		) VALUES (
+			#{id},
+			#{productId},
+			#{vaccineid},
+			#{vaccName},
+			#{batchno},
+			#{specification},
+			#{manufacturer},
+			#{vaccExpDate},
+			#{sellprice},
+			#{costprice},
+			#{oldStorenum},
+			#{newStorenum},
+			#{receive},
+			#{consume},
+			#{apply},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{status},
+			#{localcode},
+			#{histroydate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_invoicing SET 	
+			product_id = #{productId},
+			vaccineid = #{vaccineid},
+			vacc_name = #{vaccName},
+			batchno = #{batchno},
+			specification = #{specification},
+			manufacturer = #{manufacturer},
+			vacc_exp_date = #{vaccExpDate},
+			sellprice = #{sellprice},
+			costprice = #{costprice},
+			old_storenum = #{oldStorenum},
+			new_storenum = #{newStorenum},
+			receive = #{receive},
+			consume = #{consume},
+			apply = #{apply},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			localcode = #{localcode},
+			histroydate = #{histroydate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM bs_invoicing
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListSql" resultType="BsInvoicing">
+		SELECT
+			a.product_id AS "productId",
+			a.vaccineid AS "vaccineid",
+			a.vacc_name AS "vaccName",
+			a.batchno AS "batchno",
+			a.specification AS "specification",
+			a.manufacturer AS "manufacturer",
+			a.vacc_exp_date AS "vaccExpDate",
+			a.sellprice AS "sellpriceNew",
+			a.costprice AS "costpriceNew",
+			a.old_storenum AS "oldStorenum",
+			a.new_storenum AS "newStorenum",
+			a.receive AS "receive",
+			a.consume AS "consume",
+			a.apply AS "apply",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.update_by AS "updateBy.id",
+			a.update_date AS "updateDate",
+			a.localcode AS "localcode"
+			<!-- A."INDATE" AS "HISTROYDATE", -->
+		FROM
+		(
+			SELECT
+				BMP."ID" AS "PRODUCT_ID",
+				BMP.VACCINEID AS "VACCINEID",
+				BMP.VACC_NAME AS "VACC_NAME",
+				BMP.BATCHNO AS "BATCHNO",
+				BMP."SPECIFICATION" AS "SPECIFICATION",
+				BMP.MANUFACTURER AS "MANUFACTURER",
+				BMP.VACC_EXP_DATE AS "VACC_EXP_DATE",
+				BMP.SELLPRICE AS "SELLPRICE",
+				"NVL"(BMP.COSTPRICE, 0) AS "COSTPRICE",
+				"NVL"(A.OLD_STORENUM, 0) AS "OLD_STORENUM",  /* 期初库存 */
+				"NVL"(B.NEW_STORENUM, 0) AS "NEW_STORENUM",  /* 期末库存 */
+				"NVL"(C.RECEIVE, 0) AS "RECEIVE",  /* 入库 */
+				"NVL"(D.CONSUME, 0) AS "CONSUME", /* 出库 */
+				"NVL"(E.APPLY, 0) AS "APPLY",   /* 使用 */
+				BMP.CREATE_BY AS "CREATE_BY",
+				BMP.CREATE_DATE AS "CREATE_DATE",
+				BMP.UPDATE_BY AS "UPDATE_BY",
+				BMP.UPDATE_DATE AS "UPDATE_DATE",
+				BMP.LOCALCODE AS "LOCALCODE",
+				(CASE WHEN C.INDATE IS NULL THEN (CASE WHEN D.INDATE IS NULL THEN (CASE WHEN E.INDATE IS NULL THEN NULL ELSE E.INDATE END) ELSE D.INDATE END) ELSE C.INDATE END) AS "INDATE"
+			FROM
+				BS_MANAGE_PRODUCT bmp
+			LEFT JOIN 
+			(
+				/* 期初库存 */
+				SELECT
+					BMP."ID" AS "ID",
+					"NVL"(BI.NEW_STORENUM, 0) AS "OLD_STORENUM"
+				FROM
+					BS_MANAGE_PRODUCT bmp
+				LEFT JOIN BS_INVOICING bi ON BI.PRODUCT_ID = BMP."ID"
+				<where>
+					BMP.SELLPRICE > 0
+					<if test="vaccineid != null and vaccineid != ''">
+						AND BMP.vaccineid = #{vaccineid}
+					</if>
+					<if test="batchno != null and batchno != ''">
+						AND BMP.batchno = #{batchno}
+					</if>
+					<if test="beginTime != null and beginTime != ''">
+						AND "TRUNC"(BI.histroydate) = "TRUNC"(#{beginTime} - 1)
+					</if>
+					<if test="vaccineidIn != null and vaccineidIn != ''">
+						AND BMP.vaccineid in 
+							<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+					</if>
+					AND BMP.localcode = #{localCode}
+				</where>
+			) A ON A."ID" = BMP."ID"
+			LEFT JOIN 
+			(
+				/* 期末库存 */
+				SELECT
+					BMP."ID" AS "ID",
+					(CASE WHEN ("TRUNC"(#{endTime}) = "TRUNC"(SYSDATE)) THEN (BMP.STORENUM - "NVL" (R."NEW_STORENUM", 0) - "NVL" (H ."NEW_STORENUM", 0)) ELSE "NVL"(BI.NEW_STORENUM, 0) END) AS "NEW_STORENUM"
+				FROM
+					BS_MANAGE_PRODUCT bmp
+				LEFT JOIN BS_INVOICING bi ON BI.PRODUCT_ID = BMP."ID" AND "TRUNC"(BI.histroydate) = "TRUNC"(#{endTime})
+				LEFT JOIN
+				(
+					SELECT
+						BMP."ID" AS "ID",
+						"COUNT"(BMP."ID") AS "NEW_STORENUM"
+					FROM
+						BS_MANAGE_PRODUCT bmp
+					LEFT JOIN BS_RABIES_NUM brn ON BRN."pid" = BMP."ID"
+					<where>
+						BMP.SELLPRICE > 0
+						<if test="vaccineid != null and vaccineid != ''">
+							AND BMP.vaccineid = #{vaccineid}
+						</if>
+						<if test="batchno != null and batchno != ''">
+							AND BMP.batchno = #{batchno}
+						</if>
+						<if test="vaccineidIn != null and vaccineidIn != ''">
+							AND BMP.vaccineid in 
+								<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+						</if>
+						AND BRN."paystatus" = '1'
+						AND BRN."wstatus" = '0'
+						AND BRN.STATUS = '0'
+						AND BRN."deflag" = '0'
+						AND BMP.localcode = #{localCode}
+					</where>
+					GROUP BY 
+						BMP."ID"
+				) R ON R."ID" = BMP."ID"
+				LEFT JOIN
+				(
+					SELECT
+						BMP."ID" AS "ID",
+						"COUNT"(BMP."ID") AS "NEW_STORENUM"
+					FROM
+						BS_MANAGE_PRODUCT bmp
+					LEFT JOIN BS_HEPATITIS_B_NUM bhn ON BHN.PID = BMP."ID"
+					<where>
+						BMP.SELLPRICE > 0
+						<if test="vaccineid != null and vaccineid != ''">
+							AND BMP.vaccineid = #{vaccineid}
+						</if>
+						<if test="batchno != null and batchno != ''">
+							AND BMP.batchno = #{batchno}
+						</if>
+						<if test="vaccineidIn != null and vaccineidIn != ''">
+							AND BMP.vaccineid in 
+								<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+						</if>
+						AND BHN.PAY_STATUS = '1'
+						AND BHN.W_STATUS = '0'
+						AND BHN.STATUS = '0'
+						AND BHN.DEFLAG = '0'
+						AND BMP.localcode = #{localCode}
+					</where>
+					GROUP BY 
+						BMP."ID"
+				) H ON H."ID" = BMP."ID"
+				<where>
+					BMP.SELLPRICE > 0
+					<if test="vaccineid != null and vaccineid != ''">
+						AND BMP.vaccineid = #{vaccineid}
+					</if>
+					<if test="batchno != null and batchno != ''">
+						AND BMP.batchno = #{batchno}
+					</if>
+					<if test="vaccineidIn != null and vaccineidIn != ''">
+						AND BMP.vaccineid in 
+							<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+					</if>
+					AND BMP.localcode = #{localCode}
+				</where>
+			) B ON B."ID" = BMP."ID"
+			LEFT JOIN 
+			(
+				/* 入库 */
+				SELECT
+					"ID",
+					"TRUNC"(SYSDATE) AS "INDATE",
+					"RECEIVE"
+				FROM
+				(
+					SELECT
+						BMP."ID" AS "ID",
+						"NVL"("SUM"(BMS.NUM), 0) AS "RECEIVE"
+					FROM
+						BS_MANAGE_PRODUCT bmp
+					LEFT JOIN BS_MANAGE_STOCKIN bms ON BMS.PID = BMP."ID"
+					<where>
+						BMP.SELLPRICE > 0
+						<if test="vaccineid != null and vaccineid != ''">
+							AND BMP.vaccineid = #{vaccineid}
+						</if>
+						<if test="batchno != null and batchno != ''">
+							AND BMP.batchno = #{batchno}
+						</if>
+						<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+							AND BMS.INDATE between #{beginTime} and #{endTime}
+						</if>
+						<if test="vaccineidIn != null and vaccineidIn != ''">
+							AND BMP.vaccineid in 
+								<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+						</if>
+						AND BMS."TYPE" = '0'
+						AND BMS.DEL_FLAG = '0'
+						AND BMP.localcode = #{localCode}
+					</where>
+					GROUP BY BMP."ID"
+				) A
+			) C ON C."ID" = BMP."ID"
+			LEFT JOIN 
+			(
+				/* 出库 */
+				SELECT
+					"ID",
+					"TRUNC"(SYSDATE) AS "INDATE",
+					"CONSUME"
+				FROM
+				(
+					SELECT
+						BMP."ID" AS "ID",
+						"NVL"("SUM"(BMS.NUM), 0) AS "CONSUME"
+					FROM
+						BS_MANAGE_PRODUCT bmp
+					LEFT JOIN BS_MANAGE_STOCKIN bms ON BMS.PID = BMP."ID"
+					<where>
+						BMP.SELLPRICE > 0
+						<if test="vaccineid != null and vaccineid != ''">
+							AND BMP.vaccineid = #{vaccineid}
+						</if>
+						<if test="batchno != null and batchno != ''">
+							AND BMP.batchno = #{batchno}
+						</if>
+						<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+							AND BMS.INDATE between #{beginTime} and #{endTime}
+						</if>
+						<if test="vaccineidIn != null and vaccineidIn != ''">
+							AND BMP.vaccineid in 
+								<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+						</if>
+						AND BMS."TYPE" = '1'
+						AND BMS.DEL_FLAG = '0'
+						AND BMP.localcode = #{localCode}
+					</where>
+					GROUP BY BMP."ID"
+				) A
+			) D ON D."ID" = BMP."ID"
+			LEFT JOIN 
+			(
+				/* 使用 */
+				SELECT
+					"ID",
+					"TRUNC"(SYSDATE) AS "INDATE",
+					"APPLY"
+				FROM
+				(
+					SELECT
+						BMP."ID" AS "ID",
+						"NVL"("SUM"(BCL.VACC_COUNT), 0) AS "APPLY"
+					FROM
+						BS_MANAGE_PRODUCT bmp
+					LEFT JOIN BS_CHARGE_LOG bcl ON BCL.PID = BMP."ID"
+					<where>
+						BMP.SELLPRICE > 0
+						<if test="vaccineid != null and vaccineid != ''">
+							AND BMP.vaccineid = #{vaccineid}
+						</if>
+						<if test="batchno != null and batchno != ''">
+							AND BMP.batchno = #{batchno}
+						</if>
+						<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+							AND BCL.CREATE_DATE between #{beginTime} and #{endTime}
+						</if>
+						<if test="vaccineidIn != null and vaccineidIn != ''">
+							AND BMP.vaccineid in 
+								<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+						</if>
+						AND BCL.STATUS = 1
+						AND BMP.localcode = #{localCode}
+					</where>
+					GROUP BY BMP."ID"
+				) A
+			) E ON E."ID" = BMP."ID"
+			WHERE
+				BMP.SELLPRICE > 0
+		) A
+		<where>
+			A.INDATE IS NOT NULL
+			<if test="vaccineid != null and vaccineid != ''">
+				AND A.vaccineid = #{vaccineid}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND A.batchno = #{batchno}
+			</if>
+			<if test="vaccineidIn != null and vaccineidIn != ''">
+				AND A.vaccineid in 
+					<foreach collection="vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.vaccineid
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

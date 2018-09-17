@@ -1,0 +1,233 @@
+/* 规则配置V1.0.2 */
+/* 用户首选项 */
+/* 位置：SYS_USER --> PREFERENCE */
+
+{
+	"queueRefresh": 0,	//接种完成是否刷新 默认0,可不配置 【0-不刷新 1-刷新】
+	"queueDelay": 30,	//科室叫号延迟
+	"inPosition": 1,	//默认接种部位
+	"fontSize":1,		//页面字体em
+	"vaccBatch":[{		//疫苗默认批号	
+					"vaccId": "0101",	//疫苗小类
+					"batch": "000000"	//默认批号
+				},{
+					"vaccId": "0102",
+					"batch": "000000"
+				}]
+}
+
+{
+	"queueRefresh": 0,
+	"queueDelay": 30,
+	"inPosition": 1,
+	"fontSize":1,
+	"vaccBatch":[{
+					"vaccId": "0101",
+					"batch": "000000"
+				},{
+					"vaccId": "0102",
+					"batch": "000000"
+				}]
+}
+
+/* 模型特殊规则 */
+/* 多个规则可以做出json数组 [{..},{..}]的形式 */
+/* 规则中所有group均为模型大类编码 */
+/* 位置：BS_MANAGE_VACCINE_MODEL --> RULE */
+
+{
+	"type": 1,	//第一种规则	原理是检查到接种记录中有参照的记录，则不显示指定大类的指定针次
+	"description": "特殊剂次之间的时间间隔",
+	"targetPin": 1, 	//参照的记录针次			【第一针】
+	"targetGroup":"81",	//参照的记录模型大类		【甲肝灭活】	默认为group,可不配置
+	"currentPin": 1,	//要不显的计划NID针次		【第一针】
+	"group": "82",		//要不显的计划NID模型大类	【甲肝减毒】
+	"offset": 6			//时间间隔					【间隔6个月】
+}
+
+{
+	"type": 1,
+	"description": "特殊剂次之间的时间间隔",
+	"targetPin": 1,
+	"currentPin": 4,
+	"offset": 24,
+	"group": "04"
+}
+
+{
+	"type": 1,
+	"description": "特殊剂次之间的时间间隔EX",
+	"targetPin": 1, 
+	"targetGroup":"81",
+	"currentPin": 1,
+	"group": "82",
+	"offset": 6	
+}
+
+[{
+	"type": 1,
+	"description": "特殊剂次之间的时间间隔",
+	"targetPin": 1,
+	"currentPin": 2,
+	"offset": 2,
+	"group": "02",
+	"targetGroup":"02"	
+},{
+	"type": 1,	
+	"description": "特殊剂次之间的时间间隔",
+	"targetPin": 1,	
+	"currentPin": 3,
+	"offset": 6,	
+	"group": "02",
+	"targetGroup":"02"	
+}]
+
+
+
+{
+	"type": 2,		//第二种规则	原理是检查到接种记录中有参照的记录，则不显示要不显的大类
+	"description": "一种疫苗打完，则不显示另一种疫苗",
+	"targetPin": 1,			//参照的记录针次			
+	"targetGroup": "82",	//参照的记录模型大类
+	"group": "81"			//要不显的计划NID模型大类	
+}
+
+{
+	"type": 2,
+	"description": "一种疫苗打完，则不显示另一种疫苗",
+	"targetPin": 2,
+	"targetGroup": "81",
+	"group": "82"
+}
+
+{
+	"type": 2,
+	"description": "一种疫苗打完，则不显示另一种疫苗EX1 targetGroup定义为小类与接种记录小类匹配",
+	"targetPin": 0,
+	"targetGroup": "0311",
+	"group": "50"
+}
+
+
+{
+	"type": 3,		//（废弃）第三种规则	两个模型大类的模型须一致  原理是两个都显示的时候以针次大的为准，只要有一个不显示，则都不显示
+	"description": "模型大类共享免疫计划",	
+	"targetGroup":"17",		//模型大类1
+	"group": "85"			//模型大类2
+}
+
+{
+	"type": 3,
+	"description": "模型大类共享免疫计划",	
+	"targetGroup":"17",	
+	"group": "85"
+}
+
+{
+	"type": 4,	//第四种规则	时间间隔较灵活例如一年12天 
+	"description": "灵活间隔时间",	
+	"group": "24",		//要不显的计划NID模型大类	【口服轮状病毒】
+	"offset": 1,
+	"interval": "year"	//一年 接种一次
+}
+
+{
+	"type": 4,
+	"description": "灵活间隔时间",
+	"group": "24",
+	"offset": 1,
+	"interval": "year"
+}
+
+{
+	"type": 4,	//第四种规则	时间间隔较灵活例如一年12天 
+	"description": "灵活间隔时间EX",	
+	"group": "21",		//要不显的计划NID模型大类	【口服轮状病毒】
+	"offset": 1,
+	"interval": "year",	//间隔时间单位(year)
+	"pinNum":2,			//规定时间内的总剂次 默认1次
+	"startAge":6,		//儿童起始月龄 [  月龄区间闭区间
+	"endAge":36			//儿童结束月龄 ]   0表示不生效
+}
+
+[{
+	"type": 4,
+	"description": "灵活间隔时间EX",
+	"group": "21",
+	"offset": 1,
+	"interval": "year",
+	"pinNum":2,
+	"startAge":6,
+	"endAge":36
+},{
+	"type": 4,
+	"description": "灵活间隔时间EX",
+	"group": "21",
+	"offset": 1,
+	"interval": "year",
+	"pinNum":1,
+	"startAge":37
+}]
+
+
+{
+	"type": 5,	//（废弃，生成模拟记录替代）第五种规则	单剂次替代 原理：根据记录中的nid添加替代的nid
+	"description": "单剂次替代",
+	"targetPin": 1, 				//参照的记录针次
+	"targetGroup":"16",				//参照的记录模型大类
+	"currentPin": 1,				//要替代的记录针次
+	"group": "87"					//要替代的记录模型大类
+}
+
+[{
+	"type": 5,
+	"description": "单剂次替代",
+	"targetPin": 1, 
+	"targetGroup":"85",
+	"currentPin": 1,
+	"group": "17"	
+},
+{
+	"type": 5,
+	"description": "单剂次替代",
+	"targetPin": 2, 
+	"targetGroup":"85",
+	"currentPin": 2,
+	"group": "17"	
+},
+{
+	"type": 5,
+	"description": "单剂次替代",
+	"targetPin": 1, 
+	"targetGroup":"17",
+	"currentPin": 1,
+	"group": "85"	
+},
+{
+	"type": 5,
+	"description": "单剂次替代",
+	"targetPin": 2, 
+	"targetGroup":"17",
+	"currentPin": 2,
+	"group": "85"	
+}]
+
+
+
+/* 接种台叫号延迟 */
+/* 配置放在对应科室记录中即可 */
+/* 位置：SYS_OFFICE --> EMAIL */
+{
+	"queueDelay": 30	//默认30秒，可不配置
+	
+}
+
+{
+	"queueDelay": 30
+}
+
+
+##更新记录
+---------
+#V1.0.1	用户首选项
+#V1.0.2 特殊规则5

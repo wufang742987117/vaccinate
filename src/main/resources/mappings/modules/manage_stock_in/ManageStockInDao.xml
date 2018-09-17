@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.thinkgem.jeesite.modules.manage_stock_in.dao.ManageStockInDao">
+
+	<sql id="manageStockInColumns">
+		a."ID",
+		a.PID AS "product.id",
+		a.NUM,
+		a.INDATE,
+		a.REMARKS,
+		a."TYPE",
+		a.STATE,
+		a.LOCALCODE,
+		a.CREATE_DATE,
+		a.UPDATE_DATE,
+		a.CREATE_BY,
+		a.UPDATE_BY,
+		a.ORDER_NO,
+		u.name AS "createBy.name"
+	</sql>
+	
+	<sql id="bsManageProductColumns">
+		p.vaccineid AS "product.vaccineid",
+		p.VACC_NAME AS "product.vaccName",
+		p.batchno AS "product.batchno",
+		p.dosage AS "product.dosage",
+		p.manufacturer AS "product.manufacturer",
+		p.isforeign AS "product.isforeign",
+		p.storenum AS "product.storenum",
+		p.sellprice AS "product.sellprice",
+		p.isshow AS "product.isshow",
+		p.vacc_exp_date AS "product.vaccExpDate",
+		p.codeall AS "product.codeall",
+		p.specification AS "product.specification",
+		p.code AS "product.code",
+		p.spec AS "product.spec",
+		p.costprice AS "product.costprice",
+		p.rest AS "product.rest",
+		p.applicable_max AS "product.applicable_max",
+		p.applicable_min AS "product.applicable_min",
+		p.create_by AS "product.createBy.id",
+		p.create_date AS "product.createdate",
+		p.update_by AS "product.updateBy.id",
+		p.update_date AS "product.updateDate"	
+	</sql>
+
+	<sql id="manageStockInJoins">
+		LEFT JOIN bs_manage_product p on p."ID" = a.pid
+		LEFT JOIN SYS_USER u on u.id = a.create_by
+	</sql>
+
+	<select id="get" resultType="ManageStockIn">
+		SELECT
+			<include refid="manageStockInColumns" />,
+			<include refid="bsManageProductColumns" />
+		FROM BS_MANAGE_STOCKIN a
+			<include refid="manageStockInJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ManageStockIn">
+		SELECT
+			<include refid="manageStockInColumns" />,
+			<include refid="bsManageProductColumns" />
+		FROM BS_MANAGE_STOCKIN a
+			<include refid="manageStockInJoins" />
+		<where>
+			<if test="num != null and num != ''">
+				AND a.num = #{num}
+			</if>
+			<if test="product != null and product.batchno != null and product.batchno != ''">
+				AND P.BATCHNO = #{product.batchno}
+			</if>
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.PID = #{product.id}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if> 
+			<if test="stateIn != null">
+				AND a.state in
+					<foreach collection="stateIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			</if> 
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.indate between #{beginTime} and #{endTime}
+			</if>
+			<if test="product != null and product.vaccineid != null and product.vaccineid != ''">
+				AND p.vaccineid = #{product.vaccineid}
+			</if>
+			<if test="product != null and product.vaccineidIn != null and product.vaccineidIn != ''">
+				AND p.vaccineid in 
+					<foreach collection="product.vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+				AND a.del_flag = #{DEL_FLAG_NORMAL} 
+				AND a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER by a."INDATE" desc
+			</otherwise>
+		</choose>
+		
+	</select>
+
+	<select id="findAllList" resultType="ManageStockIn">
+		SELECT
+		<include refid="manageStockInColumns" />
+		FROM BS_MANAGE_STOCKIN a
+		<include refid="manageStockInJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO BS_MANAGE_STOCKIN(
+			id,
+			pid,
+			num,
+			indate,
+			remarks,
+			type,
+			state,
+			localcode,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			order_no,
+			indate_str
+		) VALUES (
+			#{id},
+			#{product.id},
+			#{num},
+			#{indate},
+			#{remarks}, 
+			#{type},
+			#{state},
+			#{localCode},
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{orderNo},
+			#{indateStr}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE BS_MANAGE_STOCKIN SET
+			id = #{id},
+			pid = #{product.id},
+			num = #{num},
+			indate = #{indate},
+			remarks = #{remarks},
+			type = #{type},
+			state = #{state},
+			localcode = #{localCode},
+			create_by = #{createBy.id},
+			create_date = #{createDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			order_no = #{orderNo}
+		WHERE id = #{id} and a.localcode = #{localCode}
+	</update>
+	
+	<update id="delete">
+		UPDATE BS_MANAGE_STOCKIN SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} and a.localcode = #{localCode}
+	</update>
+
+</mapper>

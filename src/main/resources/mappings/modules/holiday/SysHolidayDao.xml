@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.holiday.dao.SysHolidayDao">
+    
+	<sql id="sysHolidayColumns">
+		a.id AS "id",
+		a.date_type AS "dateType",
+		a.date_time AS "dateTime",
+		a.date_day AS "dateDay",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysHolidayJoins">
+	</sql>
+    
+	<select id="get" resultType="SysHoliday">
+		SELECT 
+			<include refid="sysHolidayColumns"/>
+		FROM sys_holiday a
+		<include refid="sysHolidayJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysHoliday">
+		SELECT 
+			<include refid="sysHolidayColumns"/>
+		FROM sys_holiday a
+		<include refid="sysHolidayJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			AND a.LOCALCODE = #{localCode}
+			<if test="dateType != null and dateType != ''">
+				AND a.date_type = #{dateType}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks like '%' || #{remarks} || '%'
+			</if>
+			<if test="dateTimeAfter != null">
+				AND a.date_time &gt; #{dateTimeAfter}
+			</if>
+			<if test="dateTimeBefore != null">
+				AND a.date_time &lt; #{dateTimeBefore}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.DATE_TYPE DESC , a.DATE_DAY,  a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysHoliday">
+		SELECT 
+			<include refid="sysHolidayColumns"/>
+		FROM sys_holiday a
+		<include refid="sysHolidayJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.DATE_TYPE DESC , a.DATE_DAY,  a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_holiday(
+			id,
+			date_type,
+			date_time,
+			date_day,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			localcode
+		) VALUES (
+			#{id},
+			#{dateType},
+			#{dateTime},
+			#{dateDay},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_holiday SET 	
+			date_type = #{dateType},
+			date_time = #{dateTime},
+			date_day = #{dateDay},
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_holiday SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

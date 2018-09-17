@@ -1,0 +1,18 @@
+/**
+ * jQuery.jSelectDate
+ * Version 0.1
+ * 下拉列表选择日期类,jQuery插件
+ * @id  jQuery.jSelectDate
+ * @alias $.jSelectDate
+ * @author Json Lee
+ */
+
+/**
+ * 将选中的对象转换成日期选择下拉列表框
+ * @id  jQuery.jSelectDate
+ * @alias $.jSelectDate
+ * @alias jQuery.prototype.jSelectDate
+ * @param {Object} JSON params[css : String , yearBeign : Number, disabled : Boolean}
+ * @return {jQuery}
+ */
+function jQuery.jSelectDate(){};

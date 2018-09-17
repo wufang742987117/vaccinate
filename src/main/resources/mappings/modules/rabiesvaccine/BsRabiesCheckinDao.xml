@@ -1,0 +1,734 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rabiesvaccine.dao.BsRabiesCheckinDao">
+
+	<sql id="bsRabiesCheckinColumns">
+		A ."id" AS "id",
+		A ."username" AS "username",
+		A ."sex" AS "sex",
+		A ."birthday" AS "birthday",
+		A ."age" AS "age",
+		A ."card" AS "card",
+		A ."homeaddress" AS "homeaddress",
+		A ."linkphone" AS "linkphone",
+		A ."bitedate" AS "bitedate",
+		A ."bitepart" AS "bitepart",
+		A ."biteType" AS "bitetype",
+		A."animal" AS "animal",
+		A ."dealdate" AS "dealdate",
+		A ."dealaddress" AS "dealaddress",
+		A ."exposebefore" AS "exposebefore",
+		A ."exposeafter" AS "exposeafter",
+		A ."exposelevel" AS "exposelevel",
+		A ."vaccinatename" AS "vaccinatename",
+		A ."standard" AS "standard",
+		A ."manufacturer" AS "manufacturer",
+		A ."batchnum" AS "batchnum",
+		A ."isinoculate" AS "isinoculate",
+		A ."weight" AS "weight",
+		A ."dosage" AS "dosage",
+		A."create_date" AS "createDate",
+		A ."create_by" AS "createBy.id",
+		a.province AS "province",
+		a.city AS"city",
+		a.county AS "county",
+		a.address AS "address",
+		a.expose AS "expose",
+		A."standard_no" AS "standardNo",
+		A ."manufacturer_no" AS "manufacturerNo",
+		A."batchnum_no" AS "batchnumNo",
+		A."vaccinatename_no" AS "vaccinatenameNo",
+		A ."remarks" AS "remarks",
+		A."judgment_times" AS "judgmentTimes",
+		A."payment" AS "payment",
+		A ."history" AS "history",
+		A ."openid" AS "openid",
+		A ."tempid" AS "tempid",
+		A ."dosage_no" AS "dosageNo",
+		A ."rabiescode" AS "rabiescode",
+		A ."s_id" AS "sId"
+	</sql>
+
+	<sql id="bsRabiesCheckinJoins">
+	</sql>
+
+	<select id="get" resultType="BsRabiesCheckin">
+		SELECT
+		<include refid="bsRabiesCheckinColumns" />
+		FROM bs_rabies_checkin a
+		<include refid="bsRabiesCheckinJoins" />
+		WHERE 
+			a."id" = #{id}
+		AND a."deflag" = '0' 
+	</select>
+
+	<select id="findList" resultType="BsRabiesCheckin">
+		SELECT
+			<include refid="bsRabiesCheckinColumns" />
+		FROM bs_rabies_checkin a
+			<include refid="bsRabiesCheckinJoins" />
+		<where>
+			<if test="username != null and username != ''">
+				AND a."username" = #{username}
+			</if>
+			<if test="card != null and card != ''">
+				AND a."card" = #{card}
+			</if>
+			<if test="id != null and id != ''">
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a."sex" = #{sex}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND a."birthday" = #{birthday}
+			</if>
+			<if test="age != null and age != ''">
+				AND a."age" = #{age}
+			</if>
+			<if test="linkphone != null and linkphone != ''">
+				AND a."linkphone" = #{linkphone}
+			</if>
+			<if test="bitedate != null and bitedate != ''">
+				AND a."bitedate" = #{bitedate}
+			</if>
+			<if test="bitepart != null and bitepart != ''">
+				AND a."bitepart" = #{bitepart}
+			</if>
+			<if test="animal != null and animal != ''">
+				AND a."animal" = #{animal}
+			</if>
+			<if test="dealdate != null and dealdate != ''">
+				AND a."dealdate" = #{dealdate}
+			</if>
+			<if test="dealaddress != null and dealaddress != ''">
+				AND a."dealaddress" = #{dealaddress}
+			</if>
+			<if test="exposebefore != null and exposebefore != ''">
+				AND a."exposebefore" = #{exposebefore}
+			</if>
+			<if test="exposeafter != null and exposeafter != ''">
+				AND a."exposeafter" = #{exposeafter}
+			</if>
+			<if test="exposelevel != null and exposelevel != ''">
+				AND a."exposelevel" = #{exposelevel}
+			</if>
+			<if test="vaccinatename != null and vaccinatename != ''">
+				AND a."vaccinatename" = #{vaccinatename}
+			</if>
+			<if test="standard != null and standard != ''">
+				AND a."standard" = #{standard}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a."manufacturer" = #{manufacturer}
+			</if>
+			<if test="batchnum != null and batchnum != ''">
+				AND a."batchnum" = #{batchnum}
+			</if>
+			<if test="isinoculate != null and isinoculate != ''">
+				AND a."isinoculate" = #{isinoculate}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a."dosage" = #{dosage}
+			</if>
+			<if test="vaccinatenameNo != null and vaccinatenameNo != ''">
+				AND a."vaccinatename_no" = #{vaccinatenameNo}
+			</if>
+			<if test="standardNo != null and standardNo != ''">
+				AND a."standard_no" = #{standardNo}
+			</if>
+			<if test="manufacturerNo != null and manufacturerNo != ''">
+				AND a."manufacturer_no" = #{manufacturerNo}
+			</if>
+			<if test="batchnumNo != null and batchnumNo != ''">
+				AND a."batchnum_no" = #{batchnumNo}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a."create_date" = #{createDate}
+			</if>
+			<if test="bitetype != null and bitetype != ''">
+				AND a."biteType" = #{bitetype}
+			</if>
+			<if test="rabiescode != null and rabiescode != ''">
+				AND a."rabiescode" = #{rabiescode}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			AND a."deflag" = '0' 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY
+					a."card" DESC,
+					a."create_date" DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="BsRabiesCheckin">
+		SELECT
+		<include refid="bsRabiesCheckinColumns" />
+		FROM bs_rabies_checkin a
+		<include refid="bsRabiesCheckinJoins" />
+		<where>
+				a."deflag" = '0' 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO bs_rabies_checkin(
+		"id",
+		"username",
+		"card",
+		"sex",
+		"birthday",
+		"age",
+		"homeaddress",
+		"linkphone",
+		"bitedate",
+		"bitepart",
+		"biteType",
+		"animal",
+		"dealdate",
+		"dealaddress",
+		"exposebefore",
+		"exposeafter",
+		"exposelevel",
+		"vaccinatename",
+		"standard",
+		"manufacturer",
+		"batchnum",
+		"isinoculate",
+		"weight",
+		"dosage",
+		"create_date",
+		"create_by",
+		province,
+		city,
+		county,
+		address,
+		expose,
+		"standard_no",
+		"manufacturer_no",
+		"batchnum_no",
+		"vaccinatename_no",
+		"remarks",
+		"judgment_times",
+		"payment",
+		"history",
+		"openid",
+		"tempid",
+		"dosage_no",
+		"rabiescode",
+		localcode
+		) VALUES (
+		#{id},
+		#{username},
+		#{card},
+		#{sex},
+		#{birthday},
+		#{age},
+		#{homeaddress},
+		#{linkphone},
+		#{bitedate},
+		#{bitepart},
+		#{bitetype},
+		#{animal},
+		#{dealdate},
+		#{dealaddress},
+		#{exposebefore},
+		#{exposeafter},
+		#{exposelevel},
+		#{vaccinatename},
+		#{standard},
+		#{manufacturer},
+		#{batchnum},
+		#{isinoculate},
+		#{weight},
+		#{dosage},
+		sysdate,
+		#{createBy.id},
+		#{province},
+		#{city},
+		#{county},
+		#{address},
+		#{expose},
+		#{standardNo},
+		#{manufacturerNo},
+		#{batchnumNo},
+		#{vaccinatenameNo},
+		#{remarks},
+		#{judgmentTimes},
+		#{payment},
+		#{history},
+		#{openid},
+		#{tempid},
+		#{dosageNo},
+		#{rabiescode},
+		#{localCode}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE bs_rabies_checkin SET
+		"username" = #{username},
+		"card" = #{card},
+		"sex" = #{sex},
+		"birthday" = #{birthday},
+		"age" = #{age},
+		"homeaddress" = #{homeaddress},
+		"linkphone" = #{linkphone},
+		"bitedate" = #{bitedate},
+		"bitepart" = #{bitepart},
+		"biteType" = #{bitetype},
+		"animal" = #{animal},
+		"dealdate" = #{dealdate},
+		"dealaddress" = #{dealaddress},
+		"exposebefore"= #{exposebefore},
+		"exposeafter" = #{exposeafter},
+		"exposelevel"= #{exposelevel},
+		"vaccinatename"= #{vaccinatename},
+		"standard"= #{standard},
+		"manufacturer" = #{manufacturer},
+		"batchnum" = #{batchnum},
+		"isinoculate" = #{isinoculate},
+		"weight" = #{weight},
+		"dosage" = #{dosage},
+		province = #{province},
+		city = #{city},
+		county = #{county},
+		address = #{address},
+		expose = #{expose},
+		"standard_no" = #{standardNo},
+		"manufacturer_no" = #{manufacturerNo},
+		"batchnum_no" = #{batchnumNo},
+		"vaccinatename_no" = #{vaccinatenameNo},
+		"dosage_no" = #{dosageNo},
+		"remarks" = #{remarks},
+		"judgment_times" = #{judgmentTimes},
+		"payment" = #{payment},
+		"history" = #{history}
+		WHERE 
+			"id" = #{id} 
+		and localcode = #{localCode}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_rabies_checkin 
+		SET
+			"deflag" = '1'
+		WHERE 
+			"id" = #{id} 
+		and localcode = #{localCode}
+	</update>
+	
+	<!-- 根据名字或者电话或者身份证号查询所有的个案 -->
+	<select id="namelist" resultType="BsRabiesCheckin">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					*
+				FROM
+					BS_RABIES_CHECKIN c
+				<where>
+						(c."username" = #{searchName}
+					OR  c."linkphone" = #{searchName}
+					OR  c."card" = #{searchName}
+					OR  c."rabiescode" LIKE '%' || #{searchName} || '%'
+					OR  to_char(c."birthday",'yyyyMMdd') = #{searchName})
+					<if test="birthday != null and birthday != ''">
+						AND c."birthday" = #{birthday}
+					</if>
+					<if test="createDate != null and createDate != ''">
+						AND c."create_date" = #{createDate}
+					</if>
+					<if test="linkphone != null and linkphone != ''">
+						AND c."linkphone" = #{linkphone}
+					</if>
+					AND c."deflag" = '0' 
+					and c.localcode = #{localCode}
+				</where>
+			) cc
+		WHERE
+			cc."create_date" > (SYSDATE - 365)
+	</select>
+	
+	<!--根据id查询所有的针次 -->
+	<select id="finishpin" resultType="BsRabiesNum">
+		SELECT 
+			* 
+		FROM BS_RABIES_NUM  n 
+		WHERE  
+			n."checkid" = #{id} 
+		AND n."deflag" = '0' 
+		and n.localcode = #{localCode}
+		ORDER BY 
+			n."vaccinum"
+	</select>
+	
+	<!-- 查询疫苗名称 -->
+	<select id="vaccineName" resultType="java.lang.String">
+		SELECT 
+			"NAME"
+		FROM
+			BS_MANAGE_VACCINE
+		WHERE
+			"ID" = #{vname} 
+	</select>
+	
+	<select id="queryVaccInterVal" resultType="VaccInfo">
+		SELECT
+			*
+		FROM
+			SYS_VACC_INFO_PZ
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND "VID" = #{vaccType}
+			</if>
+			<if test="count != null and count != ''">
+				AND "COUNT" = #{count}
+			</if>
+			and "STATUS" = #{status}
+			and localcode = #{localCode}
+		</where>
+	</select>
+	
+	<!-- 查询数据库的狂犬疫苗种类 -->
+	<select id="vaccineType" resultType="BsManageProduct">
+		SELECT DISTINCT
+			V."ID",
+			V."NAME"
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID
+		WHERE
+			(P.VACCINEID LIKE '28' || '%' OR P.VACCINEID LIKE '44' || '%')
+		AND P.ISSHOW = 'Y'
+		AND P.DEL_FLAG = '0'
+		and P.localcode = #{localCode}
+		and P.officecode = #{officeCode}
+	</select>
+	
+	<!-- 查询数据库的狂犬疫苗种类 -->
+	<select id="vaccById" resultType="java.lang.String">
+		SELECT
+			ID
+		FROM
+			BS_MANAGE_VACCINE A
+		WHERE
+			A.G_NUM = '44' 
+	</select>
+	
+	<!-- 儿童编码后四位生成规则 -->
+	<select id="bianmadog" resultType="java.lang.String">
+		SELECT NVL ( LPAD ( MAX (SUBSTR(T ."rabiescode", 16, 4)) + 1, 4, 0 ), '0001' ) AS max_code
+		FROM
+			BS_RABIES_CHECKIN T
+		WHERE
+			SUBSTR (T."rabiescode", 12, 4) =#{year} and t.localcode = #{localCode}
+	</select>
+	
+	<!-- 查询建档是否重复 -->
+	<select id="countRabiesCode" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_RABIES_CHECKIN A
+		WHERE
+			a."rabiescode" = #{rabiescode} 
+		and a.localcode = #{localCode}
+	</select>
+	
+	<!--根据id查询针次为0 -->
+	<select id="finishpinNot" resultType="BsRabiesNum">
+		SELECT 
+			n."id" AS "id",
+			n."checkid" AS "checkid",
+			n."vaccinum" AS "vaccinum",
+			n."vaccidate" AS "vaccidate",
+			n."realdate" AS "realdate",
+			n."dose" AS "dose",
+			n."paystatus" AS "paystatus",
+			n.status AS "status",
+			n."vaccineid" AS "vaccineid",
+			n."manufacturer" AS "manufacturer",
+			n."batchnum" AS "batchnum",
+			n."nstatus" AS "nstatus",
+			n."wstatus" AS "wstatus",
+			n."create_name" AS "createByName",
+			n."create_by" AS "createBy.id",
+			n."create_date" AS "createDate",
+			n."signature" AS "signature",
+			s."signature" AS "signatureData",
+			n."s_id" AS "sId",
+			s."stype" AS "stype",
+			n."pid" AS "pid"
+		FROM 
+			BS_RABIES_NUM n 
+		LEFT JOIN BS_RABIES_SIGNATURE s ON n."s_id" = s."id" 
+		WHERE  
+			n."checkid" = #{id} 
+		AND n."vaccinum" = '0' 
+		AND n."deflag" = '0'
+		AND n.localcode = #{localCode}
+		ORDER BY 
+			n."vaccinum"
+	</select>
+	
+	<!--根据id查询针次不为0 -->
+	<select id="finishpinNum" resultType="BsRabiesNum">
+		SELECT 
+			n."id" AS "id",
+			n."checkid" AS "checkid",
+			n."vaccinum" AS
+			"vaccinum",
+			n."vaccidate" AS "vaccidate",
+			n."realdate" AS "realdate",
+			n."dose" AS "dose",
+			n."paystatus" AS "paystatus",
+			n.status AS "status",
+			n."vaccineid" AS "vaccineid",
+			n."manufacturer" AS "manufacturer",
+			n."batchnum" AS "batchnum",
+			n."nstatus" AS "nstatus",
+			n."wstatus" AS "wstatus",
+			n."create_name" AS "createByName",
+			n."create_by" AS "createBy.id",
+			n."create_date" AS "createDate",
+			n."signature" AS "signature",
+			s."signature" AS "signatureData",
+			n."s_id" AS "sId",
+			s."stype" AS "stype",
+			n."pid" AS "pid"
+		FROM 
+			BS_RABIES_NUM n 
+		LEFT JOIN BS_RABIES_SIGNATURE s ON n."s_id" = s."id"
+		WHERE  
+			n."checkid" = #{id} 
+		AND n."vaccinum" != '0' 
+		AND n."deflag" = '0'
+		AND n.localcode = #{localCode}
+		ORDER BY 
+			n."vaccinum"
+	</select>
+	
+	<update id="deleteCheckId">
+		UPDATE bs_rabies_num 
+		SET
+			"deflag" = '1'
+		WHERE 
+			"checkid" = #{checkid} 
+		and localcode = #{localCode}
+	</update>
+	
+	<!-- 查询犬伤疫苗现有库存 -->
+	<select id="vaccineStock" resultType="BsRabiesCheckinStock">
+		SELECT
+			V."ID" AS vaccinateid,
+			V."NAME" AS vaccinatename,
+			P .MANUFACTURER AS manufacturer,
+			P .BATCHNO AS batchnum,
+			S."LABEL" AS "standard",
+			P .STORENUM AS storenum
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID
+		LEFT JOIN SYS_DICT s ON s."VALUE" = P."SPECIFICATION" AND s."TYPE" = 'specification'
+		WHERE
+			(P .VACCINEID LIKE '28' || '%' OR P .VACCINEID LIKE '44' || '%')
+		AND P .ISSHOW = 'Y'
+		AND P .DEL_FLAG = '0'
+		AND P .STORENUM >= '0'
+		and p.localcode = #{localCode}
+		and P.officecode = #{officeCode}
+		ORDER BY V."NAME"
+	</select>
+	
+	<!-- 查询未付款总量 -->
+	<select id="vaccineStock1" resultType="BsRabiesCheckinStock">
+		SELECT
+			P ."vaccineid" AS vaccinateid,
+			P ."batchnum" AS batchnum,
+			P ."dose" AS "standard",
+			"COUNT" ("batchnum") AS storenum1
+		FROM
+			BS_RABIES_NUM P
+		WHERE
+			P ."paystatus" = '0'
+		AND P .status = '0'
+		AND P ."wstatus" = '0'
+		AND P ."deflag" = '0'
+		and p.localcode = #{localCode}
+		GROUP BY
+			P ."vaccineid",
+			P ."batchnum",
+			P ."dose"
+	</select>
+	
+	<!-- 查询已付款总量 -->
+	<select id="vaccineStock2" resultType="BsRabiesCheckinStock">
+		SELECT
+			P ."vaccineid" AS vaccinateid,
+			P ."batchnum" AS batchnum,
+			P ."dose" AS "standard",
+			"COUNT" ("batchnum") AS storenum2
+		FROM
+			BS_RABIES_NUM P
+		WHERE
+		    P ."paystatus" = '1'
+		AND P .status = '0'
+		AND P ."wstatus" = '0'
+		AND P ."deflag" = '0'
+		and p.localcode = #{localCode}
+		GROUP BY
+			P ."vaccineid",
+			P ."batchnum",
+			P ."dose"
+	</select>
+	
+	<!-- 查询已完成总量 -->
+	<select id="vaccineStock3" resultType="BsRabiesCheckinStock">
+		SELECT
+			P ."vaccineid" AS vaccinateid,
+			P ."batchnum" AS batchnum,
+			P ."dose" AS "standard",
+			"COUNT" ("batchnum") AS storenum3
+		FROM
+			BS_RABIES_NUM P
+		WHERE
+			P .status = '1'
+		AND P ."wstatus" = '0'
+		AND P ."deflag" = '0'
+		and p.localcode = #{localCode}
+		GROUP BY
+			P ."vaccineid",
+			P ."batchnum",
+			P ."dose"
+	</select>
+
+	<select id="querySignature" resultType="BsRabiesCheckin">
+		SELECT 
+			s."signature" AS "signatureData",
+			s."stype" AS "stype",
+			b."id" AS "sId"
+		FROM 
+			BS_RABIES_CHECKIN n 
+		LEFT JOIN BS_RABIES_SIGNATURE s ON n."s_id" = s."id"
+		LEFT JOIN BS_RABIES_NUM b ON b."s_id" = s."id"
+		WHERE  
+			n."id" = #{id} 
+		AND n."deflag" = '0'
+		AND n.localcode = #{localCode}
+		AND rownum = 1
+	</select>
+	
+	<!-- 新建卡数 -->
+	<select id="countNumOne" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_RABIES_CHECKIN A
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	a."create_by"  = #{createById}
+			</if>
+			AND a."deflag" = '0'
+			AND a.localcode = #{localCode}
+		</where>
+	</select>
+	
+	<!-- 接种数 -->
+	<select id="countNumTwo" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_RABIES_CHECKIN A
+		LEFT JOIN BS_RABIES_NUM R ON R."checkid" = A."id"
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND R ."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	R."create_by"  = #{createById}
+			</if>
+			AND R ."realdate" IS NOT NULL
+			AND R .status = '1'
+			AND R ."wstatus" = '0'
+			AND R ."deflag" = '0'
+			AND A.localcode = #{localCode}
+		</where>
+	</select>
+	
+	<update id="updateByPayStatus">
+		UPDATE BS_RABIES_NUM SET
+			"pay" = '0',
+			"paystatus" = '1',
+			"create_date" = sysdate
+		WHERE 
+			"id" = #{id} 
+	</update>
+	<update id="updateDealByPayStatus">
+		UPDATE BS_RABIES_DEAL SET 
+			"PAYSTATUS"='1',
+			"PAY"='0' 
+		WHERE 
+			"ID" = #{id}
+	</update>
+	
+	<!-- 每天定时删除表中的数据 -->
+	<delete id="deleteDataFromBsRabiesPayEveryday">
+		delete from bs_rabies_pay WHERE CREATE_DATE &lt; SYSDATE-7
+	</delete>
+	
+	<insert id="insertBsRabiesBubble">
+		INSERT INTO BS_RABIES_CHECKIN_BUBBLE(
+		"ID",
+		"USERNAME",
+		"RABIESCODE",
+		"TYPE",
+		"CREATE_DATE") 
+		VALUES(
+		#{id},
+		#{username},
+		#{rabiescode},
+		#{type},
+		#{createDate}
+		)
+	</insert>
+	
+	<select id="findBsRabiesBubble" resultType="BsRabiesBubble">
+		SELECT * FROM bs_rabies_checkin_bubble
+		WHERE "TYPE" = #{type} AND ROWNUM &lt; 11
+		ORDER BY "CREATE_DATE" ASC
+	</select>
+	
+	<select id="findBubbleList" resultType="BsRabiesBubble">
+		SELECT * FROM bs_rabies_checkin_bubble
+	</select>
+	
+	<delete id="deleteBsRabiesBubble">
+		delete from bs_rabies_checkin_bubble WHERE "RABIESCODE"=#{rabiescode}
+	</delete>
+	
+	<!-- 每天定时删除表中的数据 -->
+	<delete id="deleteBubble">
+		delete from bs_rabies_checkin_bubble
+	</delete>
+</mapper>

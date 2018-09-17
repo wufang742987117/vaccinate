@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cms.dao.CmsDisclosureDao">
+    
+	<sql id="cmsDisclosureColumns">
+		a.id AS "id",
+		a.vid AS "vaccine.g_num",
+		a.context AS "context"
+	</sql>
+	
+	<sql id="bsManageVaccineColumns">
+		id AS "vaccine.id",
+		g_num AS "vaccine.gNum",
+		g_name AS "vaccine.gName"
+	</sql>
+	
+	<sql id="cmsDisclosureJoins">
+		JOIN (select DISTINCT g_num, g_name FROM bs_manage_vaccine) ON a.vid = g_num
+	</sql>
+    
+	<select id="get" resultType="CmsDisclosure">
+		SELECT 
+			<include refid="cmsDisclosureColumns"/><!-- ,
+			<include refid="bsManageVaccineColumns"/> -->
+		FROM cms_disclosure a
+		<!-- <include refid="cmsDisclosureJoins"/> -->
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsDisclosure">
+		SELECT 
+			<include refid="cmsDisclosureColumns"/><!-- ,
+			<include refid="bsManageVaccineColumns"/> -->
+		FROM cms_disclosure a
+		<!-- <include refid="cmsDisclosureJoins"/> --> 
+		<where>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="context != null and context != ''">
+				AND a.context LIKE '%'||#{context}||'%'
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsDisclosure">
+		SELECT 
+			<include refid="cmsDisclosureColumns"/>
+		FROM cms_disclosure a
+		<include refid="cmsDisclosureJoins"/>
+		<where>
+				
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_disclosure(
+			id,
+			vid,
+			context
+		) VALUES (
+			#{id},
+			#{vaccine.gNum},
+			#{context}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_disclosure SET 	
+			vid = #{vaccine.gNum},
+			context = #{context}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM cms_disclosure
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

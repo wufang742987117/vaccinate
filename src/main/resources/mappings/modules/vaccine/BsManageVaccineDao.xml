@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.vaccine.dao.BsManageVaccineDao">
+    
+	<sql id="bsManageVaccineColumns">
+		a.id AS "id",
+		a.g_num AS "gNum",
+		a.name AS "name",
+		a.pathema AS "pathema",
+		a.g_name AS "gName",
+		a.ban AS "ban",
+		a.g_code AS "gCode",
+		a.code AS "code",
+		a.name_all AS "nameAll",
+		a.code_all AS "codeAll",
+		a.status AS "status",
+		a.price AS "price",
+		a.excep AS "excep",
+		M.M_NUM AS "mNum",
+		a.live,
+		a.type,
+		a.sort,
+		a.localcode as "localCode"
+	</sql>
+	
+	<sql id="bsManageVaccineJoins">
+		left join BS_MANAGE_VACCINE_MODEL M ON A."ID"=M."ID"
+	</sql>
+    
+	<select id="get" resultType="BsManageVaccine">
+		SELECT 
+			a.id AS "id",
+			a.g_num AS "gNum",
+			a.name AS "name",
+			a.pathema AS "pathema",
+			a.g_name AS "gName",
+			a.ban AS "ban",
+			a.g_code AS "gCode",
+			a.code AS "code",
+			a.name_all AS "nameAll",
+			a.code_all AS "codeAll",
+			a.status AS "status",
+			a.price AS "price",
+			a.excep AS "excep",
+			a.live,
+			a.type,
+			a.sort
+		FROM bs_manage_vaccine a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsManageVaccine">
+		SELECT 
+			<include refid="bsManageVaccineColumns"/>
+		FROM bs_manage_vaccine a
+		<include refid="bsManageVaccineJoins"/>
+		<where>
+			m.localcode = #{localCode}
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="pathema != null and pathema != ''">
+				AND a.pathema = #{pathema}
+			</if>
+			<if test="gName != null and gName != ''">
+				AND a.g_name = #{gName}
+			</if>
+			<if test="gNum != null and gNum != ''">
+				AND a.g_num = #{gNum}
+			</if>
+			<if test="ban != null and ban != ''">
+				AND a.ban = #{ban}
+			</if>
+			<if test="gCode != null and gCode != ''">
+				AND a.g_code = #{gCode}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="nameAll != null and nameAll != ''">
+				AND a.name_all = #{nameAll}
+			</if>
+			<if test="codeAll != null and codeAll != ''">
+				AND a.code_all = #{codeAll}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="excep != null and excep != ''">
+				AND a.excep = #{excep}
+			</if>
+			<if test='vacctype != null and vacctype =="1"'>
+				AND a.G_NUM NOT IN ('28', '43', '44')
+			</if>
+			<if test='vacctype != null and vacctype =="2"'>
+				AND a.G_NUM IN 
+				<foreach collection="vaccSum" item="vacc" index="index" open="(" close=")" separator=",">
+		            #{vacc}
+		        </foreach>
+			</if>
+			<if test="inGroups != null and inGroups !=''">
+				AND M.M_NUM IN (${inGroups})
+			</if>
+			<if test="type != null and type !=''">
+				AND a."TYPE" = #{type}
+			</if>
+			<if test="mNum != null and mNum !=''">
+				AND m.M_NUM = #{mNum}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.G_NUM
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="BsManageVaccine">
+		SELECT
+		<include refid="bsManageVaccineColumns" />
+		FROM bs_manage_vaccine a
+		<include refid="bsManageVaccineJoins" />
+		<where>
+			m.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO bs_manage_vaccine(
+			id,
+			g_num,
+			name,
+			pathema,
+			g_name,
+			ban,
+			g_code,
+			code,
+			name_all,
+			code_all,
+			status,
+			price,
+			excep,
+			intype,
+			live,
+			type,
+			sort,
+		<!-- localcode, -->
+		update_date
+		) VALUES (
+			#{id},
+			#{gNum},
+			#{name},
+			#{pathema},
+			#{gName},
+			#{ban},
+			#{gCode},
+			#{code},
+			#{nameAll},
+			#{codeAll},
+			#{status},
+			#{price},
+			#{excep},
+			#{inType},
+			#{live},
+			#{type},
+			#{sort},
+			<!-- #{localCode}, -->
+			#{updateDate}
+		)
+	</insert>
+
+	<insert id="saveModel">
+		INSERT INTO BS_MANAGE_VACCINE_MODEL(
+			ID,
+			M_NUM,
+			M_NAME,
+			M_CODE,
+			LOCALCODE,
+			update_date
+
+		) VALUES (
+			#{id},
+			#{mNum},
+			#{gName},
+			#{gCode},
+			#{localCode},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE bs_manage_vaccine SET 	
+			g_num = #{gNum},
+			name = #{name},
+			pathema = #{pathema},
+			g_name = #{gName},
+			ban = #{ban},
+			g_code = #{gCode},
+			code = #{code},
+			name_all = #{nameAll},
+			code_all = #{codeAll},
+			status = #{status},
+			price = #{price},
+			excep = #{excep}
+		WHERE id = #{id} 
+	</update>
+
+	<update id="delete">
+		DELETE FROM bs_manage_vaccine
+		WHERE id = #{id}
+	</update>
+
+	<!-- 获取大类列表 -->
+	<select id="findGroupList" resultType="BsManageVaccine">
+		SELECT
+		DISTINCT
+			G_NUM "gNum", G_NAME "gName",G_CODE "gCode"
+		FROM
+			BS_MANAGE_VACCINE
+			ORDER BY G_NUM
+
+	</select>
+
+	<select id="findVaccListAble" resultType="BsManageVaccine">
+		SELECT DISTINCT
+			v.*
+		FROM
+			BS_MANAGE_VACCINE v
+		RIGHT JOIN BS_MANAGE_PRODUCT P ON P .vaccineid = v. ID 
+		WHERE
+			P .storenum > 0 and P.localcode = #{localCode} 
+		AND g_num = #{gNum}
+		AND p.DEL_FLAG = '0'
+	</select>
+
+	<!-- 查询所有的疫苗小类（去重） -->
+	<select id="repertorySum" resultType="BsManageVaccine">
+		SELECT DISTINCT v."NAME",v."ID" FROM BS_MANAGE_VACCINE v ORDER BY v."ID" 
+	</select>
+
+	<select id="getLastPin" resultType="BsManageVaccine">
+		SELECT
+			 DISTINCT *
+		FROM
+			(
+				SELECT
+					v.PATHEMA,
+					v.G_NUM "gNum"
+				FROM
+					"BS_MANAGE_VACCINE" v
+				where v.localcode = #{localCode}
+			) vac
+		LEFT JOIN (
+			SELECT
+				"COUNT" (VACCGROUP) "maxpin",
+				VACCGROUP
+			FROM
+				BS_MANAGE_VACCINENUM n
+			where n.localcode = #{localCode}
+			GROUP BY
+				VACCGROUP
+		) nn ON nn.VACCGROUP = vac."gNum"
+		WHERE NN.VACCGROUP = #{gNum}
+	</select>
+
+	<select id="findModelList" resultType="BsManageVaccine">
+		SELECT
+		DISTINCT
+			substr(ID,0,2) "rNum",M_NUM "gNum", M_NAME "gName",M_CODE "gCode"
+		FROM
+			BS_MANAGE_VACCINE_MODEL
+		where localcode = #{localCode}
+			ORDER BY "rNum"
+	</select>
+
+	<select id="findLiveGnumList" resultType="java.lang.String">
+		SELECT DISTINCT  m.M_NUM
+		FROM BS_MANAGE_VACCINE t LEFT JOIN BS_MANAGE_VACCINE_MODEL m ON t."ID" = m."ID" and  m.localcode = #{localCode}
+		WHERE t.LIVE = '1' and t.g_Num &lt;&gt; '03' 
+	</select>
+
+	<select id="findRules" resultType="java.lang.String">
+		SELECT DISTINCT		
+			"RULE" "rule"
+		FROM
+			BS_MANAGE_VACCINE_MODEL
+		WHERE "RULE" IS NOT NULL and localcode = #{localCode}
+	</select>
+
+	<select id="getImpartByGnum" resultType="java.lang.String">
+		SELECT DISTINCT		
+			"IMPART" "impart"
+		FROM
+			BS_MANAGE_VACCINE
+		WHERE "IMPART" IS NOT NULL
+	</select>
+
+	<select id="findGroupListAble" resultType="BsManageVaccine">
+		SELECT
+			DISTINCT t.G_NUM, t.G_NAME
+		FROM
+			BS_MANAGE_PRODUCT p
+		LEFT JOIN BS_MANAGE_VACCINE t ON p.VACCINEID = t."ID"
+		WHERE p.STORENUM > '0' AND t.G_NUM NOT IN ('28', '43', '44') and p.localcode = #{localCode}
+		ORDER BY t.G_NUM
+	</select>
+
+	<select id="findGroupListAbleModel" resultType="BsManageVaccine">
+		SELECT
+			DISTINCT m.m_num, m.m_name
+		FROM
+			BS_MANAGE_PRODUCT p
+		LEFT JOIN BS_MANAGE_VACCINE t ON p.VACCINEID = t."ID" 
+		LEFT JOIN BS_MANAGE_VACCINE_MODEL m ON p.VACCINEID = m."ID" and p.localcode = m.localcode
+		WHERE p.STORENUM > '0' AND t.G_NUM NOT IN ('28', '43', '44') and p.localcode = #{localCode}
+		<if test="showAll != SHOWALL_YES">
+		    and p.officecode = #{officeCode}
+		</if>
+		ORDER BY m.m_num 
+	</select>
+	
+	<!-- 根据筛选条件查询儿童个案详情排除近期接种的儿童个案后 -->
+	<select id="getYQWZChildBaseInfoReal" resultType="java.util.Map">
+		SELECT
+			CHILDCODE,
+			CHILDNAME,
+			GENDER,
+			RESIDE,
+			BIRTHDAY,
+			GUARDIANNAME,
+			GUARDIANMOBILE,
+			FATHER,
+			FATHERPHONE,
+			ADDRESS,
+			COMMNAME,
+			"NAME",
+			DOSAGE
+		FROM
+			(SELECT
+				CHILDCODE,
+				CHILDNAME,
+				GENDER,
+				RESIDE,
+				BIRTHDAY,
+				GUARDIANNAME,
+				GUARDIANMOBILE,
+				FATHER,
+				FATHERPHONE,
+				ADDRESS,
+				COMMNAME,
+				"NAME",
+				DOSAGE,
+				ROWNUM  AS rowno
+			FROM 
+				(SELECT
+					DISTINCT T1.CHILDCODE,
+					T2.CHILDNAME,
+					T2.GENDER,
+					T2.RESIDE,
+					T2.BIRTHDAY,
+					T2.GUARDIANNAME,
+					T2.GUARDIANMOBILE,
+					T2.FATHER,
+					T2.FATHERPHONE,
+					T2.ADDRESS,
+					T4.NAME AS COMMNAME,
+					T3."NAME",
+					T1.DOSAGE
+				FROM
+				EXP_ROUTINEVACC_6_1_DETAIL T1 
+				INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+				INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+				INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+				WHERE
+				TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM')
+				AND	T1."TYPE"='1'<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+					 AND T2.OFFICEINFO = #{searchMap.officeCode} 
+					 AND T4.LOCALCODE = #{searchMap.officeCode} 
+				</if>
+				<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+					and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+					AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+					AND trunc(#{searchMap.baseinfo.birthendTime}) 
+				</if>
+				<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+					AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+							open="(" close=")" separator=",">
+						#{resideItem}
+					</foreach>
+				</if>
+				<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+					AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+						open="(" close=")" separator=",">
+						#{situationsItem}
+					</foreach> 
+				</if> 
+				<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+					AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+						open="(" close=")" separator=",">
+						#{areasItem}
+					</foreach>
+				</if>
+				<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+					AND T1.VACC_CODE IN
+					<foreach collection="searchMap.vaccNums" index="index" item="item" 
+						open="(" close=")" separator=",">
+						#{item.id}
+					</foreach>	
+				</if>
+				AND T1.CHILDCODE NOT IN(
+					SELECT T3.CHILDCODE FROM EXP_ROUTINEVACC_6_1_DETAIL T3 WHERE T3."TYPE"='3' AND T3.YEAR_MONTH &gt;= #{searchMap.endSearchMonth}
+				)
+			)
+			<where>
+				ROWNUM  &lt;= #{page.pageSize} *  #{page.pageNo}
+			</where>) TT
+		<where>
+			TT.rowno &gt; #{page.pageSize} *  (#{page.pageNo}-1)
+		</where>
+	</select>
+	
+	
+	<!-- 查询导出数据：根据筛选条件查询儿童个案详情排除近期接种的儿童个案后 -->
+	<select id="getYQWZChildBaseInfoExcel" resultType="java.util.Map">
+		SELECT
+			DISTINCT CHILDCODE,
+			CHILDNAME,
+			GENDER,
+			RESIDE,
+			BIRTHDAY,
+			GUARDIANNAME,
+			GUARDIANMOBILE,
+			FATHER,
+			FATHERPHONE,
+			ADDRESS,
+			COMMNAME,
+			"NAME",
+			DOSAGE
+		FROM (
+		SELECT
+			DISTINCT T1.CHILDCODE,
+			T2.CHILDNAME,
+			T2.GENDER,
+			T2.RESIDE,
+			T2.BIRTHDAY,
+			T2.GUARDIANNAME,
+			T2.GUARDIANMOBILE,
+			T2.FATHER,
+			T2.FATHERPHONE,
+			T2.ADDRESS,
+			T4.NAME AS COMMNAME,
+			T3."NAME",
+			T1.DOSAGE,
+		ROWNUM  AS rowno
+		FROM
+		EXP_ROUTINEVACC_6_1_DETAIL T1 
+		INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+		INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+		INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+		WHERE
+		TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM')
+		AND	T1."TYPE"='1'<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+			 AND T2.OFFICEINFO = #{searchMap.officeCode} 
+			 AND T4.LOCALCODE = #{searchMap.officeCode} 
+		</if>
+		<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+			and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+			AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+			AND trunc(#{searchMap.baseinfo.birthendTime}) 
+		</if>
+		<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+			AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+					open="(" close=")" separator=",">
+				#{resideItem}
+			</foreach>
+		</if>
+		<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+			AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+				open="(" close=")" separator=",">
+				#{situationsItem}
+			</foreach> 
+		</if> 
+		<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+			AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+				open="(" close=")" separator=",">
+				#{areasItem}
+			</foreach>
+		</if>
+		<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+			AND T1.VACC_CODE IN
+			<foreach collection="searchMap.vaccNums" index="index" item="item" 
+				open="(" close=")" separator=",">
+				#{item.id}
+			</foreach>	
+		</if>
+		AND T1.CHILDCODE NOT IN(
+			SELECT T3.CHILDCODE FROM EXP_ROUTINEVACC_6_1_DETAIL T3 WHERE T3."TYPE"='3' AND T3.YEAR_MONTH &gt;= #{searchMap.endSearchMonth}
+		))
+	</select>
+	
+	<!-- 根据筛选条件查询记录总条数 -->
+	<select id="getYQWZChildBaseInfoRealCount" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			(SELECT
+			DISTINCT CHILDCODE,
+			CHILDNAME,
+			GENDER,
+			RESIDE,
+			BIRTHDAY,
+			GUARDIANNAME,
+			GUARDIANMOBILE,
+			FATHER,
+			FATHERPHONE,
+			ADDRESS,
+			COMMNAME,
+			"NAME",
+			DOSAGE
+		FROM (
+		SELECT
+			DISTINCT T1.CHILDCODE,
+			T2.CHILDNAME,
+			T2.GENDER,
+			T2.RESIDE,
+			T2.BIRTHDAY,
+			T2.GUARDIANNAME,
+			T2.GUARDIANMOBILE,
+			T2.FATHER,
+			T2.FATHERPHONE,
+			T2.ADDRESS,
+			T4.NAME AS COMMNAME,
+			T3."NAME",
+			T1.DOSAGE
+		FROM
+		EXP_ROUTINEVACC_6_1_DETAIL T1 
+		INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+		INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+		INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+		WHERE
+		TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM')
+		AND	T1."TYPE"='1'<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+			 AND T2.OFFICEINFO = #{searchMap.officeCode} 
+			 AND T4.LOCALCODE = #{searchMap.officeCode} 
+		</if>
+		<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+			and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+			AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+			AND trunc(#{searchMap.baseinfo.birthendTime}) 
+		</if>
+		<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+			AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+					open="(" close=")" separator=",">
+				#{resideItem}
+			</foreach>
+		</if>
+		<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+			AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+				open="(" close=")" separator=",">
+				#{situationsItem}
+			</foreach> 
+		</if> 
+		<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+			AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+				open="(" close=")" separator=",">
+				#{areasItem}
+			</foreach>
+		</if>
+		<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+			AND T1.VACC_CODE IN
+			<foreach collection="searchMap.vaccNums" index="index" item="item" 
+				open="(" close=")" separator=",">
+				#{item.id}
+			</foreach>	
+		</if>
+		AND T1.CHILDCODE NOT IN(
+			SELECT T3.CHILDCODE FROM EXP_ROUTINEVACC_6_1_DETAIL T3 WHERE T3."TYPE"='3' AND T3.YEAR_MONTH &gt;= #{searchMap.endSearchMonth}
+		)))
+	</select>
+	
+	<select id="getWithModel" resultType="BsManageVaccine">
+		SELECT 
+			<include refid="bsManageVaccineColumns"/>
+		FROM bs_manage_vaccine a
+		<include refid="bsManageVaccineJoins"/>
+		WHERE a.id = #{id} 
+			and m.localcode = #{localCode}
+	</select>
+	
+	<select id="findListSimple" resultType="BsManageVaccine">
+		SELECT 
+			a.id AS "id",
+			a.g_num AS "gNum",
+			a.name AS "name",
+			a.pathema AS "pathema",
+			a.g_name AS "gName",
+			a.ban AS "ban",
+			a.g_code AS "gCode",
+			a.code AS "code",
+			a.name_all AS "nameAll",
+			a.code_all AS "codeAll",
+			a.status AS "status",
+			a.price AS "price",
+			a.excep AS "excep",
+			a.live,
+			a.type,
+			a.sort
+		FROM bs_manage_vaccine a
+		<where>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="pathema != null and pathema != ''">
+				AND a.pathema = #{pathema}
+			</if>
+			<if test="gName != null and gName != ''">
+				AND a.g_name = #{gName}
+			</if>
+			<if test="gNum != null and gNum != ''">
+				AND a.g_num = #{gNum}
+			</if>
+			<if test="ban != null and ban != ''">
+				AND a.ban = #{ban}
+			</if>
+			<if test="gCode != null and gCode != ''">
+				AND a.g_code = #{gCode}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="nameAll != null and nameAll != ''">
+				AND a.name_all = #{nameAll}
+			</if>
+			<if test="codeAll != null and codeAll != ''">
+				AND a.code_all = #{codeAll}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="excep != null and excep != ''">
+				AND a.excep = #{excep}
+			</if>
+			<if test='vacctype != null and vacctype =="1"'>
+				AND a.G_NUM NOT IN ('28', '43', '44')
+			</if>
+			<if test='vacctype != null and vacctype =="2"'>
+				AND a.G_NUM IN 
+				<foreach collection="vaccSum" item="vacc" index="index" open="(" close=")" separator=",">
+		            #{vacc}
+		        </foreach>
+			</if>
+			<if test="type != null and type !=''">
+				AND a."TYPE" = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.G_NUM
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.vaccine.dao.SysVaccRecordDao">
+    
+	<sql id="sysVaccRecordColumns">
+		a."ID" AS "id",
+		a."PID" AS "pid",
+		a."CREATEDATE" AS "createDate",
+		a."UID" AS "uid",
+		a."PNAME" AS "pname",
+		a."UNAME" AS "uname",
+		a."ISNEW"
+	</sql>
+	
+	<sql id="sysVaccRecordJoins">
+	</sql>
+    
+	<select id="get" resultType="SysVaccRecord">
+		SELECT 
+			<include refid="sysVaccRecordColumns"/>
+		FROM sys_vacc_record a
+		<include refid="sysVaccRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysVaccRecord">
+		SELECT 
+			<include refid="sysVaccRecordColumns"/>
+		FROM sys_vacc_record a
+		<include refid="sysVaccRecordJoins"/>
+		<where>
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysVaccRecord">
+		SELECT 
+			<include refid="sysVaccRecordColumns"/>
+		FROM sys_vacc_record a
+		<include refid="sysVaccRecordJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		MERGE INTO sys_vacc_record A USING (
+		SELECT #{id} AS "ID" FROM DUAL	
+		) B ON (A ."ID" = B."ID")
+		WHEN MATCHED THEN
+			UPDATE SET 	
+				"PID" = #{pid},
+				"CREATEDATE" = sysdate,
+				"UID" = #{uid},
+				"PNAME" = #{pname},
+				"UNAME" = #{uname},
+				"ISNEW" = #{isnew},
+				"STOCK" = #{stock},
+				"LOCALCODE" = #{localCode}
+			WHERE id = #{id}
+		WHEN NOT MATCHED THEN
+			INSERT VALUES (
+				#{id},
+				#{pid},
+				sysdate,
+				#{uid},
+				#{pname},
+				#{uname},
+				#{isnew},
+				#{stock},
+				#{localCode}
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_vacc_record SET 	
+			"PID" = #{pid},
+			"CREATEDATE" = #{createDate},
+			"UID" = #{uid},
+			"PNAME" = #{pname},
+			"UNAME" = #{uname},
+			"ISNEW" = #{isnew}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_vacc_record
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

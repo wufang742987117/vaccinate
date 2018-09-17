@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.SysWorkingHoursDao">
+    
+	<sql id="sysWorkingHoursColumns">
+		a.id AS "id",
+		a.localcode AS "localCode",
+		a.week AS "week",
+		a.time_slice AS "timeSlice",
+		a.maximum AS "maximum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.date_day AS "dateDay",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="sysWorkingHoursJoins">
+	</sql>
+    
+	<select id="get" resultType="SysWorkingHours">
+		SELECT 
+			<include refid="sysWorkingHoursColumns"/>
+		FROM sys_working_hours a
+		<include refid="sysWorkingHoursJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysWorkingHours">
+		SELECT 
+			<include refid="sysWorkingHoursColumns"/>
+		FROM sys_working_hours a
+		<include refid="sysWorkingHoursJoins"/>
+		<where>
+			a.localcode = #{localCode}
+			<if test="dateDay != null and dateDay != ''">
+				and a.date_day = #{dateDay}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<when test="orderBy !=null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysWorkingHours">
+		SELECT 
+			<include refid="sysWorkingHoursColumns"/>
+		FROM sys_working_hours a
+		<include refid="sysWorkingHoursJoins"/>
+		<where>
+			a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_working_hours(
+			id,
+			localcode,
+			week,
+			time_slice,
+			maximum,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			date_day,
+			remarks
+		) VALUES (
+			#{id},
+			#{localCode},
+			#{week},
+			#{timeSlice},
+			#{maximum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{dateDay},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_working_hours SET 	
+			localcode = #{localCode},
+			week = #{week},
+			time_slice = #{timeSlice},
+			maximum = #{maximum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			date_day = #{dateDay},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_working_hours
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,580 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.hepatitis.dao.BsHepatitisBcheckinDao">
+    
+	<sql id="bsHepatitisBcheckinColumns">
+		a.id AS "id",
+		a.username AS "username",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.age AS "age",
+		a.home_address AS "homeAddress",
+		a.link_phone AS "linkPhone",
+		a.idcard_no AS "idcardNo",
+		a.vaccine_name AS "vaccineName",
+		a.standard AS "standard",
+		a.batch AS "batch",
+		a.inoculation_status AS "inoculationStatus",
+		a.weight AS "weight",
+		a.dosage AS "dosage",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.manufacturer AS "manufacturer",
+		a.temp_id AS "tempId",
+		a.open_id AS "openId",
+		a.pay_status AS "payStatus",
+		a.history AS "history",
+		a.remarks AS "remarks",
+		a.address AS "address",
+		a.province AS "province",
+		a.city AS "city",
+		a.county AS "county",
+		a.hepa_b_code AS "hepaBcode",
+		a.antibodies AS "antibodies",
+		a.vacctype AS "vaccType",
+		a.realname AS "realname"
+	</sql>
+	
+	<sql id="bsHepatitisBcheckinJoins">
+	</sql>
+    
+	<select id="get" resultType="BsHepatitisBcheckin">
+		SELECT 
+			<include refid="bsHepatitisBcheckinColumns"/>
+		FROM bs_hepatitis_bcheckin a
+		<include refid="bsHepatitisBcheckinJoins"/>
+		WHERE 
+			a.id = #{id} 
+		and a.deflag='0'
+	</select>
+
+	<select id="findList" resultType="BsHepatitisBcheckin">
+		SELECT
+			<include refid="bsHepatitisBcheckinColumns" />
+		FROM bs_hepatitis_bcheckin a  
+			<include refid="bsHepatitisBcheckinJoins" />
+		<where>
+			<if test="username != null and username != ''">
+				AND a.username = #{username}
+			</if>
+			<if test="idcardNo != null and idcardNO != ''">
+				AND a.idcard_no = #{idcardNO}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND a.birthday = #{birthday}
+			</if>
+			<if test="age != null and age != ''">
+				AND a.age = #{age}
+			</if>
+			<if test="linkPhone != null and linkPhone != ''">
+				AND a.link_phone = #{linkPhone}
+			</if>
+			<if test="vaccineName != null and vaccineName != ''">
+				AND a.vaccine_name = #{vaccineName}
+			</if>
+			<if test="standard != null and standard != ''">
+				AND a.standard = #{standard}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer = #{manufacturer}
+			</if>
+			<if test="batch != null and batch != ''">
+				AND a.batch = #{batch}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="vaccType != null and vaccType != ''">
+				AND a.vacctype = #{vaccType}
+			</if>
+			and a.deflag='0' 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY
+					a.vacctype,
+				    a.idcard_no DESC,
+					a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsHepatitisBcheckin">
+		SELECT 
+			<include refid="bsHepatitisBcheckinColumns"/>
+		FROM bs_hepatitis_bcheckin a
+		<include refid="bsHepatitisBcheckinJoins"/>
+		<where>
+			a.deflag='0' and a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_hepatitis_bcheckin(
+			id,
+			username,
+			sex,
+			birthday,
+			age,
+			home_address,
+			link_phone,
+			idcard_no,
+			vaccine_name,
+			standard,
+			batch,
+			inoculation_status,
+			weight,
+			dosage,
+			create_date,
+			create_by,
+			manufacturer,
+			temp_id,
+			open_id,
+			pay_status,
+			history,
+			remarks,
+			address,
+			province,
+			city,
+			county,
+			hepa_b_code,
+			antibodies,
+			vacctype,
+			realname,
+			localcode
+		) VALUES (
+			#{id},
+			#{username},
+			#{sex},
+			#{birthday},
+			#{age},
+			#{homeAddress},
+			#{linkPhone},
+			#{idcardNo},
+			#{vaccineName},
+			#{standard},
+			#{batch},
+			#{inoculationStatus},
+			#{weight},
+			#{dosage},
+			sysdate,
+			#{createBy.id},
+			#{manufacturer},
+			#{tempId},
+			#{openId},
+			#{payStatus},
+			#{history},
+			#{remarks},
+			#{address},
+			#{province},
+			#{city},
+			#{county},
+			#{hepaBcode},
+			#{antibodies},
+			#{vaccType},
+			#{realname},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_hepatitis_bcheckin SET 	
+			username = #{username},
+			sex = #{sex},
+			birthday = #{birthday},
+			age = #{age},
+			home_address = #{homeAddress},
+			link_phone = #{linkPhone},
+			idcard_no = #{idcardNo},
+			vaccine_name = #{vaccineName},
+			standard = #{standard},
+			batch = #{batch},
+			inoculation_status = #{inoculationStatus},
+			weight = #{weight},
+			dosage = #{dosage},
+			manufacturer = #{manufacturer},
+			temp_id = #{tempId},
+			open_id = #{openId},
+			pay_status = #{payStatus},
+			history = #{history},
+			remarks = #{remarks},
+			address = #{address},
+			province = #{province},
+			city = #{city},
+			county = #{county},
+			hepa_b_code = #{hepaBcode},
+			antibodies = #{antibodies},
+			vacctype = #{vaccType},
+			realname = #{realname}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		update bs_hepatitis_bcheckin 
+		set deflag = '1'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 根据名字或者电话或者身份证号查询所有的个案 -->
+	<select id="namelist" resultType="BsHepatitisBcheckin">
+		SELECT
+			*
+		FROM
+			BS_HEPATITIS_BCHECKIN c
+		<where>
+				(c.username = #{searchName}
+			OR  c.link_phone = #{searchName}
+			OR  c.idcard_no = #{searchName}
+			OR  c.hepa_b_code LIKE '%' || #{searchName} || '%'
+			OR  to_char(c.birthday,'yyyyMMdd') = #{searchName})
+			 <if test="birthday != null and birthday != ''">
+				AND c.birthday = #{birthday}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND c.create_date = #{createDate}
+			</if>
+			<if test="linkPhone != null and linkPhone != ''">
+				AND c.link_phone = #{linkPhone}
+			</if> 
+			and c.deflag='0' 
+			and c.localcode = #{localCode}
+		</where>
+	</select>
+	
+	<select id="getQueryVaccName" resultType="java.lang.String">
+		SELECT
+			vaccname
+		FROM
+			SYS_VACC_INFO
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND "ID" = #{vaccType}
+			</if>
+			and localcode = #{localCode}
+		</where>
+	</select>
+	
+	<!-- 根据id查询所有针次信息 -->
+	<select id="finishTimes" resultType="BsHepatitisBNum">
+		SELECT * 
+		FROM BS_HEPATITIS_B_NUM b 
+		WHERE 
+			b.check_id = #{id} 
+		and b.deflag = '0' 
+		and b.localcode = #{localCode}
+		ORDER BY b.vaccine_num   
+	</select>
+	
+	<!-- 查询疫苗名称 -->
+	<select id="vaccineName" resultType="java.lang.String">
+		SELECT 
+			"NAME"
+		FROM
+			BS_MANAGE_VACCINE
+		WHERE
+			"ID" = #{vname} 
+	</select>
+	
+	<select id="queryVaccInterVal" resultType="VaccInfo">
+		SELECT
+			*
+		FROM
+			SYS_VACC_INFO_PZ
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND "VID" = #{vaccType}
+			</if>
+			<if test="count != null and count != ''">
+				AND "COUNT" = #{count}
+			</if>
+			and "STATUS" = #{status}
+			and localcode = #{localCode}
+		</where>
+	</select>
+	
+	<select id="getQueryVacc" resultType="VaccInfo">
+		SELECT
+			*
+		FROM
+			SYS_VACC_INFO
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND "ID" = #{vaccType}
+			</if>
+			AND type = '2'
+			and localcode = #{localCode}
+		</where>
+	</select>
+	
+	<!--查询数据库乙肝疫苗种类  -->
+	<select id="vaccineTypeHepa" resultType="BsManageProduct" >
+		SELECT DISTINCT
+			V."ID",
+			V."NAME",
+			P.VACCINEID
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID 
+		WHERE
+			P.ISSHOW = 'Y'
+		AND P.DEL_FLAG = '0'
+		and p.localcode = #{localCode}
+		and P.officecode = #{officeCode}
+	</select>
+	
+	<!--乙肝疫苗后四位生成规则  -->
+	<select id="bianmadog" resultType="java.lang.String">
+		SELECT NVL ( LPAD ( MAX (SUBSTR(T .hepa_b_code, 16, 4)) + 1, 4, 0 ), '0001' ) AS max_code
+		FROM
+			bs_hepatitis_bcheckin T
+		WHERE
+			SUBSTR (T.hepa_b_code, 12, 4) = #{year}
+		AND SUBSTR (T.hepa_b_code, 20) = #{vaccType}
+		AND T.localcode = #{localCode}
+	</select>
+	
+	<!-- 查询建档是否重复 -->
+	<select id="countHepaBcode" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_HEPATITIS_BCHECKIN A
+		WHERE
+			a.hepa_b_code = #{hepaBcode} and a.localcode = #{localCode} 
+	</select>
+	
+	<!-- 乙肝疫苗（非蛋白） -->
+	<select id="finishpinNum" resultType="BsHepatitisBNum">
+		SELECT 
+			n.id AS "id",
+			n.check_id AS "checkId",
+			n.vaccine_num AS "vaccineNum",
+			n.vaccine_date AS "vaccineDate",
+			n.real_date AS "realDate",
+			n.dose AS "dose",
+			n.pay_status AS "payStatus",
+			n.status AS "status",
+			n.vaccine_id AS "vaccineId",
+			n.manufacturer AS "manufacturer",
+			n.batch AS "batch",
+			n.n_status AS "nStatus",
+			n.w_status AS "wStatus",
+			n.create_name AS "createName",
+			n.create_by AS "createBy.id",
+			n.create_date AS "createDate",
+			n.signature AS "signature",
+			s.signature AS "signatureData",
+			n.s_id AS "sId",
+			s.stype AS "stype"
+		FROM 
+			BS_HEPATITIS_B_NUM n 
+		LEFT JOIN BS_HEPATITIS_B_SIGNATURE s ON n.s_id = s.id
+		WHERE  
+			n.check_id = #{id} 
+		AND n.vaccine_num != '0' 
+		and n.deflag = '0'
+		AND n.localcode = #{localCode}
+		ORDER BY 
+			n.vaccine_num
+	</select>
+	
+	<!-- 查询乙肝疫苗现有库存 -->
+	<select id="vaccineHepaStock" resultType="BsHepatitisBcheckinStock"   >
+		SELECT
+			V."ID" AS vaccineId,
+			V."NAME" AS vaccineName,
+			P .MANUFACTURER AS manufacturer,
+			P .BATCHNO AS batch,
+			S."LABEL" AS "standard",
+			P .STORENUM AS storeNum
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID 
+		LEFT JOIN SYS_DICT s ON s."VALUE" = P."SPECIFICATION" AND s."TYPE" = 'specification'
+		WHERE
+			P .ISSHOW = 'Y'
+		AND P .DEL_FLAG = '0'
+		AND P .localcode = #{localCode}
+		and P.officecode = #{officeCode}
+		ORDER BY V."NAME"
+	</select>
+	
+	<!--乙肝疫苗  查询未付款总量 -->
+	<select id="vaccineHepaStock1" resultType="BsHepatitisBcheckinStock">
+		SELECT
+			p .vaccine_id AS vaccineId,
+			p .batch AS batch,
+			p .standard AS "standard",
+			"COUNT" (batch) AS storeNum1
+		FROM
+			bs_hepatitis_b_num p
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND	p.vacctype  = #{vaccType}
+			</if>
+			AND p .pay_status = '0'
+			AND p .status = '0'
+			AND p .w_status = '0'
+			AND p .deflag = '0'
+			and p.localcode = #{localCode}
+		</where>
+		GROUP BY
+			p .vaccine_id,
+			p .batch,
+			p .standard
+	</select>
+	
+	<!--乙肝疫苗  查询已付款总量（但未接种未减库存） -->
+	<select id="vaccineHepaStock2" resultType="BsHepatitisBcheckinStock"   >
+		SELECT
+			p .vaccine_id AS vaccineId,
+			p .batch AS batch,
+			p .standard AS "standard",
+			"COUNT" (batch) AS storeNum2
+		FROM
+			bs_hepatitis_b_num p
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND	p.vacctype  = #{vaccType}
+			</if>
+			AND p .pay_status = '1'
+			AND p .status = '0'
+			AND p .w_status = '0'
+			AND p .deflag = '0'
+			and p.localcode = #{localCode}
+		</where>
+		GROUP BY
+			p .vaccine_id,
+			p .batch,
+			p .standard
+	</select>
+	
+	<!--乙肝疫苗 查询已完成总量 -->
+	<select id="vaccineHepaStock3" resultType="BsHepatitisBcheckinStock"   >
+			SELECT
+			p .vaccine_id AS vaccineId,
+			p .batch AS batch,
+			p .standard AS "standard",
+			"COUNT" (batch) AS storeNum3
+		FROM
+			bs_hepatitis_b_num p
+		<where>
+			<if test="vaccType != null and vaccType != ''">
+				AND	p.vacctype  = #{vaccType}
+			</if>
+			AND p .status = '1'
+			AND p .w_status = '0'
+			AND p .deflag = '0'
+			and p.localcode = #{localCode}
+		</where>
+		GROUP BY
+			p .vaccine_id,
+			p .batch,
+			p .standard
+	</select>
+	
+	<select id="findData" resultType="BsHepatitisBcheckin">
+		select * from
+			(
+			SELECT 
+			    V ."ID" AS vaccineId,
+			    P ."ID" AS pid,
+			    P .BATCHNO AS batch,
+			    P .SPECIFICATION AS standard,
+				P .MANUFACTURER AS manufacturer
+			FROM VIEW_BS_PRODUCT P
+			LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID
+			WHERE
+				P.ISSHOW = 'Y'
+			AND P.DEL_FLAG = '0'
+			AND <![CDATA[ P.storenum > 0]]>
+			<if test="vaccType == 2">
+				AND P.VACCINEID LIKE '02' || '%' 
+				AND P.SPECIFICATION LIKE #{attr} || '%'
+			</if>
+			<if test="vaccType == 4">
+				AND P.VACCINEID LIKE #{attr} || '%' 
+			</if>
+			AND p.localcode = #{localCode}
+			AND P.officecode = #{officeCode}
+			) 
+		where rownum = 1 
+	</select>
+	
+	<!-- 新建卡数 -->
+	<select id="countNumOne" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_HEPATITIS_BCHECKIN A
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				 AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss') 
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	A.create_by  = #{createById}
+			</if>
+			<if test="vaccType != null and vaccType != ''">
+				AND	a.vacctype  = #{vaccType}
+			</if>
+			and a.deflag='0' and a.localcode = #{localCode}
+		</where>
+	</select>
+	
+	<!-- 接种数 -->
+	<select id="countNumTwo" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_HEPATITIS_BCHECKIN  A
+		LEFT JOIN BS_HEPATITIS_B_NUM R ON R.check_id = A.id AND R.localcode = A.localcode
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				 AND R .real_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss') 
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	R.create_by  = #{createById}
+			</if>
+			<if test="vaccType != null and vaccType != ''">
+				AND	R.vacctype  = #{vaccType}
+			</if>
+			AND R .real_date IS NOT NULL
+			AND R .status = '1'
+			AND R .w_status = '0'
+			AND R.deflag='0'
+			AND a.localcode = #{localCode}
+		</where>
+	</select>
+	
+	<update id="updateByPayStatus">
+		UPDATE BS_HEPATITIS_B_NUM SET
+			pay = '0',
+			pay_status = '1',
+			create_date = sysdate
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

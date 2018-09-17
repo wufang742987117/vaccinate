@@ -1,0 +1,851 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.num.dao.BsRabiesNumDao">
+
+	<sql id="bsRabiesNumColumns">
+		a."id" AS "id",
+		a."checkid" AS "checkid",
+		a."vaccinum" AS "vaccinum",
+		a."vaccidate" AS "vaccidate",
+		a."realdate" AS "realdate",
+		a."dose" AS "dose",
+		a."paystatus" AS "paystatus",
+		a."vaccineid" AS "vaccineid",
+		a."manufacturer" AS "manufacturer",
+		a."batchnum" AS "batchnum",
+		a."nstatus" AS "nstatus",
+		a."wstatus" AS "wstatus",
+		a."create_name" AS "createByName",
+		a."create_by" AS "createBy.id",
+		a."create_date" AS "createDate",
+		a."signature" AS "signature",
+		a."s_id" AS "sId",
+		a."pid" AS "pid",
+		s."signature" AS "signatureData",
+		s."stype" AS "stype",
+		a.status AS "status",
+		a.original_price AS "originalPrice",
+		a.current_price AS "currentPrice",
+		a.fund_status AS "fundStatus"
+	</sql>
+	
+	<sql id="bsRabiesDealColumns">
+			a."ID" as "id",
+			a."CHECKID" as "checkinId",
+			a."CREARE_BY" as "createBy.id",
+			a."CREATE_DATE" as "createDate",
+			a."PAYSTATUS" as "paystatus",
+			a."CREATE_NAME" as "createName",
+			a."STATUS" as "status",
+			a."REMARKS" as "remarks",
+			a."REFUND" as "refund",
+			a."PRICE" as "price"
+	</sql>
+
+	<sql id="bsRabiesNumJoins">
+		LEFT JOIN BS_RABIES_SIGNATURE s ON a."s_id" = s."id"
+	</sql>
+
+	<select id="get" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		WHERE 
+			a."id" = #{id}
+		AND a."deflag" = '0'
+	</select>
+
+	<select id="findList" resultType="BsRabiesNum">
+		SELECT DISTINCT xxx.*
+		FROM 
+			(SELECT 
+				b."id" AS "kin.id",
+				b."username" AS "kin.username",
+				b."sex" AS "kin.sex",
+				b."age" AS "kin.age",
+				COUNT(b."rabiescode") AS "vaccicount",
+				SUBSTR (b."rabiescode", 14) AS "kin.rabiescode",
+				A ."manufacturer" AS "manufacturer",
+				A ."batchnum" AS "batchnum",
+				A ."create_name" AS "createByName",
+				A ."vaccinum" AS "vaccinum",
+				A ."signature" AS "signature"
+	        FROM bs_rabies_num A
+	        LEFT JOIN bs_rabies_checkin b ON b."id" = A."checkid" and b.localcode = A.localcode
+	        LEFT JOIN SYS_USER su ON su."ID" = A."create_by"
+       		<where>
+       		    and a.localcode = #{localCode}
+				<if test="manufacturer != null and manufacturer != ''">
+					AND	a."manufacturer"  = #{manufacturer}
+				</if>
+				<if test="createById != null and createById != ''">
+					AND	a."create_by"  = #{createById}
+				</if>
+				<if test="paystatus != null and paystatus != ''">
+					<choose>
+						<when test="paystatus == 2">
+				            AND a.status = '1'
+				        </when> 
+				        <when test="paystatus == 3">
+				            AND a."paystatus" = '1'
+				            AND a.status = '0'
+				        </when>
+				        <when test="paystatus == 4">
+				            AND (a."paystatus" = '0' OR a."paystatus" = '1')
+				            AND a.status = '0'
+				        </when>
+				        <when test="paystatus == 5">
+				            AND a.status = '1'
+				        </when>
+				        <otherwise>
+				        	AND a."paystatus" = #{paystatus}
+				            AND a.status = '0'
+				        </otherwise>
+				    </choose> 
+				</if>
+				<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					<choose>    
+						<when test="paystatus == 0 or paystatus == 1">
+				            AND a."vaccidate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="paystatus == 2">
+				        	AND a."signature" = '1'
+				            AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="paystatus == 3">
+				            AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="paystatus == 4">
+				            AND a."signature" = '1'
+				            AND a."realdate" IS NULL
+				            AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="paystatus == 5">
+				        	AND (a."signature" = '0' OR a."signature" = '2')
+				            AND a."realdate" IS NOT NULL
+				            AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <otherwise> 
+				        	AND a."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </otherwise>
+				    </choose> 
+				</if>
+				AND a."wstatus" = '0'
+				AND a."deflag" = '0'
+			</where>
+			GROUP BY 
+				b."id", b."username", b."sex", b."age" ,b."rabiescode", a."manufacturer", a."batchnum", a."create_name", a."vaccinum", a."signature"
+			) XXX
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY 
+					xxx."kin.rabiescode",
+					xxx."kin.username",
+					xxx."vaccinum",
+					xxx."manufacturer"
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		<where>
+				a."deflag" = '0' 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_rabies_num(
+			"id",
+			"checkid",
+			"vaccinum",
+			"vaccidate",
+			"realdate",
+			"dose",
+			"paystatus",
+			"vaccineid",
+			"batchnum",
+			"manufacturer",
+			"nstatus",
+			"wstatus",
+			"create_by",
+			"create_date",
+			"create_name",
+			"signature",
+			"pid",
+			localcode,
+			status
+		) VALUES (
+			#{id},
+			#{checkid},
+			#{vaccinum},
+			#{vaccidate},
+			#{realdate},
+			#{dose},
+			#{paystatus},
+			#{vaccineid},
+			#{batchnum},
+			#{manufacturer},
+			#{nstatus},
+			#{wstatus},
+			#{createBy.id},
+			sysdate,
+			#{createBy.loginName},
+			#{signature},
+			#{pid},
+			#{localCode},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_rabies_num SET
+		"checkid" = #{checkid},
+		"vaccinum" = #{vaccinum},
+		"vaccidate" = #{vaccidate},
+		"realdate" = #{realdate},
+		"dose" = #{dose},
+		"vaccineid" = #{vaccineid},
+		"batchnum" = #{batchnum},
+		"manufacturer" = #{manufacturer},
+		"nstatus" = #{nstatus},
+		"wstatus" = #{wstatus},
+		"create_by" = #{createBy.id},
+		"create_date" = sysdate,
+		"create_name" = #{createBy.loginName},
+		"pid" = #{pid},
+		status = #{status}
+		WHERE "id" = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_rabies_num SET
+			"deflag" = '1',
+			"paystatus" = '0'
+		WHERE 
+			"id" = #{id}
+	</update>
+	
+	<!-- 查询该时间应种针数 -->
+	<select id="queryBsNumList0" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+			<if test="vaccinum != null">
+				AND a."vaccinum" = #{vaccinum}
+			</if>
+			<if test="vaccidate != null and vaccidate != ''">
+				AND trunc(a."vaccidate") = trunc(#{vaccidate})
+			</if>
+			AND a."nstatus" = '0'
+			AND a."deflag" = '0'
+			AND (a.status != '1' OR a."realdate" IS NULL)
+		</where>
+	</select>
+	
+	<select id="findList2" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+			AND a."nstatus" = '0'
+			AND a."deflag" = '0'
+			AND a."wstatus" = '0'
+			AND a.status != '1'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			ORDER BY a."vaccinum"
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListDown" resultType="BsRabiesNum">
+		SELECT
+			b."id" AS "kin.id",
+			b."username" AS "kin.username",
+			b."card" AS "kin.card",
+			b."sex" AS "kin.sex",
+			b."birthday" AS "kin.birthday",
+			b."age" AS "kin.age",
+			b."linkphone" AS "kin.linkphone",
+			b."exposelevel" AS "kin.exposelevel",
+			substr(b."rabiescode",14) AS "kin.rabiescode",
+			<include refid="bsRabiesNumColumns" />
+		FROM 
+			bs_rabies_num a
+		LEFT JOIN bs_rabies_checkin b ON b."id" = a."checkid" and b.localcode = a.localcode
+		LEFT JOIN SYS_USER su ON su."ID" = a."create_by"
+		<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="kin != null and kin.username != null and kin.username != ''">
+				AND b."username" = #{kin.username}
+			</if>
+			<if test="kin != null and kin.card != null and kin.card != ''">
+				AND	b."card"  = #{kin.card}
+			</if>
+			<if test="kin != null and kin.exposelevel != null and kin.exposelevel != ''">
+				AND	b."exposelevel"  = #{kin.exposelevel}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND	a."manufacturer"  = #{manufacturer}
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	a."create_by"  = #{createById}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			AND a."vaccinum" != '0'
+			AND a."realdate" IS NOT NULL
+			AND a.status = '1'
+			AND a."wstatus" = '0'
+			AND a."deflag" = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY 
+					a."manufacturer" ASC,
+					b."rabiescode" ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListUp" resultType="BsRabiesNum">
+		SELECT DISTINCT ttt.*, fff."vaccinum"
+		FROM (SELECT b."username" AS "kin.username",
+		               b."sex" AS "kin.sex",
+		               SUBSTR(b."rabiescode", 14) AS "kin.rabiescode",
+		               A ."manufacturer" AS "manufacturer",
+		               A ."create_name" AS "createByName"
+		        FROM bs_rabies_num A
+		        LEFT JOIN bs_rabies_checkin b ON b."id" = A."checkid" and b.localcode = A.localcode
+		        LEFT JOIN SYS_USER su ON su."ID" = A."create_by"
+		       	<where>
+		       	    and a.localcode = #{localCode}
+					<if test="kin != null and kin.username != null and kin.username != ''">
+						AND b."username" = #{kin.username}
+					</if>
+					<if test="kin != null and kin.card != null and kin.card != ''">
+						AND	b."card"  = #{kin.card}
+					</if>
+					<if test="kin != null and kin.exposelevel != null and kin.exposelevel != ''">
+						AND	b."exposelevel"  = #{kin.exposelevel}
+					</if>
+					<if test="manufacturer != null and manufacturer != ''">
+						AND	a."manufacturer"  = #{manufacturer}
+					</if>
+					<if test="createById != null and createById != ''">
+						AND	a."create_by"  = #{createById}
+					</if>
+					<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+						AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+					AND a."vaccinum" = '0'
+					AND a."realdate" IS NOT NULL
+					AND a.status = '1'
+					AND a."wstatus" = '0'
+					AND a."deflag" = '0'
+				</where>
+		        ORDER BY A ."manufacturer" ASC, b."rabiescode" ASC) TTT
+		  		LEFT JOIN (
+		  			  SELECT COUNT(b."rabiescode") AS "vaccinum",
+		                     SUBSTR(b."rabiescode", 14) AS "kin.rabiescode"
+		              FROM bs_rabies_num A
+		              LEFT JOIN bs_rabies_checkin b ON b."id" = A."checkid" and b.localcode = A.localcode
+		              LEFT JOIN SYS_USER su ON su."ID" = A."create_by"
+		              <where>
+		                  	and a.localcode = #{localCode}
+						<if test="kin != null and kin.username != null and kin.username != ''">
+							AND b."username" = #{kin.username}
+						</if>
+						<if test="kin != null and kin.card != null and kin.card != ''">
+							AND	b."card"  = #{kin.card}
+						</if>
+						<if test="kin != null and kin.exposelevel != null and kin.exposelevel != ''">
+							AND	b."exposelevel"  = #{kin.exposelevel}
+						</if>
+						<if test="manufacturer != null and manufacturer != ''">
+							AND	a."manufacturer"  = #{manufacturer}
+						</if>
+						<if test="createById != null and createById != ''">
+							AND	a."create_by"  = #{createById}
+						</if>
+						<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+							AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+						</if>
+						AND a."vaccinum" = '0'
+						AND a."realdate" IS NOT NULL
+						AND a.status = '1'
+						AND a."wstatus" = '0'
+						AND a."deflag" = '0'
+					  </where>
+		              GROUP BY b."rabiescode") FFF 
+		        On ttt."kin.rabiescode" = fff."kin.rabiescode"
+		      	ORDER BY 
+					ttt."manufacturer" ASC,
+					ttt."kin.rabiescode"
+	</select>
+	
+	<select id="storeList" resultType="BsRabiesSocket">
+		SELECT
+			V."ID" AS "vaccid",
+			V."NAME" AS "vaccname",
+			P .MANUFACTURER AS "manufacturer",
+			P .BATCHNO AS "batchnum",
+			S."LABEL" AS "standard",
+			P .STORENUM AS "storenum"
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID
+		LEFT JOIN SYS_DICT s ON s."VALUE" = P."SPECIFICATION" AND s."TYPE" = 'specification'
+		WHERE
+			(P .VACCINEID LIKE '28' || '%' OR P .VACCINEID LIKE '44' || '%')
+			AND P .ISSHOW = 'Y'
+			AND P .DEL_FLAG = '0'
+			AND P .STORENUM >= '0'
+			and p.localcode = #{localCode}
+			and p.officecode = #{officeCode}
+		ORDER BY V."NAME"
+	</select>
+	
+	<!-- 查询已付款总量 -->
+	<select id="vaccineStock2" parameterType="BsRabiesNum" resultType="BsRabiesSocket">
+		SELECT
+			P ."vaccineid" AS "vaccid",
+			P ."batchnum" AS "batchnum",
+			P ."dose" AS "standard",
+			"COUNT" ("batchnum") AS "storenum2"
+		FROM
+			BS_RABIES_NUM P
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND P."create_date" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	P."create_by"  = #{createById}
+			</if>
+			AND P ."paystatus" = '1'
+			AND P .status = '0'
+			AND P ."wstatus" = '0'
+			AND P ."deflag" = '0'
+			and p.localcode = #{localCode}
+		</where>
+		GROUP BY
+			P ."vaccineid",
+			P ."batchnum",
+			P ."dose"
+	</select>
+	
+	<select id="socketlist" resultType="BsRabiesSocket">
+		SELECT * FROM(
+			SELECT
+				"vaccname",
+				"manufacturer",
+				"standard",
+				"COUNT"("manufacturer") as "vcount"
+			FROM
+			(
+				SELECT
+					bp.manufacturer AS "manufacturer",
+					bp.vacc_name AS "vaccname",
+					a."dose" AS "standard"
+				FROM
+					bs_rabies_num A
+				LEFT JOIN VIEW_BS_PRODUCT_NO bp ON bp.vaccineid = A ."vaccineid" and bp.localcode = A.localcode
+				AND bp.batchno = A ."batchnum"
+				<where>
+				    and a.localcode = #{localCode}
+					<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+						AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+					<if test="createById != null and createById != ''">
+						AND	a."create_by"  = #{createById}
+					</if>
+					AND A ."realdate" IS NOT NULL
+					AND A .status = '1'
+					AND a."wstatus" = '0'
+					AND a."deflag" = '0'
+					and bp.officecode = #{officeCode}
+				</where>
+				ORDER BY
+					A ."vaccinum" ASC
+			)
+			GROUP BY
+				"vaccname",
+				"manufacturer",
+				"standard"
+		)ORDER BY "vaccname" DESC
+	</select>
+	
+	<select id="socketlistUp" resultType="BsRabiesSocket">
+		SELECT * FROM(
+			SELECT
+				"vaccinum",
+				"manufacturer",
+				"COUNT"("manufacturer") as "vcount"
+			FROM
+			(
+				SELECT
+					a."vaccinum" AS "vaccinum",
+					bp.manufacturer AS "manufacturer"
+				FROM
+					bs_rabies_num A
+				LEFT JOIN VIEW_BS_PRODUCT_NO bp ON bp.vaccineid = A ."vaccineid" and bp.localcode = A .localcode
+				AND bp.batchno = A ."batchnum"
+				<where>
+				    and a.localcode = #{localCode}
+					<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+						AND a."realdate" between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+					<if test="createById != null and createById != ''">
+						AND	a."create_by"  = #{createById}
+					</if>
+					AND A ."realdate" IS NOT NULL
+					AND A .status = '1'
+					AND a."wstatus" = '0'
+					AND a."deflag" = '0'
+					and bp.officecode = #{officeCode}
+				</where>
+				ORDER BY
+					A ."vaccinum" ASC
+			)
+			GROUP BY
+				"vaccinum",
+				"manufacturer"
+		)ORDER BY "manufacturer", "vaccinum" DESC
+	</select>
+	
+	<select id="queryCreateById" resultType="java.lang.String">
+		SELECT
+			"LOGIN_NAME"
+		FROM
+			SYS_USER
+		WHERE
+			"ID" = #{value}
+		AND ROWNUM = 1
+	</select>
+	
+	<!-- 查询全部免疫蛋白 -->
+	<select id="queryBsNumListDB" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+			<if test="vaccinum != null">
+				AND a."vaccinum" = #{vaccinum}
+			</if>
+			<if test="vaccidate != null and vaccidate != ''">
+				AND trunc(a."vaccidate") = trunc(#{vaccidate})
+			</if>
+			AND a."deflag" = '0'
+		</where>
+	</select>
+	
+	<insert id="insertPay">
+		INSERT INTO BS_RABIES_PAY(
+			"id",
+			"check"
+		) VALUES (
+			#{id},
+			#{check}
+		)
+	</insert>
+
+	<select id="queryPay" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			"check"
+		FROM
+			BS_RABIES_PAY
+		WHERE
+			"id" = #{id}
+	</select>
+	
+	<select id="findByChenkWxId" resultType="java.lang.String">
+		SELECT
+			a."id"
+		FROM bs_rabies_num a
+		<where>
+				 (a."signature" = '0' OR a."signature" = '2')
+			AND a."wstatus" = '0'
+			AND a."nstatus" = '0'
+			AND a."deflag" = '0'
+			and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="querySignature" parameterType="BsRabiesNum" resultType="java.lang.Integer">
+		SELECT 
+			COUNT(*) 
+		FROM BS_RABIES_SIGNATURE 
+		WHERE 
+			"id" = #{sId} 
+	</select>
+	
+	<insert id="insertSignature">
+		INSERT INTO BS_RABIES_SIGNATURE(
+			"id",
+			"signature",
+			"stype"
+		) VALUES (
+			#{sId},
+			#{signatureData},
+			#{stype}
+		)
+	</insert>
+	
+	<update id="updateCheckSId">
+		UPDATE bs_rabies_checkin SET
+		"s_id" = #{sId}
+		WHERE "id" = #{checkid}
+	</update>
+	
+	<update id="updateSignatures">
+		UPDATE bs_rabies_num SET
+		"signature" = #{signature},
+		"s_id" = #{sId},
+		"create_date" = sysdate
+		WHERE 
+			"id" = #{id}
+	</update>
+	
+	<select id="findListVaccinumNot" resultType="BsRabiesNum">
+		SELECT
+		<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+		<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+			<if test="nstatus != null and nstatus != ''">
+				AND a."nstatus" = #{nstatus}
+			</if>
+			AND a."vaccinum" = '0'
+			AND a."deflag" = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			ORDER BY a."checkid",a."vaccinum",a."vaccidate",a.status desc,a."paystatus" desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListVaccinum" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="checkid != null and checkid != ''">
+				AND a."checkid" = #{checkid}
+			</if>
+			<if test="nstatus != null and nstatus != ''">
+				AND a."nstatus" = #{nstatus}
+			</if>
+			AND a."vaccinum" != '0'
+			AND a."deflag" = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			ORDER BY a."checkid",a."vaccinum",a."vaccidate",a.status desc,a."paystatus" desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 查询全部针次 -->
+	<select id="queryBsNumListOut" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		WHERE 
+			a."checkid" = #{checkid}
+		AND trunc(a."vaccidate") = trunc(#{vaccidate})
+		AND a."paystatus" != '0'
+		AND (a."signature" = '0' OR a."signature" = '2')
+		AND a."deflag" = '0'
+	</select>
+	
+	<!-- 查询已完成并且已减库存记录 -->
+	<select id="findByCheckId" resultType="BsRabiesNum">
+		SELECT
+			<include refid="bsRabiesNumColumns" />
+		FROM bs_rabies_num a
+			<include refid="bsRabiesNumJoins" />
+		WHERE
+			a."checkid" = #{checkid}
+		AND a."nstatus" = '1'
+		AND a."deflag" = '0'
+		AND a."realdate" IS NOT NULL
+		AND a.status = '1'
+		and a.localcode = #{localCode}
+	</select>
+	
+	<!-- 查询产品pid -->
+	<select id="queryBsProductPId" resultType="BsManageProduct">
+		SELECT 
+			a.id AS "id",
+			a.vaccineid AS "vaccineid",
+			a.batchno AS "batchno",
+			a.dosage AS "dosage",
+			a.manufacturer AS "manufacturer",
+			a.isforeign AS "isforeign",
+			a.storenum AS "storenum",
+			a.sellprice AS "sellprice",
+			a.isshow AS "isshow",
+			bv.name AS "name",
+			bv.name AS "vaccName",
+			a.vacc_exp_date AS "vaccExpDate",
+			A .codeall AS "codeall",
+			A .specification AS "specification",
+			A .code AS "code"
+		FROM bs_manage_product a
+		LEFT JOIN BS_MANAGE_VACCINE bv ON bv.id = a.vaccineid
+		WHERE 
+			a.id = #{pid}
+		AND a.DEL_FLAG = '0'
+	</select>
+	
+	<update id="updateSignStatus">
+		UPDATE bs_rabies_num SET
+			"signature" = '2'
+		WHERE "id" = #{id}
+	</update>
+	
+	<update id="refundById">
+		UPDATE bs_rabies_num SET
+			<if test="realdate != null and realdate != ''">
+				"realdate" = #{realdate},
+			</if>
+			<if test="nstatus != null and nstatus != ''">
+				"nstatus" = #{nstatus},
+			</if>
+			<if test="paystatus != null and paystatus != ''">
+				"paystatus" = #{paystatus},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="createBy != null and createBy != '' and createBy.id != null and createBy.id != ''">
+				"create_by" = #{createBy.id},
+			</if>
+			<if test="createBy != null and createBy != '' and createBy.loginName != null and createBy.loginName != ''">
+				"create_name" = #{createBy.loginName},
+			</if>
+			"create_date" = sysdate
+		WHERE "id" = #{id}
+	</update>
+	
+	<update id="saveAdjustment">
+		UPDATE bs_rabies_num SET
+			original_price = #{originalPrice},
+			current_price = #{currentPrice},
+			fund_status = '1'
+		WHERE "id" = #{id}
+	</update>
+	
+	<select id="getRabiesNumCount" resultType="Integer">
+		SELECT COUNT(*) FROM BS_RABIES_NUM WHERE STATUS = '1'  AND "wstatus" = '0'
+				AND "deflag" = '0' AND "TRUNC"("create_date") = "TRUNC"(SYSDATE)
+	</select>
+	
+	<!-- 查询当前犬伤用户伤口处理费用 -->
+	<select id="findCheckinDeal" resultType="BsRabiesCheckinDeal">
+		SELECT 
+		<include refid="bsRabiesDealColumns" />
+		FROM BS_RABIES_DEAL a
+		<where>
+			AND "CHECKID" = #{checkinId} 
+			AND "LOCALCODE" = #{localCode}
+			<if test="id != null and id != ''">
+				AND "ID"=#{id}
+			</if>
+		</where>
+		 
+	</select>
+	<insert id="insertCheckinDeal">
+		INSERT INTO BS_RABIES_DEAL(
+			"ID",
+			"CHECKID",
+			"CREARE_BY",
+			"CREATE_DATE",
+			"PAYSTATUS",
+			"CREATE_NAME",
+			"LOCALCODE",
+			"STATUS",
+			"REMARKS",
+			"REFUND",
+			"PRICE"
+		)VALUES(
+			#{id},
+			#{checkinId},
+			#{createBy.id},
+			sysdate,
+			'0',
+			#{createName},
+			#{localCode},
+			'0',
+			#{remarks},
+			#{refund},
+			#{price}
+		)
+	</insert>
+	<update id="refundDealById">
+		UPDATE BS_RABIES_DEAL SET
+		<if test="paystatus != null and paystatus !=''">
+			PAYSTATUS = #{paystatus}
+		</if>
+		WHERE
+			"ID" = #{id}
+	</update>
+</mapper>

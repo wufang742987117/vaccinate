@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.inoculate.dao.QueneDao">
+    
+	<sql id="queneColumns">
+		a.queueno AS "queueno",
+		a.childid AS "childid",
+		a.vaccineid AS "vaccineid",
+		a.roomcode AS "roomcode",
+		a.doctor AS "doctor",
+		a.ispass AS "ispass",
+		c.childname AS "child.childname",	
+		c.childname AS "childname",	
+		c.guardianmobile as "child.guardianmobile",
+		a.status AS "status",
+		a.batch AS "batch",
+		a.office AS "office",
+		a.price AS "price",
+		a.pid,
+		a.CREATETIME AS "createDate",
+		bp.VACC_NAME AS "vaccine.name",
+		a.bodypart,
+		a.original_price AS "originalPrice",
+		a.current_price AS "currentPrice",
+		a.fund_status AS "fundStatus",
+		a.create_by as "createBy.id" 
+	</sql>
+	
+	<sql id="queneJoins">
+		LEFT JOIN BS_CHILD_BASEINFO c on a.childid = c.childcode AND a.localcode = c.localcode
+		LEFT JOIN BS_MANAGE_PRODUCT bp ON bp."ID" = a.pid AND bp.localcode = a.localcode
+		
+	</sql>
+    
+	<select id="get" resultType="Quene">
+		SELECT 
+			<include refid="queneColumns"/>
+		FROM bs_quene a
+			<include refid="queneJoins"/>
+		WHERE a.queueno = #{queueno} and a.localcode = #{localCode}
+		<!-- AND a.status = 0 -->
+	</select>
+	
+	<select id="findList" resultType="Quene">
+		SELECT 
+			<include refid="queneColumns"/>
+		FROM bs_quene a
+		<include refid="queneJoins"/>
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="null != ispass and ispass != ''">
+				AND a.ispass='${ispass}' 
+			</if>
+			<if test="null != status and status != ''">
+				AND a.status = '${status}' 
+			</if>
+			<if test="null != statusIn and statusIn != ''">
+				AND a.status in (${statusIn})
+			</if>
+			<if test="null != roomcode and roomcode != ''">
+				AND a.roomcode='${roomcode}' 
+			</if>
+			<if test="null != childid and childid != ''">
+				AND a.childid='${childid}' 
+			</if>
+			<if test="null != vaccineid and vaccineid != ''">
+				AND a.vaccineid='${vaccineid}' 
+			</if>
+			<if test="null != queueno and queueno != ''">
+				AND a.queueno=#{queueno} 
+			</if>
+			
+		</where>
+		ORDER BY ${orderBy}
+	</select>
+	
+	<select id="findQueneList" resultType="com.thinkgem.jeesite.modules.inoculate.vo.QueneVo">
+		SELECT 
+			<include refid="queneColumns"/>
+		FROM bs_quene a
+		<include refid="queneJoins"/>
+		<where>
+		    and a.localcode = #{localCode}
+			<if test="null != ispass and ispass != ''">
+				AND a.ispass='${ispass}' 
+			</if>
+			<if test="null != status and status != ''">
+				AND a.status = '${status}' 
+			</if>
+			<if test="null != roomcode and roomcode != ''">
+				AND a.roomcode='${roomcode}' 
+			</if>
+		</where>
+		ORDER BY a.queueno
+	</select>
+	<select id="findAllList" resultType="Quene">
+		SELECT 
+			<include refid="queneColumns"/>
+		FROM bs_quene a
+		<include refid="queneJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_quene(
+			queueno,
+			childid,
+			vaccineid,
+			roomcode,
+			doctor,
+			ispass,
+			bodypart,
+			batch,
+			office,
+			price,
+			status,
+			pid,
+			localcode,
+			create_by
+		) VALUES (
+			#{queueno},
+			#{childid},
+			#{vaccineid},
+			#{roomcode},
+			#{doctor},
+			#{ispass},
+			#{bodypart},
+			#{batch},
+			#{office},
+			#{price},
+			#{status},
+			#{pid},
+			#{localCode},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_quene SET 	
+			queueno = #{queueno},
+			childid = #{childid},
+			vaccineid = #{vaccineid},
+			roomcode = #{roomcode},
+			doctor = #{doctor},
+			ispass = #{ispass},
+			status = #{status},
+			bodypart = #{bodypart},
+			batch = #{batch},
+			office = #{office},
+			price = #{price},
+			pid = #{pid}
+		WHERE queueno = #{queueno} and localcode = #{localCode} 
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_quene
+		SET status = 1
+		WHERE queueno = #{queueno} and localcode = #{localCode}
+	</update>
+	
+	<!-- 获取科室最后一个排号 -->
+	<select id="getLastQueneCode" resultType="java.lang.String">
+		SELECT max(queueno) FROM BS_QUENE 
+		WHERE QUEUENO LIKE #{roomcode}||'%' AND localcode = #{localCode}
+	</select>
+	
+	<select id="getIfExist" resultType="Quene">
+		SELECT 
+			<include refid="queneColumns"/>
+		FROM bs_quene a
+			<include refid="queneJoins"/>
+		WHERE a.CHILDID = #{childcode} and a.VACCINEID = #{vaccineid} and a.status &lt;&gt; 1
+	</select>
+	
+	<update  id="clear"	>
+		DELETE FROM BS_QUENE 
+	</update >
+	
+	
+	<!-- 获取接种时间小于30分钟的记录 -->
+	<select id="getObserv" resultType="java.util.HashMap">
+		SELECT max(tt."rest") "rest" , tt."name"
+			FROM(		
+			SELECT
+					ROUND (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60),0) AS "rest", i.CHILDNAME "name"	 		
+					FROM
+						BS_CHILD_VACCINATERECORD t 
+					LEFT JOIN BS_CHILD_BASEINFO i ON i."ID" = t.CHILDID
+					WHERE (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60))  &gt; 0 
+					AND (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60)) &lt; 31
+					AND i.localcode = #{localCode}
+					AND t.STATUS = '1'
+					order by ROUND (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60),0)
+			)tt
+			GROUP BY tt."name"
+			ORDER BY max(tt."rest"), tt."name"
+	</select>
+	
+	<!-- 获取接种时间大于30分钟小于30分钟15秒的记录 -->
+	<select id="getCompleteView" resultType="java.util.HashMap">
+		SELECT ROUND (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60),0) AS "rest", i.CHILDNAME "name", t.CHILDID "childid" FROM 
+		BS_CHILD_VACCINATERECORD t 
+		LEFT JOIN BS_CHILD_BASEINFO i ON i."ID" = t.CHILDID 
+		WHERE (( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60)-30) &gt; 0 
+		AND (60-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60 * 60)) &gt; 0 
+		AND t.STATUS = '1' 
+		order by ROUND (30-( TO_NUMBER (SYSDATE - t.VACCINATEDATE) * 24 * 60),0)
+	</select>
+	
+	<!-- 统计科室已完成的数量-->
+	<select id="total" resultType="Quene">
+		SELECT  QQ.total,V.m_Name AS "NAME" FROM(
+			SELECT COUNT(*) AS total,"SUBSTR"(Q.VACCINEID, 0, 2) AS code ,localcode
+			FROM BS_QUENE Q 
+			WHERE QUEUENO LIKE #{roomcode}||'%' AND STATUS='2' and q.localcode = #{localCode}
+			GROUP BY "SUBSTR"(Q.VACCINEID, 0, 2), localcode)qq 
+			LEFT JOIN (select distinct t.m_num,t.m_name from bs_manage_vaccine_model t) v on QQ.CODE=V.m_Num 
+	</select>
+	
+	<!-- 根据大类查询所有在90天内到期的疫苗-->
+	<select id="indate" resultType="BsManageProduct">
+			SELECT
+				P .*
+			FROM
+				BS_MANAGE_PRODUCT P
+			WHERE
+<!-- 				"SUBSTR" (P .VACCINEID, 0, 2) IN (${vaccineStr}) -->
+			p.officecode = #{officeCode}
+		 	AND (SYSDATE + #{days})>P .VACC_EXP_DATE 
+			AND P .DEL_FLAG = '0'
+			AND p.STORENUM>0
+			and p.localcode = #{localCode}
+			ORDER BY
+				P .VACCINEID
+	</select>
+	
+	<update id="refundById">
+		UPDATE BS_QUENE 
+		SET 	
+			status = #{status}
+		WHERE 
+			queueno = #{queueno}
+		AND localcode = #{localCode}
+	</update>
+	
+	<update id="saveAdjustment">
+		UPDATE BS_QUENE SET
+			original_price = #{originalPrice},
+			current_price = #{currentPrice},
+			fund_status = '1'
+		WHERE queueno = #{queueno}
+		AND localcode = #{localCode}
+	</update>
+	
+	<select id="getQueneCount" resultType="Integer">
+		SELECT COUNT(*) FROM BS_QUENE WHERE STATUS != 1 AND TRUNC(CREATETIME) = TRUNC(SYSDATE)
+	</select>
+</mapper>

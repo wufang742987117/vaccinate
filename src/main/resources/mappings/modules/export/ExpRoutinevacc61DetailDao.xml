@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.export.dao.ExpRoutinevacc61DetailDao">
+    
+	<sql id="expRoutinevacc61DetailColumns">
+		a.id AS "id",
+		a.localcode AS "localCode"
+		a.year_month AS "yearMonth",
+		a.unit_code AS "unitCode",
+		a.unit_name AS "unitName",
+		a.vacc_code AS "vaccCode",
+		a.dosage AS "dosage",
+		a.childcode AS "childcode",
+		a.type AS "type",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="expRoutinevacc61DetailJoins">
+	</sql>
+    
+	<select id="get" resultType="ExpRoutinevacc61Detail">
+		SELECT 
+			<include refid="expRoutinevacc61DetailColumns"/>
+		FROM exp_routinevacc_6_1_detail a
+		<include refid="expRoutinevacc61DetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ExpRoutinevacc61Detail">
+		SELECT 
+			<include refid="expRoutinevacc61DetailColumns"/>
+		FROM exp_routinevacc_6_1_detail a
+		<include refid="expRoutinevacc61DetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="yearMonth != null and yearMonth != ''">
+				AND a.year_month = #{yearMonth}
+			</if>
+			<if test="localCode != null and localCode != ''">
+				AND a.localcode = #{localCode}
+			</if>
+			<if test="unitCode != null and unitCode != ''">
+				AND a.unit_code = #{unitCode}
+			</if>
+			<if test="unitName != null and unitName != ''">
+				AND a.unit_name = #{unitName}
+			</if>
+			<if test="vaccCode != null and vaccCode != ''">
+				AND a.vacc_code = #{vaccCode}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode = #{childcode}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ExpRoutinevacc61Detail">
+		SELECT 
+			<include refid="expRoutinevacc61DetailColumns"/>
+		FROM exp_routinevacc_6_1_detail a
+		<include refid="expRoutinevacc61DetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO exp_routinevacc_6_1_detail(
+			id,
+			localcode,
+			year_month,
+			unit_code,
+			unit_name,
+			vacc_code,
+			dosage,
+			childcode,
+			type,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{localCode},
+			#{yearMonth},
+			#{unitCode},
+			#{unitName},
+			#{vaccCode},
+			#{dosage},
+			#{childcode},
+			#{type},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE exp_routinevacc_6_1_detail SET 	
+			localcode = #{localCode},
+			year_month = #{yearMonth},
+			unit_code = #{unitCode},
+			unit_name = #{unitName},
+			vacc_code = #{vaccCode},
+			dosage = #{dosage},
+			childcode = #{childcode},
+			type = #{type},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE exp_routinevacc_6_1_detail SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

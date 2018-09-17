@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.yiyuan.dao.SysBirthHospitalDao">
+    
+	<sql id="sysBirthHospitalColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.remarks AS "remarks",
+		a.index_num AS "indexNum"
+	</sql>
+	
+	<sql id="sysBirthHospitalJoins">
+	</sql>
+    
+	<select id="get" resultType="SysBirthHospital">
+		SELECT 
+			<include refid="sysBirthHospitalColumns"/>
+		FROM sys_birth_hospital a
+		<include refid="sysBirthHospitalJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysBirthHospital">
+		SELECT 
+			<include refid="sysBirthHospitalColumns"/>
+		FROM sys_birth_hospital a
+		<include refid="sysBirthHospitalJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+			<if test="indexNum != null and indexNum != ''">
+				AND a.index_num = #{indexNum}
+			</if>
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY "DECODE"( "SUBSTR"(code,0,6), #{localCodeLike},1), index_num 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysBirthHospital">
+		SELECT 
+			<include refid="sysBirthHospitalColumns"/>
+		FROM sys_birth_hospital a
+		<include refid="sysBirthHospitalJoins"/>
+		<where>
+			and a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_birth_hospital(
+			id,
+			code,
+			name,
+			remarks,
+			index_num,
+			localcode
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{remarks},
+			#{indexNum},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_birth_hospital SET 	
+			code = #{code},
+			name = #{name},
+			remarks = #{remarks},
+			index_num = #{indexNum}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_birth_hospital
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

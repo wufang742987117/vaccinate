@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.charge.dao.BsChargeLogDao">
+
+	<sql id="bsChargeLogColumns">
+	    a.bill_num AS "billNum",
+		max(a.patient_id )AS "patientId",
+		max(a.patient_name) AS "patientName",
+		max(a.vacc_code) AS "vaccCode",
+		max(a.vacc_dose) AS "vaccDose",
+		max(a.vacc_batchnum) AS "vaccBatchnum",
+		max(a.vacc_manufacturer) AS "vaccManufacturer",
+		max(a.vacc_price) AS "vaccPrice",
+		sum(a.vacc_count) AS "vaccCount",
+		max(b.name) AS "vaccName",
+		max(a.pid) AS "pid",
+		max(a.status) AS "status",
+		max(a.create_date) AS "createDate",
+		max(a.sum_price) AS "sumPrice",
+		"NVL"(max(a.updateSumPrice),0) AS "updateSumPrice",
+		max(a.refund) AS "refund",
+		max(a.pay) AS "pay",
+		max(a.localcode) AS "localCode",
+		max(a.remark) AS "remarks",
+		max(a.billing) AS "billing",
+		max(s.login_name) as "createByName",
+		max(a.create_by) as "createById"
+	</sql>
+	
+	<sql id="chargeLogColumns">
+	    a.bill_num AS "billNum",
+		max(a.patient_id )AS "patientId",
+		max(a.patient_name) AS "patientName",
+		max(a.vacc_code) AS "vaccCode",
+		max(a.vacc_dose) AS "vaccDose",
+		max(a.vacc_batchnum) AS "vaccBatchnum",
+		max(a.vacc_manufacturer) AS "vaccManufacturer",
+		max(a.vacc_price) AS "vaccPrice",
+		sum(a.vacc_count) AS "vaccCount",
+		max(b.name) AS "vaccName",
+		max(a.pid) AS "pid",
+		max(a.status) AS "status",
+		max(a.create_date) AS "createDate",
+		max(a.sum_price) AS "sumPrice",
+		"NVL"(max(a.updateSumPrice),0) AS "updateSumPrice",
+		max(a.refund) AS "refund",
+		max(a.pay) AS "pay",
+		max(a.localcode) AS "localCode",
+		max(a.remark) AS "remarks",
+		max(a.billing) AS "billing",
+		max(s.login_name) as "createByName",
+		max(a.create_by) as "createById",
+		a.type as "type"
+	</sql>
+	
+	<sql id="bsChargeColumns">
+		a.id as "id",
+	    a.bill_num AS "billNum",
+		a.patient_id AS "patientId",
+		a.patient_name AS "patientName",
+		a.vacc_code AS "vaccCode",
+		a.vacc_dose AS "vaccDose",
+		a.vacc_batchnum AS "vaccBatchnum",
+		a.vacc_manufacturer AS "vaccManufacturer",
+		a.vacc_price AS "vaccPrice",
+		a.vacc_count AS "vaccCount",
+		b.name AS "vaccName",
+		a.pid AS "pid",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.sum_price AS "sumPrice",
+		a.updateSumPrice AS "updateSumPrice",
+		a.refund AS "refund",
+		a.pay AS "pay",
+		a.localcode AS "localCode",
+		a.remark AS "remarks",
+		a.billing AS "billing",
+		a.create_by as "createById"
+	</sql>
+	
+	<sql id="bsChargeLogJoins">
+	    left join bs_manage_vaccine b ON a.vacc_code = b.id
+	    left join SYS_USER s ON a.create_by = s.id
+	</sql>
+		
+	<select id="get" resultType="BsChargeLog">
+		SELECT
+			<include refid="bsChargeLogColumns" />
+		FROM bs_charge_log a
+			<include refid="bsChargeLogJoins" />
+		WHERE a.id = #{id}   
+	</select>
+
+	<select id="findList" resultType="BsChargeLog">
+		SELECT 
+		<include refid="bsChargeLogColumns" />
+		FROM bs_charge_log a
+		<include refid="bsChargeLogJoins" />
+		<where>
+			<if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="createById != '' and createById != null">
+				AND a.create_by = #{createById}
+			</if>
+			<if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			</if>   
+			<if test="billNum != null and billNum != ''">
+				AND a.bill_num = #{billNum}
+			</if>
+            <if test="patientName != null and patientName != ''">
+				AND a.patient_name LIKE '%'||#{patientName}||'%'
+			</if>
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="status == null">
+				AND a.status != 2
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND b. NAME = #{vaccName}
+			</if>
+			<if test="billing != null and billing != ''">
+				AND a.BILLING = #{billing}
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		GROUP BY a.BILL_NUM  
+		ORDER BY a.BILL_NUM desc
+	</select>
+
+	<select id="findAllList" resultType="BsChargeLog">
+		SELECT
+		<include refid="bsChargeLogColumns" />
+		FROM bs_charge_log a
+		<include refid="bsChargeLogJoins" />
+		<where>
+          	AND a.create_by = #{createBy.id}
+           	<if test="status == null">
+				AND a.status != 2
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO bs_charge_log(
+		    id,
+			patient_id,
+			patient_name,
+			bill_num,
+			sum_price,
+			pay,
+			refund,
+			vacc_code,
+			vacc_batchnum,
+			vacc_manufacturer,
+			vacc_dose,
+			vacc_count,
+			vacc_price,
+			status,
+			create_date,
+			localcode,
+			CREATE_BY,
+			pid,
+			billing,
+			type
+		) VALUES (
+		    #{id},
+			#{patientId},
+			#{patientName},
+			#{billNum},
+			#{sumPrice},
+			#{pay},
+			#{refund},
+			#{vaccCode},
+			#{vaccBatchnum},
+			#{vaccManufacturer},
+			#{vaccDose},
+			#{vaccCount},
+			#{vaccPrice},
+			#{status},
+			#{createDate},
+			#{localCode},
+			#{createBy.id},
+			#{pid},
+			#{billing},
+			#{type}
+		) 
+	</insert>
+
+	<update id="update">
+		UPDATE bs_charge_log SET
+			patient_id = #{patientId},
+			patient_name = #{patientName},
+			bill_num = #{billNum},
+			vacc_code = #{vaccCode},
+			batchnum = #{vaccBatchnum},
+			manufacturer = #{vaccManufacturer},
+			dose = #{vaccDose},
+			vacc_count = #{vaccCount},
+			status = #{status}
+		WHERE 
+			id = #{id}
+	    AND create_by = #{createBy.id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM bs_charge_log
+		WHERE 
+			id = #{id}
+	    AND create_by = #{createBy.id}
+	</update>
+	
+	<select id="findListOverview" resultType="BsChargeLog">
+		SELECT 
+		<include refid="bsChargeLogColumns" />
+		FROM bs_charge_log a
+		<include refid="bsChargeLogJoins" />
+		<where>
+			<if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="createById != '' and createById != null">
+				AND a.create_by = #{createById}
+			</if>
+			<if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			</if> 
+			<if test="billNum != null and billNum != ''">
+				AND a.bill_num = #{billNum}
+			</if>
+            <if test="patientName != null and patientName != ''">
+				AND a.patient_name LIKE '%'||#{patientName}||'%'
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND b. NAME = #{vaccName}
+			</if>		
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="status == null">
+				AND a.status != 2
+				AND a.status != 0
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		GROUP BY a.BILL_NUM ,a.billing
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.billing, a.BILL_NUM desc
+			</when>
+			<otherwise>
+				ORDER BY a.billing, a.BILL_NUM desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListDetails" resultType="BsChargeLog">
+		SELECT
+			A .bill_num AS "billNum",
+			MAX (A .patient_id) AS "patientId",
+			MAX (A .patient_name) AS "patientName",
+			MAX (A .vacc_code) AS "vaccCode",
+			MAX (A .vacc_dose) AS "vaccDose",
+			MAX (A .vacc_batchnum) AS "vaccBatchnum",
+			MAX (A .vacc_manufacturer) AS "vaccManufacturer",
+			SUM (A .vacc_count) AS "vaccCount",
+			MAX (A .VACC_PRICE) AS "vaccPrice",
+			MAX (b. NAME) AS "vaccName",
+			MAX (A .status) AS "status",
+			MAX (A .create_date) AS "createDate",
+			MAX (A .sum_price) AS "sumPrice",
+			"NVL"(MAX (A.UPDATESUMPRICE), 0) AS "updateSumPrice",
+			MAX (A .billing) AS "billing",
+			MAX (s.login_name) as "createByName",
+			MAX (a.create_by) as "createById"
+		FROM bs_charge_log A
+		<include refid="bsChargeLogJoins" />
+		<where>
+			<if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			</if>
+			<if test="billNum != null and billNum != ''">
+				AND a.bill_num = #{billNum}
+			</if>
+			<if test="patientName != null and patientName != ''">
+				AND a.patient_name LIKE '%'||#{patientName}||'%'
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND b. NAME = #{vaccName}
+			</if>   
+			<if test="status == null">
+				AND a.status != 2
+				AND a.status != 0
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		GROUP BY
+			A .BILL_NUM, A .VACC_CODE ,a.billing
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.billing, A .BILL_NUM DESC
+			</when>
+			<otherwise>
+				ORDER BY a.billing, A .BILL_NUM DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getPatientIdByTicket" resultType="java.lang.String">
+		SELECT 
+			PATIENT_ID 
+		FROM 
+			BS_CHARGE_LOG
+		WHERE
+			BILL_NUM = #{billNum}
+		AND localcode = #{localCode}
+		AND ROWNUM = 1
+	</select>
+	
+	<update id="updateTicketStatus" parameterType="String">
+		UPDATE BS_CHARGE_LOG
+		SET 
+			status = '0'
+		WHERE 
+			BILL_NUM = #{billNum} 
+		AND localcode = #{localCode}
+		AND status != 2
+	</update>
+	
+	<update id="updateBilling" parameterType="String">
+		UPDATE BS_CHARGE_LOG
+		SET 
+			billing = '1'
+		WHERE 
+			BILL_NUM = #{billNum} 
+		AND localcode = #{localCode}
+	</update>
+	
+	<select id="getBillNumCurral" resultType="java.lang.Integer">
+		SELECT 
+			current_value
+		FROM BS_TBL_SEQ
+		WHERE 
+			name = 'SEQ_BILL_NUM' 
+		AND "UID" = #{createById}
+		AND localcode = #{localCode}
+	</select>
+	
+	<select id="getVaccList" resultType="java.util.HashMap" parameterType="String">
+		SELECT 
+			DISTINCT VACCINEID, 
+			VACC_NAME,CODEALL 
+		FROM VIEW_BS_PRODUCT
+		where 
+			localcode = #{localCode}
+	</select>
+	
+	<select id="getVaccById" resultType="java.util.HashMap" parameterType="Map">
+		select * from (
+			SELECT 
+				a.*, 
+				b.LABEL as SPECIFICATIONVALUE
+			FROM BS_MANAGE_PRODUCT a 
+			LEFT JOIN SYS_DICT b ON b.TYPE = 'specification' AND a.SPECIFICATION = b.VALUE
+			where
+				a.id = #{PID}
+			and a.localcode = #{localCode}
+		) 
+		where 
+			rownum = 1
+	</select>
+	
+	<select id="getBillNumCount" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+		(
+			(
+				SELECT
+					"MAX"(bill_num)
+				FROM
+					bs_charge_log
+				WHERE
+					bill_num = #{billNum}
+				AND localcode = #{localCode}
+				GROUP BY
+					bill_num
+			)
+			minus	
+			(
+				SELECT
+					"MAX"(bill_num)
+				FROM
+					bs_charge_log
+				WHERE
+					bill_num = #{billNum}
+				AND localcode = #{localCode}
+				AND status = 0
+				AND billing = '0'
+				GROUP BY
+					bill_num
+			)			
+		)
+		
+	</select>
+	
+	<insert id="insertBillNum">
+		INSERT INTO BS_TBL_SEQ(
+			name,
+			current_value,
+			incre,
+			localcode,
+			"UID"
+		) VALUES (
+			'SEQ_BILL_NUM',
+			#{billNum},
+			1,
+			#{localCode},
+			#{createById}
+		) 
+	</insert>
+	
+	<update id="updateBillNum">
+		UPDATE BS_TBL_SEQ
+		SET 
+			current_value = #{billNum}
+		WHERE 
+			name = 'SEQ_BILL_NUM'
+		AND "UID" = #{createById}
+		AND localcode = #{localCode}
+	</update>
+	
+	<select id="getBillNumByUserCount" resultType="java.lang.Integer">
+		SELECT
+			"COUNT"(*)
+		FROM
+			BS_TBL_SEQ
+		WHERE
+			name = 'SEQ_BILL_NUM'
+		AND "UID" = #{createById}
+		AND localcode = #{localCode}
+	</select>
+	
+	<update id="updateUserBillingStatus">
+		UPDATE sys_user SET 
+			billing_status = #{billing}
+		WHERE id = #{createBy.id}
+	</update>
+	
+	<update id="getBillNumNextval">
+		UPDATE BS_TBL_SEQ
+		SET 
+			current_value = current_value + incre
+		WHERE 
+			name = 'SEQ_BILL_NUM' 
+		AND "UID" = #{createById}
+		AND localcode = #{localCode}
+	</update>
+	
+	<select id="findChargeCase" resultType="BsChargeLog">
+		SELECT
+			A .bill_num AS "billNum",
+			MAX(A .pid) AS "pid",
+			MAX (A .patient_id) AS "patientId",
+			MAX (A .patient_name) AS "patientName",
+			MAX (A .vacc_code) AS "vaccCode",
+			MAX (A .vacc_dose) AS "vaccDose",
+			SUM (A .vacc_count) AS "vaccCount",
+			MAX (A .VACC_PRICE) AS "vaccPrice",
+			MAX (A .vacc_batchnum) AS "vaccBatchnum",
+			MAX (A .vacc_manufacturer) AS "vaccManufacturer",
+			MAX (b. NAME) AS "vaccName",
+			MAX (A .status) AS "status",
+			MAX (A .create_date) AS "createDate",
+			MAX (A .sum_price) AS "sumPrice",
+			"NVL"(max(A.UPDATESUMPRICE),0) AS "updateSumPrice",
+			MAX (A .billing) AS "billing",
+			MAX(A .pay) AS "pay",
+			MAX(A. refund) AS "refund"
+		FROM bs_charge_log A
+		<include refid="bsChargeLogJoins" />
+		<where>
+			<if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			</if>   
+			<if test="billNum != null and billNum != ''">
+				AND a.bill_num = #{billNum}
+			</if>
+			<if test="status == null">
+				AND a.status != 2
+				AND a.status != 0
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND b. NAME = #{vaccName}
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		GROUP BY
+			A .BILL_NUM,
+			A .VACC_CODE
+		ORDER BY
+			A .BILL_NUM DESC
+	</select>
+	
+	<insert id="updateCharge">
+		INSERT INTO bs_charge_log(
+			id,
+			patient_id,
+			patient_name,
+			bill_num,
+			sum_price,
+			pay,
+			refund,
+			vacc_code,
+			vacc_batchnum,
+			vacc_manufacturer,
+			vacc_dose,
+			vacc_count,
+			vacc_price,
+			status,
+			create_date,
+			localcode,
+			CREATE_BY,
+			updateSumPrice,
+			pid,
+			billing,
+			type
+		) VALUES (
+			#{id},
+			#{patientId},
+			#{patientName},
+			#{billNum},
+			#{sumPrice},
+			#{pay},
+			#{refund},
+			#{vaccCode},
+			#{vaccBatchnum},
+			#{vaccManufacturer},
+			#{vaccDose},
+			#{vaccCount},
+			#{vaccPrice},
+			#{status},
+			#{createDate},
+			#{localCode},
+			#{createBy.id},
+			#{updateSumPrice},
+			#{pid},
+			#{billing},
+			#{type}
+		) 
+	</insert>
+	
+	<update id="updateChargeList">
+		UPDATE BS_CHARGE_LOG
+		SET 
+			remark = '已退款' || (updateSumPrice + #{updateSumPrice}) || '元',
+			updateSumPrice = updateSumPrice + #{updateSumPrice}
+		WHERE 
+			BILL_NUM = #{billNum} 
+		AND localcode = #{localCode}
+		and status != 2
+	</update>
+	
+	<update id="updateChargeByBillNum">
+		UPDATE BS_CHARGE_LOG
+		SET 
+			BILL_NUM = #{newBillNum}
+		WHERE 
+			BILL_NUM =  #{billNum}
+		AND localcode = #{localCode}
+	</update>
+	
+	<select id="findChargeVaccine" resultType="BsChargeLog">
+		SELECT
+			A .vacc_code AS "vaccCode",
+			sum (A .vacc_count) AS "vaccCount",
+			MAX (A .vacc_price) AS "vaccPrice",
+			MAX (b. NAME) AS "vaccName",
+			MAX (A .vacc_dose) AS "vaccDose",
+		    MAX (A .vacc_batchnum) AS "vaccBatchnum",
+			MAX (A .vacc_manufacturer) AS "vaccManufacturer",
+			SUM (A .UPDATESUMPRICE) AS "updateSumPrice",
+			MAX (A .create_date) AS "createDate"
+		FROM
+			BS_CHARGE_LOG A
+		<include refid="bsChargeLogJoins" />
+		<where>
+		     <if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			 </if>  
+			 <if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			 </if>        
+			 <if test="status != null">
+				AND a.status = #{status}
+			 </if>
+			 <if test="status == null">
+				AND a.status != 2
+				AND a.status != 0
+			 </if>
+			 AND a.localcode = #{localCode}
+		</where>
+		GROUP BY
+			A .vacc_code,
+			A .vacc_dose,
+			A .vacc_batchnum,
+			A .vacc_manufacturer,
+			A .vacc_price
+	</select>
+	
+	<select id="findDataListChargeEveryday" resultType="BsChargeLog">
+		SELECT 
+		<include refid="bsChargeColumns" />
+		FROM bs_charge_log a
+		<include refid="bsChargeLogJoins" />
+		<where>
+			trunc(a.create_date) = trunc(sysdate-1)
+		</where>
+	</select>
+	
+	<select id="findViewList" resultType="BsManageProduct">
+		SELECT 
+			a.id AS "id",
+			a.vaccineid AS "vaccineid",
+			a.batchno AS "batchno",
+			a.dosage AS "dosage",
+			a.manufacturer AS "manufacturer",
+			a.storenum AS "storenum",
+			a.sellprice AS "sellprice",
+			a.isshow AS "isshow",
+			bv.G_NAME AS "gname",
+			bv.name AS "vaccName",
+			a.vacc_exp_date AS "vaccExpDate",
+			A .codeall AS "codeall",
+			A .specification AS "specification",
+			A .code AS "code",
+			a.costprice as "costprice",
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS "updateBy.id",
+			a.update_date,
+			a.officeCode as "officeCodeDb"
+		FROM VIEW_BS_PRODUCT a
+		LEFT JOIN BS_MANAGE_VACCINE bv ON bv.id = a.vaccineid
+		<where>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer LIKE '%'||#{manufacturer}||'%'
+			</if>
+			<if test="storenumIsNull">
+				AND a.storenum > 0
+			</if>
+			<if test="showAll != SHOWALL_YES">
+			    AND a.officecode = #{officeCode}
+			</if>
+			<if test="officeCodeDb != null and officeCodeDb != ''">
+			    AND a.officecode = #{officeCodeDb}
+			</if>
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+			AND a.localcode = #{localCode} 
+		</where>
+		ORDER BY a.create_date
+	</select>
+	
+	<select id="findPrintList" resultType="BsChargeLog">
+		SELECT 
+		<include refid="chargeLogColumns" />
+		FROM bs_charge_log a
+		<include refid="bsChargeLogJoins" />
+		<where>
+			<if test="createBy != null and createBy != '' and createBy.id != '' and createBy.id != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="createById != '' and createById != null">
+				AND a.create_by = #{createById}
+			</if>
+			<if test="beginChargedate != null and endChargedate != null and beginChargedate != '' and endChargedate != ''">
+				AND a.create_date BETWEEN #{beginChargedate} AND #{endChargedate}
+			</if>   
+			<if test="billNum != null and billNum != ''">
+				AND a.bill_num = #{billNum}
+			</if>
+            <if test="patientName != null and patientName != ''">
+				AND a.patient_name LIKE '%'||#{patientName}||'%'
+			</if>
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="status == null">
+				AND a.status != 2
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND b. NAME = #{vaccName}
+			</if>
+			<if test="billing != null and billing != ''">
+				AND a.BILLING = #{billing}
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		GROUP BY 
+			a.BILL_NUM,
+			a.TYPE  
+		ORDER BY a.BILL_NUM desc
+	</select>
+</mapper>

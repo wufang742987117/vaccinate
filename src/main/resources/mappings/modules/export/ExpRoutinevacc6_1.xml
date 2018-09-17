@@ -1,0 +1,3017 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.export.dao.ExpRoutinevacc6_1Dao">
+    
+	<sql id="expRoutinevacc6_1Columns">
+		a.id AS "id",
+		a.localcode AS "localCode",
+		a.year_month AS "yearMonth",
+		a.unit_name AS "unitName",
+		a.unit_code AS "unitCode",
+		a.reside AS "reside",
+		a.display AS "display",
+		a.committee AS "committee",
+		a.hepb_a_sh AS "hepbASh",
+		a.hepb_a_re AS "hepbARe",
+		a.hepb_a_sr AS "hepbASr",
+		a.hepb_aa_sh AS "hepbAaSh",
+		a.hepb_aa_re AS "hepbAaRe",
+		a.hepb_aa_sr AS "hepbAaSr",
+		a.hepb_b_sh AS "hepbBSh",
+		a.hepb_b_re AS "hepbBRe",
+		a.hepb_b_sr AS "hepbBSr",
+		a.hepb_c_sh AS "hepbCSh",
+		a.hepb_c_re AS "hepbCRe",
+		a.hepb_c_sr AS "hepbCSr",
+		a.bcg_sh AS "bcgSh",
+		a.bcg_re AS "bcgRe",
+		a.bcg_sr AS "bcgSr",
+		a.pv_a_sh AS "pvASh",
+		a.pv_a_re AS "pvARe",
+		a.pv_a_sr AS "pvASr",
+		a.pv_b_sh AS "pvBSh",
+		a.pv_b_re AS "pvBRe",
+		a.pv_b_sr AS "pvBSr",
+		a.pv_c_sh AS "pvCSh",
+		a.pv_c_re AS "pvCRe",
+		a.pv_c_sr AS "pvCSr",
+		a.pv_d_sh AS "pvDSh",
+		a.pv_d_re AS "pvDRe",
+		a.pv_d_sr AS "pvDSr",
+		a.dtp_a_sh AS "dtpASh",
+		a.dtp_a_re AS "dtpARe",
+		a.dtp_a_sr AS "dtpASr",
+		a.dtp_b_sh AS "dtpBSh",
+		a.dtp_b_re AS "dtpBRe",
+		a.dtp_b_sr AS "dtpBSr",
+		a.dtp_c_sh AS "dtpCSh",
+		a.dtp_c_re AS "dtpCRe",
+		a.dtp_c_sr AS "dtpCSr",
+		a.dtp_d_sh AS "dtpDSh",
+		a.dtp_d_re AS "dtpDRe",
+		a.dtp_d_sr AS "dtpDSr",
+		a.dt_sh AS "dtSh",
+		a.dt_re AS "dtRe",
+		a.dt_sr AS "dtSr",
+		a.mr_a_sh AS "mrASh",
+		a.mr_a_re AS "mrARe",
+		a.mr_a_sr AS "mrASr",
+		a.mr_b_sh AS "mrBSh",
+		a.mr_b_re AS "mrBRe",
+		a.mr_b_sr AS "mrBSr",
+		a.mmr_a_sh AS "mmrASh",
+		a.mmr_a_re AS "mmrARe",
+		a.mmr_a_sr AS "mmrASr",
+		a.mmr_b_sh AS "mmrBSh",
+		a.mmr_b_re AS "mmrBRe",
+		a.mmr_b_sr AS "mmrBSr",
+		a.mm_a_sh AS "mmASh",
+		a.mm_a_re AS "mmARe",
+		a.mm_a_sr AS "mmASr",
+		a.mm_b_sh AS "mmBSh",
+		a.mm_b_re AS "mmBRe",
+		a.mm_b_sr AS "mmBSr",
+		a.mv_a_sh AS "mvASh",
+		a.mv_a_re AS "mvARe",
+		a.mv_a_sr AS "mvASr",
+		a.mv_b_sh AS "mvBSh",
+		a.mv_b_re AS "mvBRe",
+		a.mv_b_sr AS "mvBSr",
+		a.mena_a_sh AS "menaASh",
+		a.mena_a_re AS "menaARe",
+		a.mena_a_sr AS "menaASr",
+		a.mena_b_sh AS "menaBSh",
+		a.mena_b_re AS "menaBRe",
+		a.mena_b_sr AS "menaBSr",
+		a.menac_a_sh AS "menacASh",
+		a.menac_a_re AS "menacARe",
+		a.menac_a_sr AS "menacASr",
+		a.menac_b_sh AS "menacBSh",
+		a.menac_b_re AS "menacBRe",
+		a.menac_b_sr AS "menacBSr",
+		a.jel_a_sh AS "jelASh",
+		a.jel_a_re AS "jelARe",
+		a.jel_a_sr AS "jelASr",
+		a.jel_b_sh AS "jelBSh",
+		a.jel_b_re AS "jelBRe",
+		a.jel_b_sr AS "jelBSr",
+		a.jei_a_sh AS "jeiASh",
+		a.jei_a_re AS "jeiARe",
+		a.jei_a_sr AS "jeiASr",
+		a.jei_b_sh AS "jeiBSh",
+		a.jei_b_re AS "jeiBRe",
+		a.jei_b_sr AS "jeiBSr",
+		a.jei_c_sh AS "jeiCSh",
+		a.jei_c_re AS "jeiCRe",
+		a.jei_c_sr AS "jeiCSr",
+		a.jei_d_sh AS "jeiDSh",
+		a.jei_d_re AS "jeiDRe",
+		a.jei_d_sr AS "jeiDSr",
+		a.hepal_sh AS "hepalSh",
+		a.hepal_re AS "hepalRe",
+		a.hepal_sr AS "hepalSr",
+		a.hepai_a_sh AS "hepaiASh",
+		a.hepai_a_re AS "hepaiARe",
+		a.hepai_a_sr AS "hepaiASr",
+		a.hepai_b_sh AS "hepaiBSh",
+		a.hepai_b_re AS "hepaiBRe",
+		a.hepai_b_sr AS "hepaiBSr",
+		a.mr_sum_a_sh AS "mrSumASh",
+		a.mr_sum_a_re AS "mrSumARe",
+		a.mr_sum_a_sr AS "mrSumASr",
+		a.mr_sum_b_sh AS "mrSumBSh",
+		a.mr_sum_b_re AS "mrSumBRe",
+		a.mr_sum_b_sr AS "mrSumBSr",
+		a.mmr_sum_a_sh AS "mmrSumASh",
+		a.mmr_sum_a_re AS "mmrSumARe",
+		a.mmr_sum_a_sr AS "mmrSumASr",
+		a.mmr_sum_b_sh AS "mmrSumBSh",
+		a.mmr_sum_b_re AS "mmrSumBRe",
+		a.mmr_sum_b_sr AS "mmrSumBSr",
+		a.mm_sum_a_sh AS "mmSumASh",
+		a.mm_sum_a_re AS "mmSumARe",
+		a.mm_sum_a_sr AS "mmSumASr",
+		a.mm_sum_b_sh AS "mmSumBSh",
+		a.mm_sum_b_re AS "mmSumBRe",
+		a.mm_sum_b_sr AS "mmSumBSr",
+		a.mv_sum_a_sh AS "mvSumASh",
+		a.mv_sum_a_re AS "mvSumARe",
+		a.mv_sum_a_sr AS "mvSumASr",
+		a.mv_sum_b_sh AS "mvSumBSh",
+		a.mv_sum_b_re AS "mvSumBRe",
+		a.mv_sum_b_sr AS "mvSumBSr",
+		a.hepal_sum_a_sh AS "hepalSumASh",
+		a.hepal_sum_a_re AS "hepalSumARe",
+		a.hepal_sum_a_sr AS "hepalSumASr",
+		a.hepal_sum_b_sh AS "hepalSumBSh",
+		a.hepal_sum_b_re AS "hepalSumBRe",
+		a.hepal_sum_b_sr AS "hepalSumBSr",
+		a.hepai_sum_a_sh AS "hepaiSumASh",
+		a.hepai_sum_a_re AS "hepaiSumARe",
+		a.hepai_sum_a_sr AS "hepaiSumASr",
+		a.hepai_sum_b_sh AS "hepaiSumBSh",
+		a.hepai_sum_b_re AS "hepaiSumBRe",
+		a.hepai_sum_b_sr AS "hepaiSumBSr",
+		a.mcv_sum_a_sh AS "mcvSumASh",
+		a.mcv_sum_a_re AS "mcvSumARe",
+		a.mcv_sum_a_sr AS "mcvSumASr",
+		a.mcv_sum_b_sh AS "mcvSumBSh",
+		a.mcv_sum_b_re AS "mcvSumBRe",
+		a.mcv_sum_b_sr AS "mcvSumBSr",
+		a.rcv_sum_a_sh AS "rcvSumASh",
+		a.rcv_sum_a_re AS "rcvSumARe",
+		a.rcv_sum_a_sr AS "rcvSumASr",
+		a.rcv_sum_b_sh AS "rcvSumBSh",
+		a.rcv_sum_b_re AS "rcvSumBRe",
+		a.rcv_sum_b_sr AS "rcvSumBSr",
+		a.mumcv_sum_a_sh AS "mumcvSumASh",
+		a.mumcv_sum_a_re AS "mumcvSumARe",
+		a.mumcv_sum_a_sr AS "mumcvSumASr",
+		a.mumcv_sum_b_sh AS "mumcvSumBSh",
+		a.mumcv_sum_b_re AS "mumcvSumBRe",
+		a.mumcv_sum_b_sr AS "mumcvSumBSr",
+		a.hepa_sum_a_sh AS "hepaSumASh",
+		a.hepa_sum_a_re AS "hepaSumARe",
+		a.hepa_sum_a_sr AS "hepaSumASr",
+		a.hepa_sum_b_sh AS "hepaSumBSh",
+		a.hepa_sum_b_re AS "hepaSumBRe",
+		a.hepa_sum_b_sr AS "hepaSumBSr"
+	</sql>
+	
+	<sql id="ExpRoutinevacc6_1Joins">
+	</sql>
+    
+	<select id="get" resultType="ExpRoutinevacc6_1">
+		SELECT 
+			<include refid="expRoutinevacc6_1Columns"/>
+		FROM exp_routinevacc_6_1 a
+		<include refid="ExpRoutinevacc6_1Joins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ExpRoutinevacc6_1">
+		SELECT 
+			<include refid="expRoutinevacc6_1Columns"/>
+		FROM exp_routinevacc_6_1 a
+		<include refid="ExpRoutinevacc6_1Joins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ExpRoutinevacc6_1">
+		SELECT 
+			<include refid="expRoutinevacc6_1Columns"/>
+		FROM exp_routinevacc_6_1 a
+		<include refid="ExpRoutinevacc6_1Joins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO exp_routinevacc_6_1(
+			id,
+			localcode,
+			year_month,
+			unit_name,
+			unit_code,
+			reside,
+			display,
+			committee,
+			hepb_a_sh,
+			hepb_a_re,
+			hepb_a_sr,
+			hepb_aa_sh,
+			hepb_aa_re,
+			hepb_aa_sr,
+			hepb_b_sh,
+			hepb_b_re,
+			hepb_b_sr,
+			hepb_c_sh,
+			hepb_c_re,
+			hepb_c_sr,
+			bcg_sh,
+			bcg_re,
+			bcg_sr,
+			pv_a_sh,
+			pv_a_re,
+			pv_a_sr,
+			pv_b_sh,
+			pv_b_re,
+			pv_b_sr,
+			pv_c_sh,
+			pv_c_re,
+			pv_c_sr,
+			pv_d_sh,
+			pv_d_re,
+			pv_d_sr,
+			dtp_a_sh,
+			dtp_a_re,
+			dtp_a_sr,
+			dtp_b_sh,
+			dtp_b_re,
+			dtp_b_sr,
+			dtp_c_sh,
+			dtp_c_re,
+			dtp_c_sr,
+			dtp_d_sh,
+			dtp_d_re,
+			dtp_d_sr,
+			dt_sh,
+			dt_re,
+			dt_sr,
+			mr_a_sh,
+			mr_a_re,
+			mr_a_sr,
+			mr_b_sh,
+			mr_b_re,
+			mr_b_sr,
+			mmr_a_sh,
+			mmr_a_re,
+			mmr_a_sr,
+			mmr_b_sh,
+			mmr_b_re,
+			mmr_b_sr,
+			mm_a_sh,
+			mm_a_re,
+			mm_a_sr,
+			mm_b_sh,
+			mm_b_re,
+			mm_b_sr,
+			mv_a_sh,
+			mv_a_re,
+			mv_a_sr,
+			mv_b_sh,
+			mv_b_re,
+			mv_b_sr,
+			mena_a_sh,
+			mena_a_re,
+			mena_a_sr,
+			mena_b_sh,
+			mena_b_re,
+			mena_b_sr,
+			menac_a_sh,
+			menac_a_re,
+			menac_a_sr,
+			menac_b_sh,
+			menac_b_re,
+			menac_b_sr,
+			jel_a_sh,
+			jel_a_re,
+			jel_a_sr,
+			jel_b_sh,
+			jel_b_re,
+			jel_b_sr,
+			jei_a_sh,
+			jei_a_re,
+			jei_a_sr,
+			jei_b_sh,
+			jei_b_re,
+			jei_b_sr,
+			jei_c_sh,
+			jei_c_re,
+			jei_c_sr,
+			jei_d_sh,
+			jei_d_re,
+			jei_d_sr,
+			hepal_sh,
+			hepal_re,
+			hepal_sr,
+			hepai_a_sh,
+			hepai_a_re,
+			hepai_a_sr,
+			hepai_b_sh,
+			hepai_b_re,
+			hepai_b_sr,
+			mr_sum_a_sh,
+			mr_sum_a_re,
+			mr_sum_a_sr,
+			mr_sum_b_sh,
+			mr_sum_b_re,
+			mr_sum_b_sr,
+			mmr_sum_a_sh,
+			mmr_sum_a_re,
+			mmr_sum_a_sr,
+			mmr_sum_b_sh,
+			mmr_sum_b_re,
+			mmr_sum_b_sr,
+			mm_sum_a_sh,
+			mm_sum_a_re,
+			mm_sum_a_sr,
+			mm_sum_b_sh,
+			mm_sum_b_re,
+			mm_sum_b_sr,
+			mv_sum_a_sh,
+			mv_sum_a_re,
+			mv_sum_a_sr,
+			mv_sum_b_sh,
+			mv_sum_b_re,
+			mv_sum_b_sr,
+			hepal_sum_a_sh,
+			hepal_sum_a_re,
+			hepal_sum_a_sr,
+			hepal_sum_b_sh,
+			hepal_sum_b_re,
+			hepal_sum_b_sr,
+			hepai_sum_a_sh,
+			hepai_sum_a_re,
+			hepai_sum_a_sr,
+			hepai_sum_b_sh,
+			hepai_sum_b_re,
+			hepai_sum_b_sr,
+			mcv_sum_a_sh,
+			mcv_sum_a_re,
+			mcv_sum_a_sr,
+			mcv_sum_b_sh,
+			mcv_sum_b_re,
+			mcv_sum_b_sr,
+			rcv_sum_a_sh,
+			rcv_sum_a_re,
+			rcv_sum_a_sr,
+			rcv_sum_b_sh,
+			rcv_sum_b_re,
+			rcv_sum_b_sr,
+			mumcv_sum_a_sh,
+			mumcv_sum_a_re,
+			mumcv_sum_a_sr,
+			mumcv_sum_b_sh,
+			mumcv_sum_b_re,
+			mumcv_sum_b_sr,
+			hepa_sum_a_sh,
+			hepa_sum_a_re,
+			hepa_sum_a_sr,
+			hepa_sum_b_sh,
+			hepa_sum_b_re,
+			hepa_sum_b_sr
+		) VALUES (
+			#{id},
+			#{localCode},
+			to_date(#{yearMonth},'yyyy-MM'),
+			#{unitName},
+			#{unitCode},
+			#{reside},
+			#{display},
+			#{committee},
+			#{hepbASh},
+			#{hepbARe},
+			#{hepbASr},
+			#{hepbAaSh},
+			#{hepbAaRe},
+			#{hepbAaSr},
+			#{hepbBSh},
+			#{hepbBRe},
+			#{hepbBSr},
+			#{hepbCSh},
+			#{hepbCRe},
+			#{hepbCSr},
+			#{bcgSh},
+			#{bcgRe},
+			#{bcgSr},
+			#{pvASh},
+			#{pvARe},
+			#{pvASr},
+			#{pvBSh},
+			#{pvBRe},
+			#{pvBSr},
+			#{pvCSh},
+			#{pvCRe},
+			#{pvCSr},
+			#{pvDSh},
+			#{pvDRe},
+			#{pvDSr},
+			#{dtpASh},
+			#{dtpARe},
+			#{dtpASr},
+			#{dtpBSh},
+			#{dtpBRe},
+			#{dtpBSr},
+			#{dtpCSh},
+			#{dtpCRe},
+			#{dtpCSr},
+			#{dtpDSh},
+			#{dtpDRe},
+			#{dtpDSr},
+			#{dtSh},
+			#{dtRe},
+			#{dtSr},
+			#{mrASh},
+			#{mrARe},
+			#{mrASr},
+			#{mrBSh},
+			#{mrBRe},
+			#{mrBSr},
+			#{mmrASh},
+			#{mmrARe},
+			#{mmrASr},
+			#{mmrBSh},
+			#{mmrBRe},
+			#{mmrBSr},
+			#{mmASh},
+			#{mmARe},
+			#{mmASr},
+			#{mmBSh},
+			#{mmBRe},
+			#{mmBSr},
+			#{mvASh},
+			#{mvARe},
+			#{mvASr},
+			#{mvBSh},
+			#{mvBRe},
+			#{mvBSr},
+			#{menaASh},
+			#{menaARe},
+			#{menaASr},
+			#{menaBSh},
+			#{menaBRe},
+			#{menaBSr},
+			#{menacASh},
+			#{menacARe},
+			#{menacASr},
+			#{menacBSh},
+			#{menacBRe},
+			#{menacBSr},
+			#{jelASh},
+			#{jelARe},
+			#{jelASr},
+			#{jelBSh},
+			#{jelBRe},
+			#{jelBSr},
+			#{jeiASh},
+			#{jeiARe},
+			#{jeiASr},
+			#{jeiBSh},
+			#{jeiBRe},
+			#{jeiBSr},
+			#{jeiCSh},
+			#{jeiCRe},
+			#{jeiCSr},
+			#{jeiDSh},
+			#{jeiDRe},
+			#{jeiDSr},
+			#{hepalSh},
+			#{hepalRe},
+			#{hepalSr},
+			#{hepaiASh},
+			#{hepaiARe},
+			#{hepaiASr},
+			#{hepaiBSh},
+			#{hepaiBRe},
+			#{hepaiBSr},
+			#{mrSumASh},
+			#{mrSumARe},
+			#{mrSumASr},
+			#{mrSumBSh},
+			#{mrSumBRe},
+			#{mrSumBSr},
+			#{mmrSumASh},
+			#{mmrSumARe},
+			#{mmrSumASr},
+			#{mmrSumBSh},
+			#{mmrSumBRe},
+			#{mmrSumBSr},
+			#{mmSumASh},
+			#{mmSumARe},
+			#{mmSumASr},
+			#{mmSumBSh},
+			#{mmSumBRe},
+			#{mmSumBSr},
+			#{mvSumASh},
+			#{mvSumARe},
+			#{mvSumASr},
+			#{mvSumBSh},
+			#{mvSumBRe},
+			#{mvSumBSr},
+			#{hepalSumASh},
+			#{hepalSumARe},
+			#{hepalSumASr},
+			#{hepalSumBSh},
+			#{hepalSumBRe},
+			#{hepalSumBSr},
+			#{hepaiSumASh},
+			#{hepaiSumARe},
+			#{hepaiSumASr},
+			#{hepaiSumBSh},
+			#{hepaiSumBRe},
+			#{hepaiSumBSr},
+			#{mcvSumASh},
+			#{mcvSumARe},
+			#{mcvSumASr},
+			#{mcvSumBSh},
+			#{mcvSumBRe},
+			#{mcvSumBSr},
+			#{rcvSumASh},
+			#{rcvSumARe},
+			#{rcvSumASr},
+			#{rcvSumBSh},
+			#{rcvSumBRe},
+			#{rcvSumBSr},
+			#{mumcvSumASh},
+			#{mumcvSumARe},
+			#{mumcvSumASr},
+			#{mumcvSumBSh},
+			#{mumcvSumBRe},
+			#{mumcvSumBSr},
+			#{hepaSumASh},
+			#{hepaSumARe},
+			#{hepaSumASr},
+			#{hepaSumBSh},
+			#{hepaSumBRe},
+			#{hepaSumBSr}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE exp_routinevacc_6_1 SET 	
+			localcode = #{localCode},
+			year_month = #{yearMonth},
+			unit_name = #{unitName},
+			unit_code = #{unitCode},
+			reside = #{reside},
+			display = #{display},
+			committee = #{committee},
+			hepb_a_sh = #{hepbASh},
+			hepb_a_re = #{hepbARe},
+			hepb_a_sr = #{hepbASr},
+			hepb_aa_sh = #{hepbAaSh},
+			hepb_aa_re = #{hepbAaRe},
+			hepb_aa_sr = #{hepbAaSr},
+			hepb_b_sh = #{hepbBSh},
+			hepb_b_re = #{hepbBRe},
+			hepb_b_sr = #{hepbBSr},
+			hepb_c_sh = #{hepbCSh},
+			hepb_c_re = #{hepbCRe},
+			hepb_c_sr = #{hepbCSr},
+			bcg_sh = #{bcgSh},
+			bcg_re = #{bcgRe},
+			bcg_sr = #{bcgSr},
+			pv_a_sh = #{pvASh},
+			pv_a_re = #{pvARe},
+			pv_a_sr = #{pvASr},
+			pv_b_sh = #{pvBSh},
+			pv_b_re = #{pvBRe},
+			pv_b_sr = #{pvBSr},
+			pv_c_sh = #{pvCSh},
+			pv_c_re = #{pvCRe},
+			pv_c_sr = #{pvCSr},
+			pv_d_sh = #{pvDSh},
+			pv_d_re = #{pvDRe},
+			pv_d_sr = #{pvDSr},
+			dtp_a_sh = #{dtpASh},
+			dtp_a_re = #{dtpARe},
+			dtp_a_sr = #{dtpASr},
+			dtp_b_sh = #{dtpBSh},
+			dtp_b_re = #{dtpBRe},
+			dtp_b_sr = #{dtpBSr},
+			dtp_c_sh = #{dtpCSh},
+			dtp_c_re = #{dtpCRe},
+			dtp_c_sr = #{dtpCSr},
+			dtp_d_sh = #{dtpDSh},
+			dtp_d_re = #{dtpDRe},
+			dtp_d_sr = #{dtpDSr},
+			dt_sh = #{dtSh},
+			dt_re = #{dtRe},
+			dt_sr = #{dtSr},
+			mr_a_sh = #{mrASh},
+			mr_a_re = #{mrARe},
+			mr_a_sr = #{mrASr},
+			mr_b_sh = #{mrBSh},
+			mr_b_re = #{mrBRe},
+			mr_b_sr = #{mrBSr},
+			mmr_a_sh = #{mmrASh},
+			mmr_a_re = #{mmrARe},
+			mmr_a_sr = #{mmrASr},
+			mmr_b_sh = #{mmrBSh},
+			mmr_b_re = #{mmrBRe},
+			mmr_b_sr = #{mmrBSr},
+			mm_a_sh = #{mmASh},
+			mm_a_re = #{mmARe},
+			mm_a_sr = #{mmASr},
+			mm_b_sh = #{mmBSh},
+			mm_b_re = #{mmBRe},
+			mm_b_sr = #{mmBSr},
+			mv_a_sh = #{mvASh},
+			mv_a_re = #{mvARe},
+			mv_a_sr = #{mvASr},
+			mv_b_sh = #{mvBSh},
+			mv_b_re = #{mvBRe},
+			mv_b_sr = #{mvBSr},
+			mena_a_sh = #{menaASh},
+			mena_a_re = #{menaARe},
+			mena_a_sr = #{menaASr},
+			mena_b_sh = #{menaBSh},
+			mena_b_re = #{menaBRe},
+			mena_b_sr = #{menaBSr},
+			menac_a_sh = #{menacASh},
+			menac_a_re = #{menacARe},
+			menac_a_sr = #{menacASr},
+			menac_b_sh = #{menacBSh},
+			menac_b_re = #{menacBRe},
+			menac_b_sr = #{menacBSr},
+			jel_a_sh = #{jelASh},
+			jel_a_re = #{jelARe},
+			jel_a_sr = #{jelASr},
+			jel_b_sh = #{jelBSh},
+			jel_b_re = #{jelBRe},
+			jel_b_sr = #{jelBSr},
+			jei_a_sh = #{jeiASh},
+			jei_a_re = #{jeiARe},
+			jei_a_sr = #{jeiASr},
+			jei_b_sh = #{jeiBSh},
+			jei_b_re = #{jeiBRe},
+			jei_b_sr = #{jeiBSr},
+			jei_c_sh = #{jeiCSh},
+			jei_c_re = #{jeiCRe},
+			jei_c_sr = #{jeiCSr},
+			jei_d_sh = #{jeiDSh},
+			jei_d_re = #{jeiDRe},
+			jei_d_sr = #{jeiDSr},
+			hepal_sh = #{hepalSh},
+			hepal_re = #{hepalRe},
+			hepal_sr = #{hepalSr},
+			hepai_a_sh = #{hepaiASh},
+			hepai_a_re = #{hepaiARe},
+			hepai_a_sr = #{hepaiASr},
+			hepai_b_sh = #{hepaiBSh},
+			hepai_b_re = #{hepaiBRe},
+			hepai_b_sr = #{hepaiBSr},
+			mr_sum_a_sh = #{mrSumASh},
+			mr_sum_a_re = #{mrSumARe},
+			mr_sum_a_sr = #{mrSumASr},
+			mr_sum_b_sh = #{mrSumBSh},
+			mr_sum_b_re = #{mrSumBRe},
+			mr_sum_b_sr = #{mrSumBSr},
+			mmr_sum_a_sh = #{mmrSumASh},
+			mmr_sum_a_re = #{mmrSumARe},
+			mmr_sum_a_sr = #{mmrSumASr},
+			mmr_sum_b_sh = #{mmrSumBSh},
+			mmr_sum_b_re = #{mmrSumBRe},
+			mmr_sum_b_sr = #{mmrSumBSr},
+			mm_sum_a_sh = #{mmSumASh},
+			mm_sum_a_re = #{mmSumARe},
+			mm_sum_a_sr = #{mmSumASr},
+			mm_sum_b_sh = #{mmSumBSh},
+			mm_sum_b_re = #{mmSumBRe},
+			mm_sum_b_sr = #{mmSumBSr},
+			mv_sum_a_sh = #{mvSumASh},
+			mv_sum_a_re = #{mvSumARe},
+			mv_sum_a_sr = #{mvSumASr},
+			mv_sum_b_sh = #{mvSumBSh},
+			mv_sum_b_re = #{mvSumBRe},
+			mv_sum_b_sr = #{mvSumBSr},
+			hepal_sum_a_sh = #{hepalSumASh},
+			hepal_sum_a_re = #{hepalSumARe},
+			hepal_sum_a_sr = #{hepalSumASr},
+			hepal_sum_b_sh = #{hepalSumBSh},
+			hepal_sum_b_re = #{hepalSumBRe},
+			hepal_sum_b_sr = #{hepalSumBSr},
+			hepai_sum_a_sh = #{hepaiSumASh},
+			hepai_sum_a_re = #{hepaiSumARe},
+			hepai_sum_a_sr = #{hepaiSumASr},
+			hepai_sum_b_sh = #{hepaiSumBSh},
+			hepai_sum_b_re = #{hepaiSumBRe},
+			hepai_sum_b_sr = #{hepaiSumBSr},
+			mcv_sum_a_sh = #{mcvSumASh},
+			mcv_sum_a_re = #{mcvSumARe},
+			mcv_sum_a_sr = #{mcvSumASr},
+			mcv_sum_b_sh = #{mcvSumBSh},
+			mcv_sum_b_re = #{mcvSumBRe},
+			mcv_sum_b_sr = #{mcvSumBSr},
+			rcv_sum_a_sh = #{rcvSumASh},
+			rcv_sum_a_re = #{rcvSumARe},
+			rcv_sum_a_sr = #{rcvSumASr},
+			rcv_sum_b_sh = #{rcvSumBSh},
+			rcv_sum_b_re = #{rcvSumBRe},
+			rcv_sum_b_sr = #{rcvSumBSr},
+			mumcv_sum_a_sh = #{mumcvSumASh},
+			mumcv_sum_a_re = #{mumcvSumARe},
+			mumcv_sum_a_sr = #{mumcvSumASr},
+			mumcv_sum_b_sh = #{mumcvSumBSh},
+			mumcv_sum_b_re = #{mumcvSumBRe},
+			mumcv_sum_b_sr = #{mumcvSumBSr},
+			hepa_sum_a_sh = #{hepaSumASh},
+			hepa_sum_a_re = #{hepaSumARe},
+			hepa_sum_a_sr = #{hepaSumASr},
+			hepa_sum_b_sh = #{hepaSumBSh},
+			hepa_sum_b_re = #{hepaSumBRe},
+			hepa_sum_b_sr = #{hepaSumBSr}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM exp_routinevacc_6_1
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 获取map数据开始  -->
+	<select id="selectVaccData61_unit" resultType="java.util.Map">
+		SELECT 
+			LABEL,
+			SUM(HEPB_A_SH) AS HEPB_A_SH,
+			SUM(HEPB_A_RE) AS HEPB_A_RE,
+			SUM(CASE WHEN HEPB_A_SH = 0 THEN 0 ELSE round(HEPB_A_RE/HEPB_A_SH*100,'2') END )AS HEPB_A_SR,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH,   
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE,   
+			SUM(CASE WHEN HEPB_AA_SH = 0 THEN 0 ELSE round(HEPB_AA_RE/HEPB_AA_SH*100,'2') END )AS HEPB_AA_SR,	   
+			SUM(HEPB_B_SH) AS HEPB_B_SH,
+			SUM(HEPB_B_RE) AS HEPB_B_RE,
+			SUM(CASE WHEN HEPB_B_SH = 0 THEN 0 ELSE round(HEPB_B_RE/HEPB_B_SH*100,'2') END )AS HEPB_B_SR,
+			SUM(HEPB_C_SH) AS HEPB_C_SH,
+			SUM(HEPB_C_RE) AS HEPB_C_RE,
+			SUM(CASE WHEN HEPB_C_SH = 0 THEN 0 ELSE round(HEPB_C_RE/HEPB_C_SH*100,'2') END )AS HEPB_C_SR,
+			SUM(BCG_SH) AS BCG_SH,
+			SUM(BCG_RE) AS BCG_RE,
+			SUM(CASE WHEN BCG_SH = 0 THEN 0 ELSE round(BCG_RE/BCG_SH*100,'2') END )AS BCG_SR,
+			SUM(PV_A_SH) AS PV_A_SH,
+			SUM(PV_A_RE) AS PV_A_RE, 
+			SUM(CASE WHEN PV_A_SH = 0 THEN 0 ELSE round(PV_A_RE/PV_A_SH*100,'2') END )AS PV_A_SR,
+			SUM(PV_B_SH) AS PV_B_SH, 
+			SUM(PV_B_RE) AS PV_B_RE, 
+			SUM(CASE WHEN PV_B_SH = 0 THEN 0 ELSE round(PV_B_RE/PV_B_SH*100,'2') END )AS PV_B_SR,
+			SUM(PV_C_SH) AS PV_C_SH,
+			SUM(PV_C_RE) AS PV_C_RE,
+			SUM(CASE WHEN PV_C_SH = 0 THEN 0 ELSE round(PV_C_RE/PV_C_SH*100,'2') END )AS PV_C_SR,
+			SUM(PV_D_SH) AS PV_D_SH,
+			SUM(PV_D_RE) AS PV_D_RE,
+			SUM(CASE WHEN PV_D_SH = 0 THEN 0 ELSE round(PV_D_RE/PV_D_SH*100,'2') END )AS PV_D_SR,
+			SUM(DTP_A_SH) AS DTP_A_SH,
+			SUM(DTP_A_RE) AS DTP_A_RE,
+			SUM(CASE WHEN DTP_A_SH = 0 THEN 0 ELSE round(DTP_A_RE/DTP_A_SH*100,'2') END )AS DTP_A_SR,
+			SUM(DTP_B_SH) AS DTP_B_SH,
+			SUM(DTP_B_RE) AS DTP_B_RE,
+			SUM(CASE WHEN DTP_B_SH = 0 THEN 0 ELSE round(DTP_B_RE/DTP_B_SH*100,'2') END )AS DTP_B_SR,
+			SUM(DTP_C_SH) AS DTP_C_SH,
+			SUM(DTP_C_RE) AS DTP_C_RE,
+			SUM(CASE WHEN DTP_C_SH = 0 THEN 0 ELSE round(DTP_C_RE/DTP_C_SH*100,'2') END )AS DTP_C_SR,
+			SUM(DTP_D_SH) AS DTP_D_SH,
+			SUM(DTP_D_RE) AS DTP_D_RE,
+			SUM(CASE WHEN DTP_D_SH = 0 THEN 0 ELSE round(DTP_D_RE/DTP_D_SH*100,'2') END )AS DTP_D_SR,
+			SUM(DT_SH) AS DT_SH,
+			SUM(DT_RE) AS DT_RE,
+			SUM(CASE WHEN DT_SH = 0 THEN 0 ELSE round(DT_RE/DT_SH*100,'2') END )AS DT_SR,
+			SUM(MR_A_SH) AS MR_A_SH,
+			SUM(MR_A_RE) AS MR_A_RE,
+			SUM(CASE WHEN MR_A_SH = 0 THEN 0 ELSE round(MR_A_RE/MR_A_SH*100,'2') END )AS MR_A_SR,
+			SUM(MR_B_SH) AS MR_B_SH,
+			SUM(MR_B_RE) AS MR_B_RE,
+			SUM(CASE WHEN MR_B_SH = 0 THEN 0 ELSE round(MR_B_RE/MR_B_SH*100,'2') END )AS MR_B_SR,
+			SUM(MMR_A_SH) AS MMR_A_SH,
+			SUM(MMR_A_RE) AS MMR_A_RE,
+			SUM(CASE WHEN MMR_A_SH = 0 THEN 0 ELSE round(MMR_A_RE/MMR_A_SH*100,'2') END )AS MMR_A_SR,
+			SUM(MMR_B_SH) AS MMR_B_SH,
+			SUM(MMR_B_RE) AS MMR_B_RE,
+			SUM(CASE WHEN MMR_B_SH = 0 THEN 0 ELSE round(MMR_B_RE/MMR_B_SH*100,'2') END )AS MMR_B_SR,
+			SUM(MM_A_SH) AS MM_A_SH,
+			SUM(MM_A_RE) AS MM_A_RE,
+			SUM(CASE WHEN MM_A_SH = 0 THEN 0 ELSE round(MM_A_RE/MM_A_SH*100,'2') END )AS MM_A_SR,
+			SUM(MM_B_SH) AS MM_B_SH,
+			SUM(MM_B_RE) AS MM_B_RE,
+			SUM(CASE WHEN MM_B_SH = 0 THEN 0 ELSE round(MM_B_RE/MM_B_SH*100,'2') END )AS MM_B_SR,
+			SUM(MV_A_SH) AS MV_A_SH,
+			SUM(MV_A_RE) AS MV_A_RE,
+			SUM(CASE WHEN MV_A_SH = 0 THEN 0 ELSE round(MV_A_RE/MV_A_SH*100,'2') END )AS MV_A_SR,
+			SUM(MV_B_SH) AS MV_B_SH,
+			SUM(MV_B_RE) AS MV_B_RE,
+			SUM(CASE WHEN MV_B_SH = 0 THEN 0 ELSE round(MV_B_RE/MV_B_SH*100,'2') END )AS MV_B_SR,
+			SUM(MENA_A_SH) AS MENA_A_SH,
+			SUM(MENA_A_RE) AS MENA_A_RE,
+			SUM(CASE WHEN MENA_A_SH = 0 THEN 0 ELSE round(MENA_A_RE/MENA_A_SH*100,'2') END )AS MENA_A_SR,
+			SUM(MENA_B_SH) AS MENA_B_SH,
+			SUM(MENA_B_RE) AS MENA_B_RE,
+			SUM(CASE WHEN MENA_B_SH = 0 THEN 0 ELSE round(MENA_B_RE/MENA_B_SH*100,'2') END )AS MENA_B_SR,
+			SUM(MENAC_A_SH) AS MENAC_A_SH,   
+			SUM(MENAC_A_RE) AS MENAC_A_RE,   
+			SUM(CASE WHEN MENAC_A_SH = 0 THEN 0 ELSE round(MENAC_A_RE/MENAC_A_SH*100,'2') END )AS MENAC_A_SR,
+			SUM(MENAC_B_SH) AS MENAC_B_SH,   
+			SUM(MENAC_B_RE) AS MENAC_B_RE,   
+			SUM(CASE WHEN MENAC_B_SH = 0 THEN 0 ELSE round(MENAC_B_RE/MENAC_B_SH*100,'2') END )AS MENAC_B_SR, 
+			SUM(JEL_A_SH) AS JEL_A_SH,  
+			SUM(JEL_A_RE) AS JEL_A_RE,  
+			SUM(CASE WHEN JEL_A_SH = 0 THEN 0 ELSE round(JEL_A_RE/JEL_A_SH*100,'2') END )AS JEL_A_SR,
+			SUM(JEL_B_SH) AS JEL_B_SH,  
+			SUM(JEL_B_RE) AS JEL_B_RE,  
+			SUM(CASE WHEN JEL_B_SH = 0 THEN 0 ELSE round(JEL_B_RE/JEL_B_SH*100,'2') END )AS JEL_B_SR,
+			SUM(JEI_A_SH) AS JEI_A_SH,  
+			SUM(JEI_A_RE) AS JEI_A_RE,  
+			SUM(CASE WHEN JEI_A_SH = 0 THEN 0 ELSE round(JEI_A_RE/JEI_A_SH*100,'2') END )AS JEI_A_SR,  
+			SUM(JEI_B_SH) AS JEI_B_SH, 
+			SUM(JEI_B_RE) AS JEI_B_RE,  
+			SUM(CASE WHEN JEI_B_SH = 0 THEN 0 ELSE round(JEI_B_RE/JEI_B_SH*100,'2') END )AS JEI_B_SR, 
+			SUM(JEI_C_SH) AS JEI_C_SH,  
+			SUM(JEI_C_RE) AS JEI_C_RE,  
+			SUM(CASE WHEN JEI_C_SH = 0 THEN 0 ELSE round(JEI_C_RE/JEI_C_SH*100,'2') END )AS JEI_C_SR,
+			SUM(JEI_D_SH) AS JEI_D_SH,  
+			SUM(JEI_D_RE) AS JEI_D_RE,  
+			SUM(CASE WHEN JEI_D_SH = 0 THEN 0 ELSE round(JEI_D_RE/JEI_D_SH*100,'2') END )AS JEI_D_SR, 
+			SUM(HEPAL_SH) AS HEPAL_SH,  
+			SUM(HEPAL_RE) AS HEPAL_RE,  
+			SUM(CASE WHEN HEPAL_SH = 0 THEN 0 ELSE round(HEPAL_RE/HEPAL_SH*100,'2') END )AS HEPAL_SR, 
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH,   
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE,   
+			SUM(CASE WHEN HEPAI_A_SH = 0 THEN 0 ELSE round(HEPAI_A_RE/HEPAI_A_SH*100,'2') END )AS HEPAI_A_SR,  
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH,   
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM(CASE WHEN HEPAI_B_SH = 0 THEN 0 ELSE round(HEPAI_B_RE/HEPAI_B_SH*100,'2') END )AS HEPAI_B_SR
+		FROM
+			(SELECT 
+				E.LABEL AS LABEL,
+				SUM(HEPB_A_SH) AS HEPB_A_SH,
+				SUM(HEPB_A_RE) AS HEPB_A_RE,			
+				SUM(HEPB_AA_SH) AS HEPB_AA_SH,
+				SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+				SUM(HEPB_B_SH) AS HEPB_B_SH,
+				SUM(HEPB_B_RE) AS HEPB_B_RE,
+				SUM(HEPB_C_SH) AS HEPB_C_SH,
+				SUM(HEPB_C_RE) AS HEPB_C_RE,
+				SUM(BCG_SH) AS BCG_SH,
+				SUM(BCG_RE) AS BCG_RE,
+				SUM(PV_A_SH) AS PV_A_SH,
+				SUM(PV_A_RE) AS PV_A_RE,
+				SUM(PV_B_SH) AS PV_B_SH,
+				SUM(PV_B_RE) AS PV_B_RE,
+				SUM(PV_C_SH) AS PV_C_SH,
+				SUM(PV_C_RE) AS PV_C_RE,
+				SUM(PV_D_SH) AS PV_D_SH,
+				SUM(PV_D_RE) AS PV_D_RE,
+				SUM(DTP_A_SH) AS DTP_A_SH,
+				SUM(DTP_A_RE) AS DTP_A_RE,
+				SUM(DTP_B_SH) AS DTP_B_SH,
+				SUM(DTP_B_RE) AS DTP_B_RE,
+				SUM(DTP_C_SH) AS DTP_C_SH,
+				SUM(DTP_C_RE) AS DTP_C_RE,
+				SUM(DTP_D_SH) AS DTP_D_SH,
+				SUM(DTP_D_RE) AS DTP_D_RE,
+				SUM(DT_SH) AS DT_SH,
+				SUM(DT_RE) AS DT_RE,
+				SUM(MR_A_SH) AS MR_A_SH,
+				SUM(MR_A_RE) AS MR_A_RE,
+				SUM(MR_B_SH) AS MR_B_SH,
+				SUM(MR_B_RE) AS MR_B_RE,
+				SUM(MMR_A_SH) AS MMR_A_SH,
+				SUM(MMR_A_RE) AS MMR_A_RE,
+				SUM(MMR_B_SH) AS MMR_B_SH,
+				SUM(MMR_B_RE) AS MMR_B_RE,
+				SUM(MM_A_SH) AS MM_A_SH,
+				SUM(MM_A_RE) AS MM_A_RE,
+				SUM(MM_B_SH) AS MM_B_SH,
+				SUM(MM_B_RE) AS MM_B_RE,
+				SUM(MV_A_SH) AS MV_A_SH,
+				SUM(MV_A_RE) AS MV_A_RE,
+				SUM(MV_B_SH) AS MV_B_SH,
+				SUM(MV_B_RE) AS MV_B_RE,
+				SUM(MENA_A_SH) AS MENA_A_SH,
+				SUM(MENA_A_RE) AS MENA_A_RE,
+				SUM(MENA_B_SH) AS MENA_B_SH,
+				SUM(MENA_B_RE) AS MENA_B_RE,
+				SUM(MENAC_A_SH) AS MENAC_A_SH,
+				SUM(MENAC_A_RE) AS MENAC_A_RE,
+				SUM(MENAC_B_SH) AS MENAC_B_SH,
+				SUM(MENAC_B_RE) AS MENAC_B_RE,
+				SUM(JEL_A_SH) AS JEL_A_SH,
+				SUM(JEL_A_RE) AS JEL_A_RE,
+				SUM(JEL_B_SH) AS JEL_B_SH,
+				SUM(JEL_B_RE) AS JEL_B_RE,
+				SUM(JEI_A_SH) AS JEI_A_SH,
+				SUM(JEI_A_RE) AS JEI_A_RE,
+				SUM(JEI_B_SH) AS JEI_B_SH,
+				SUM(JEI_B_RE) AS JEI_B_RE,
+				SUM(JEI_C_SH) AS JEI_C_SH,
+				SUM(JEI_C_RE) AS JEI_C_RE,
+				SUM(JEI_D_SH) AS JEI_D_SH,
+				SUM(JEI_D_RE) AS JEI_D_RE,
+				SUM(HEPAL_SH) AS HEPAL_SH,
+				SUM(HEPAL_RE) AS HEPAL_RE,
+				SUM(HEPAI_A_SH) AS HEPAI_A_SH,
+				SUM(HEPAI_A_RE) AS HEPAI_A_RE,
+				SUM(HEPAI_B_SH) AS HEPAI_B_SH,
+				SUM(HEPAI_B_RE) AS HEPAI_B_RE
+			FROM EXP_ROUTINEVACC_6_1 EXPVACC
+			INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside' AND (E.VALUE	= '1' OR E.VALUE = '2')
+			<where>
+				<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+					year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+				</if>   
+				<if test="localCode !=null  and localCode !=''">
+					AND EXPVACC.LOCALCODE = #{localCode}
+				</if>   
+			</where>
+			GROUP BY e.LABEL) 
+		GROUP BY LABEL
+		UNION ALL
+		SELECT
+			'合计' AS LABEL,
+			SUM(HEPB_A_SH) AS HEPB_A_SH,
+			SUM(HEPB_A_RE) AS HEPB_A_RE,
+			SUM(CASE WHEN HEPB_A_SH = 0 THEN 0 ELSE round(HEPB_A_RE/HEPB_A_SH*100,'2') END )AS HEPB_A_SR,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH,
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+			SUM(CASE WHEN HEPB_AA_SH = 0 THEN 0 ELSE round(HEPB_AA_RE/HEPB_AA_SH*100,'2') END )AS HEPB_AA_SR,
+			SUM(HEPB_B_SH) AS HEPB_B_SH,
+			SUM(HEPB_B_RE) AS HEPB_B_RE,
+			SUM(CASE WHEN HEPB_B_SH = 0 THEN 0 ELSE round(HEPB_B_RE/HEPB_B_SH*100,'2') END )AS HEPB_B_SR,
+			SUM(HEPB_C_SH) AS HEPB_C_SH,
+			SUM(HEPB_C_RE) AS HEPB_C_RE,
+			SUM(CASE WHEN HEPB_C_SH = 0 THEN 0 ELSE round(HEPB_C_RE/HEPB_C_SH*100,'2') END )AS HEPB_C_SR,
+			SUM(BCG_SH) AS BCG_SH,
+			SUM(BCG_RE) AS BCG_RE,
+			SUM(CASE WHEN BCG_SH = 0 THEN 0 ELSE round(BCG_RE/BCG_SH*100,'2') END )AS BCG_SR,
+			SUM(PV_A_SH) AS PV_A_SH,
+			SUM(PV_A_RE) AS PV_A_RE, 
+			SUM(CASE WHEN PV_A_SH = 0 THEN 0 ELSE round(PV_A_RE/PV_A_SH*100,'2') END )AS PV_A_SR,
+			SUM(PV_B_SH) AS PV_B_SH, 
+			SUM(PV_B_RE) AS PV_B_RE, 
+			SUM(CASE WHEN PV_B_SH = 0 THEN 0 ELSE round(PV_B_RE/PV_B_SH*100,'2') END )AS PV_B_SR,
+			SUM(PV_C_SH) AS PV_C_SH,
+			SUM(PV_C_RE) AS PV_C_RE,
+			SUM(CASE WHEN PV_C_SH = 0 THEN 0 ELSE round(PV_C_RE/PV_C_SH*100,'2') END )AS PV_C_SR,
+			SUM(PV_D_SH) AS PV_D_SH,
+			SUM(PV_D_RE) AS PV_D_RE,
+			SUM(CASE WHEN PV_D_SH = 0 THEN 0 ELSE round(PV_D_RE/PV_D_SH*100,'2') END )AS PV_D_SR,
+			SUM(DTP_A_SH) AS DTP_A_SH,
+			SUM(DTP_A_RE) AS DTP_A_RE,
+			SUM(CASE WHEN DTP_A_SH = 0 THEN 0 ELSE round(DTP_A_RE/DTP_A_SH*100,'2') END )AS DTP_A_SR,
+			SUM(DTP_B_SH) AS DTP_B_SH,
+			SUM(DTP_B_RE) AS DTP_B_RE,
+			SUM(CASE WHEN DTP_B_SH = 0 THEN 0 ELSE round(DTP_B_RE/DTP_B_SH*100,'2') END )AS DTP_B_SR,
+			SUM(DTP_C_SH) AS DTP_C_SH,
+			SUM(DTP_C_RE) AS DTP_C_RE,
+			SUM(CASE WHEN DTP_C_SH = 0 THEN 0 ELSE round(DTP_C_RE/DTP_C_SH*100,'2') END )AS DTP_C_SR,
+			SUM(DTP_D_SH) AS DTP_D_SH,
+			SUM(DTP_D_RE) AS DTP_D_RE,
+			SUM(CASE WHEN DTP_D_SH = 0 THEN 0 ELSE round(DTP_D_RE/DTP_D_SH*100,'2') END )AS DTP_D_SR,
+			SUM(DT_SH) AS DT_SH,
+			SUM(DT_RE) AS DT_RE,
+			SUM(CASE WHEN DT_SH = 0 THEN 0 ELSE round(DT_RE/DT_SH*100,'2') END )AS DT_SR,
+			SUM(MR_A_SH) AS MR_A_SH,
+			SUM(MR_A_RE) AS MR_A_RE,
+			SUM(CASE WHEN MR_A_SH = 0 THEN 0 ELSE round(MR_A_RE/MR_A_SH*100,'2') END )AS MR_A_SR,
+			SUM(MR_B_SH) AS MR_B_SH,
+			SUM(MR_B_RE) AS MR_B_RE,
+			SUM(CASE WHEN MR_B_SH = 0 THEN 0 ELSE round(MR_B_RE/MR_B_SH*100,'2') END )AS MR_B_SR,
+			SUM(MMR_A_SH) AS MMR_A_SH,
+			SUM(MMR_A_RE) AS MMR_A_RE,
+			SUM(CASE WHEN MMR_A_SH = 0 THEN 0 ELSE round(MMR_A_RE/MMR_A_SH*100,'2') END )AS MMR_A_SR,
+			SUM(MMR_B_SH) AS MMR_B_SH,
+			SUM(MMR_B_RE) AS MMR_B_RE,
+			SUM(CASE WHEN MMR_B_SH = 0 THEN 0 ELSE round(MMR_B_RE/MMR_B_SH*100,'2') END )AS MMR_B_SR,
+			SUM(MM_A_SH) AS MM_A_SH,
+			SUM(MM_A_RE) AS MM_A_RE,
+			SUM(CASE WHEN MM_A_SH = 0 THEN 0 ELSE round(MM_A_RE/MM_A_SH*100,'2') END )AS MM_A_SR,
+			SUM(MM_B_SH) AS MM_B_SH,
+			SUM(MM_B_RE) AS MM_B_RE,
+			SUM(CASE WHEN MM_B_SH = 0 THEN 0 ELSE round(MM_B_RE/MM_B_SH*100,'2') END )AS MM_B_SR,
+			SUM(MV_A_SH) AS MV_A_SH,
+			SUM(MV_A_RE) AS MV_A_RE,
+			SUM(CASE WHEN MV_A_SH = 0 THEN 0 ELSE round(MV_A_RE/MV_A_SH*100,'2') END )AS MV_A_SR,
+			SUM(MV_B_SH) AS MV_B_SH,
+			SUM(MV_B_RE) AS MV_B_RE,
+			SUM(CASE WHEN MV_B_SH = 0 THEN 0 ELSE round(MV_B_RE/MV_B_SH*100,'2') END )AS MV_B_SR,
+			SUM(MENA_A_SH) AS MENA_A_SH,
+			SUM(MENA_A_RE) AS MENA_A_RE,
+			SUM(CASE WHEN MENA_A_SH = 0 THEN 0 ELSE round(MENA_A_RE/MENA_A_SH*100,'2') END )AS MENA_A_SR,
+			SUM(MENA_B_SH) AS MENA_B_SH,
+			SUM(MENA_B_RE) AS MENA_B_RE,
+			SUM(CASE WHEN MENA_B_SH = 0 THEN 0 ELSE round(MENA_B_RE/MENA_B_SH*100,'2') END )AS MENA_B_SR,
+			SUM(MENAC_A_SH) AS MENAC_A_SH,   
+			SUM(MENAC_A_RE) AS MENAC_A_RE,   
+			SUM(CASE WHEN MENAC_A_SH = 0 THEN 0 ELSE round(MENAC_A_RE/MENAC_A_SH*100,'2') END )AS MENAC_A_SR,
+			SUM(MENAC_B_SH) AS MENAC_B_SH,   
+			SUM(MENAC_B_RE) AS MENAC_B_RE,   
+			SUM(CASE WHEN MENAC_B_SH = 0 THEN 0 ELSE round(MENAC_B_RE/MENAC_B_SH*100,'2') END )AS MENAC_B_SR, 
+			SUM(JEL_A_SH) AS JEL_A_SH,  
+			SUM(JEL_A_RE) AS JEL_A_RE,  
+			SUM(CASE WHEN JEL_A_SH = 0 THEN 0 ELSE round(JEL_A_RE/JEL_A_SH*100,'2') END )AS JEL_A_SR,
+			SUM(JEL_B_SH) AS JEL_B_SH,  
+			SUM(JEL_B_RE) AS JEL_B_RE,  
+			SUM(CASE WHEN JEL_B_SH = 0 THEN 0 ELSE round(JEL_B_RE/JEL_B_SH*100,'2') END )AS JEL_B_SR,
+			SUM(JEI_A_SH) AS JEI_A_SH,  
+			SUM(JEI_A_RE) AS JEI_A_RE,  
+			SUM(CASE WHEN JEI_A_SH = 0 THEN 0 ELSE round(JEI_A_RE/JEI_A_SH*100,'2') END )AS JEI_A_SR,  
+			SUM(JEI_B_SH) AS JEI_B_SH, 
+			SUM(JEI_B_RE) AS JEI_B_RE,  
+			SUM(CASE WHEN JEI_B_SH = 0 THEN 0 ELSE round(JEI_B_RE/JEI_B_SH*100,'2') END )AS JEI_B_SR, 
+			SUM(JEI_C_SH) AS JEI_C_SH,  
+			SUM(JEI_C_RE) AS JEI_C_RE,  
+			SUM(CASE WHEN JEI_C_SH = 0 THEN 0 ELSE round(JEI_C_RE/JEI_C_SH*100,'2') END )AS JEI_C_SR,
+			SUM(JEI_D_SH) AS JEI_D_SH,  
+			SUM(JEI_D_RE) AS JEI_D_RE,  
+			SUM(CASE WHEN JEI_D_SH = 0 THEN 0 ELSE round(JEI_D_RE/JEI_D_SH*100,'2') END )AS JEI_D_SR, 
+			SUM(HEPAL_SH) AS HEPAL_SH,  
+			SUM(HEPAL_RE) AS HEPAL_RE,  
+			SUM(CASE WHEN HEPAL_SH = 0 THEN 0 ELSE round(HEPAL_RE/HEPAL_SH*100,'2') END )AS HEPAL_SR, 
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH,   
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE,   
+			SUM(CASE WHEN HEPAI_A_SH = 0 THEN 0 ELSE round(HEPAI_A_RE/HEPAI_A_SH*100,'2') END )AS HEPAI_A_SR,  
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH,   
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM(CASE WHEN HEPAI_B_SH = 0 THEN 0 ELSE round(HEPAI_B_RE/HEPAI_B_SH*100,'2') END )AS HEPAI_B_SR
+		FROM(
+			SELECT 
+				'合计' AS LABEL,
+				SUM(HEPB_A_SH) AS HEPB_A_SH,
+				SUM(HEPB_A_RE) AS HEPB_A_RE,
+				SUM(HEPB_A_SR) AS HEPB_A_SR,
+				SUM(HEPB_AA_SH) AS HEPB_AA_SH,   
+				SUM(HEPB_AA_RE) AS HEPB_AA_RE,   
+				SUM(HEPB_AA_SR) AS HEPB_AA_SR,	   
+				SUM(HEPB_B_SH) AS HEPB_B_SH,
+				SUM(HEPB_B_RE) AS HEPB_B_RE,
+				SUM(HEPB_B_SR) AS HEPB_B_SR,
+				SUM(HEPB_C_SH) AS HEPB_C_SH,
+				SUM(HEPB_C_RE) AS HEPB_C_RE,
+				SUM(HEPB_C_SR) AS HEPB_C_SR,
+				SUM(BCG_SH) AS BCG_SH,
+				SUM(BCG_RE) AS BCG_RE,
+				SUM(BCG_SR) AS BCG_SR,
+				SUM(PV_A_SH) AS PV_A_SH,
+				SUM(PV_A_RE) AS PV_A_RE, 
+				SUM(PV_A_SR) AS PV_A_SR,
+				SUM(PV_B_SH) AS PV_B_SH, 
+				SUM(PV_B_RE) AS PV_B_RE, 
+				SUM(PV_B_SR) AS PV_B_SR,
+				SUM(PV_C_SH) AS PV_C_SH,
+				SUM(PV_C_RE) AS PV_C_RE,
+				SUM(PV_C_SR) AS PV_C_SR,
+				SUM(PV_D_SH) AS PV_D_SH,
+				SUM(PV_D_RE) AS PV_D_RE,
+				SUM(PV_D_SR) AS PV_D_SR,
+				SUM(DTP_A_SH) AS DTP_A_SH,
+				SUM(DTP_A_RE) AS DTP_A_RE,
+				SUM(DTP_A_SR) AS DTP_A_SR,
+				SUM(DTP_B_SH) AS DTP_B_SH,
+				SUM(DTP_B_RE) AS DTP_B_RE,
+				SUM(DTP_B_SR) AS DTP_B_SR,
+				SUM(DTP_C_SH) AS DTP_C_SH,
+				SUM(DTP_C_RE) AS DTP_C_RE,
+				SUM(DTP_C_SR) AS DTP_C_SR,
+				SUM(DTP_D_SH) AS DTP_D_SH,
+				SUM(DTP_D_RE) AS DTP_D_RE,
+				SUM(DTP_D_SR) AS DTP_D_SR,
+				SUM(DT_SH) AS DT_SH,
+				SUM(DT_RE) AS DT_RE,
+				SUM(DT_SR) AS DT_SR,
+				SUM(MR_A_SH) AS MR_A_SH,
+				SUM(MR_A_RE) AS MR_A_RE,
+				SUM(MR_A_SR) AS MR_A_SR,
+				SUM(MR_B_SH) AS MR_B_SH,
+				SUM(MR_B_RE) AS MR_B_RE,
+				SUM(MR_B_SR) AS MR_B_SR,
+				SUM(MMR_A_SH) AS MMR_A_SH,
+				SUM(MMR_A_RE) AS MMR_A_RE,
+				SUM(MMR_A_SR) AS MMR_A_SR,
+				SUM(MMR_B_SH) AS MMR_B_SH,
+				SUM(MMR_B_RE) AS MMR_B_RE,
+				SUM(MMR_B_SR) AS MMR_B_SR,
+				SUM(MM_A_SH) AS MM_A_SH,
+				SUM(MM_A_RE) AS MM_A_RE,
+				SUM(MM_A_SR) AS MM_A_SR,
+				SUM(MM_B_SH) AS MM_B_SH,
+				SUM(MM_B_RE) AS MM_B_RE,
+				SUM(MM_B_SR) AS MM_B_SR,
+				SUM(MV_A_SH) AS MV_A_SH,
+				SUM(MV_A_RE) AS MV_A_RE,
+				SUM(MV_A_SR) AS MV_A_SR,
+				SUM(MV_B_SH) AS MV_B_SH,
+				SUM(MV_B_RE) AS MV_B_RE,
+				SUM(MV_B_SR) AS MV_B_SR,
+				SUM(MENA_A_SH) AS MENA_A_SH,
+				SUM(MENA_A_RE) AS MENA_A_RE,
+				SUM(MENA_A_SR) AS MENA_A_SR,
+				SUM(MENA_B_SH) AS MENA_B_SH,
+				SUM(MENA_B_RE) AS MENA_B_RE,
+				SUM(MENA_B_SR) AS MENA_B_SR,
+				SUM(MENAC_A_SH) AS MENAC_A_SH,   
+				SUM(MENAC_A_RE) AS MENAC_A_RE,   
+				SUM(MENAC_A_SR) AS MENAC_A_SR,
+				SUM(MENAC_B_SH) AS MENAC_B_SH,   
+				SUM(MENAC_B_RE) AS MENAC_B_RE,   
+				SUM(MENAC_B_SR) AS MENAC_B_SR, 
+				SUM(JEL_A_SH) AS JEL_A_SH,  
+				SUM(JEL_A_RE) AS JEL_A_RE,  
+				SUM(JEL_A_SR) AS JEL_A_SR,
+				SUM(JEL_B_SH) AS JEL_B_SH,  
+				SUM(JEL_B_RE) AS JEL_B_RE,  
+				SUM(JEL_B_SR) AS JEL_B_SR,
+				SUM(JEI_A_SH) AS JEI_A_SH,  
+				SUM(JEI_A_RE) AS JEI_A_RE,  
+				SUM(JEI_A_SR) AS JEI_A_SR,  
+				SUM(JEI_B_SH) AS JEI_B_SH, 
+				SUM(JEI_B_RE) AS JEI_B_RE,  
+				SUM(JEI_B_SR) AS JEI_B_SR, 
+				SUM(JEI_C_SH) AS JEI_C_SH,  
+				SUM(JEI_C_RE) AS JEI_C_RE,  
+				SUM(JEI_C_SR) AS JEI_C_SR,
+				SUM(JEI_D_SH) AS JEI_D_SH,  
+				SUM(JEI_D_RE) AS JEI_D_RE,  
+				SUM(JEI_D_SR) AS JEI_D_SR, 
+				SUM(HEPAL_SH) AS HEPAL_SH,  
+				SUM(HEPAL_RE) AS HEPAL_RE,  
+				SUM(HEPAL_SR) AS HEPAL_SR, 
+				SUM(HEPAI_A_SH) AS HEPAI_A_SH,   
+				SUM(HEPAI_A_RE) AS HEPAI_A_RE,   
+				SUM(HEPAI_A_SR) AS HEPAI_A_SR,  
+				SUM(HEPAI_B_SH) AS HEPAI_B_SH,   
+				SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+				SUM(HEPAI_B_SR) AS HEPAI_B_SR
+			FROM
+			(SELECT 
+				LABEL,
+				SUM(HEPB_A_SH) AS HEPB_A_SH,
+				SUM(HEPB_A_RE) AS HEPB_A_RE,
+				SUM(CASE WHEN HEPB_A_SH = 0 THEN 0 ELSE round(HEPB_A_RE/HEPB_A_SH*100,'2') END )AS HEPB_A_SR,
+				SUM(HEPB_AA_SH) AS HEPB_AA_SH,
+				SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+				SUM(CASE WHEN HEPB_AA_SH = 0 THEN 0 ELSE round(HEPB_AA_RE/HEPB_AA_SH*100,'2') END )AS HEPB_AA_SR,
+				SUM(HEPB_B_SH) AS HEPB_B_SH,
+				SUM(HEPB_B_RE) AS HEPB_B_RE,
+				SUM(CASE WHEN HEPB_B_SH = 0 THEN 0 ELSE round(HEPB_B_RE/HEPB_B_SH*100,'2') END )AS HEPB_B_SR,
+				SUM(HEPB_C_SH) AS HEPB_C_SH,
+				SUM(HEPB_C_RE) AS HEPB_C_RE,
+				SUM(CASE WHEN HEPB_C_SH = 0 THEN 0 ELSE round(HEPB_C_RE/HEPB_C_SH*100,'2') END )AS HEPB_C_SR,
+				SUM(BCG_SH) AS BCG_SH,
+				SUM(BCG_RE) AS BCG_RE,
+				SUM(CASE WHEN BCG_SH = 0 THEN 0 ELSE round(BCG_RE/BCG_SH*100,'2') END )AS BCG_SR,
+				SUM(PV_A_SH) AS PV_A_SH,
+				SUM(PV_A_RE) AS PV_A_RE, 
+				SUM(CASE WHEN PV_A_SH = 0 THEN 0 ELSE round(PV_A_RE/PV_A_SH*100,'2') END )AS PV_A_SR,
+				SUM(PV_B_SH) AS PV_B_SH, 
+				SUM(PV_B_RE) AS PV_B_RE, 
+				SUM(CASE WHEN PV_B_SH = 0 THEN 0 ELSE round(PV_B_RE/PV_B_SH*100,'2') END )AS PV_B_SR,
+				SUM(PV_C_SH) AS PV_C_SH,
+				SUM(PV_C_RE) AS PV_C_RE,
+				SUM(CASE WHEN PV_C_SH = 0 THEN 0 ELSE round(PV_C_RE/PV_C_SH*100,'2') END )AS PV_C_SR,
+				SUM(PV_D_SH) AS PV_D_SH,
+				SUM(PV_D_RE) AS PV_D_RE,
+				SUM(CASE WHEN PV_D_SH = 0 THEN 0 ELSE round(PV_D_RE/PV_D_SH*100,'2') END )AS PV_D_SR,
+				SUM(DTP_A_SH) AS DTP_A_SH,
+				SUM(DTP_A_RE) AS DTP_A_RE,
+				SUM(CASE WHEN DTP_A_SH = 0 THEN 0 ELSE round(DTP_A_RE/DTP_A_SH*100,'2') END )AS DTP_A_SR,
+				SUM(DTP_B_SH) AS DTP_B_SH,
+				SUM(DTP_B_RE) AS DTP_B_RE,
+				SUM(CASE WHEN DTP_B_SH = 0 THEN 0 ELSE round(DTP_B_RE/DTP_B_SH*100,'2') END )AS DTP_B_SR,
+				SUM(DTP_C_SH) AS DTP_C_SH,
+				SUM(DTP_C_RE) AS DTP_C_RE,
+				SUM(CASE WHEN DTP_C_SH = 0 THEN 0 ELSE round(DTP_C_RE/DTP_C_SH*100,'2') END )AS DTP_C_SR,
+				SUM(DTP_D_SH) AS DTP_D_SH,
+				SUM(DTP_D_RE) AS DTP_D_RE,
+				SUM(CASE WHEN DTP_D_SH = 0 THEN 0 ELSE round(DTP_D_RE/DTP_D_SH*100,'2') END )AS DTP_D_SR,
+				SUM(DT_SH) AS DT_SH,
+				SUM(DT_RE) AS DT_RE,
+				SUM(CASE WHEN DT_SH = 0 THEN 0 ELSE round(DT_RE/DT_SH*100,'2') END )AS DT_SR,
+				SUM(MR_A_SH) AS MR_A_SH,
+				SUM(MR_A_RE) AS MR_A_RE,
+				SUM(CASE WHEN MR_A_SH = 0 THEN 0 ELSE round(MR_A_RE/MR_A_SH*100,'2') END )AS MR_A_SR,
+				SUM(MR_B_SH) AS MR_B_SH,
+				SUM(MR_B_RE) AS MR_B_RE,
+				SUM(CASE WHEN MR_B_SH = 0 THEN 0 ELSE round(MR_B_RE/MR_B_SH*100,'2') END )AS MR_B_SR,
+				SUM(MMR_A_SH) AS MMR_A_SH,
+				SUM(MMR_A_RE) AS MMR_A_RE,
+				SUM(CASE WHEN MMR_A_SH = 0 THEN 0 ELSE round(MMR_A_RE/MMR_A_SH*100,'2') END )AS MMR_A_SR,
+				SUM(MMR_B_SH) AS MMR_B_SH,
+				SUM(MMR_B_RE) AS MMR_B_RE,
+				SUM(CASE WHEN MMR_B_SH = 0 THEN 0 ELSE round(MMR_B_RE/MMR_B_SH*100,'2') END )AS MMR_B_SR,
+				SUM(MM_A_SH) AS MM_A_SH,
+				SUM(MM_A_RE) AS MM_A_RE,
+				SUM(CASE WHEN MM_A_SH = 0 THEN 0 ELSE round(MM_A_RE/MM_A_SH*100,'2') END )AS MM_A_SR,
+				SUM(MM_B_SH) AS MM_B_SH,
+				SUM(MM_B_RE) AS MM_B_RE,
+				SUM(CASE WHEN MM_B_SH = 0 THEN 0 ELSE round(MM_B_RE/MM_B_SH*100,'2') END )AS MM_B_SR,
+				SUM(MV_A_SH) AS MV_A_SH,
+				SUM(MV_A_RE) AS MV_A_RE,
+				SUM(CASE WHEN MV_A_SH = 0 THEN 0 ELSE round(MV_A_RE/MV_A_SH*100,'2') END )AS MV_A_SR,
+				SUM(MV_B_SH) AS MV_B_SH,
+				SUM(MV_B_RE) AS MV_B_RE,
+				SUM(CASE WHEN MV_B_SH = 0 THEN 0 ELSE round(MV_B_RE/MV_B_SH*100,'2') END )AS MV_B_SR,
+				SUM(MENA_A_SH) AS MENA_A_SH,
+				SUM(MENA_A_RE) AS MENA_A_RE,
+				SUM(CASE WHEN MENA_A_SH = 0 THEN 0 ELSE round(MENA_A_RE/MENA_A_SH*100,'2') END )AS MENA_A_SR,
+				SUM(MENA_B_SH) AS MENA_B_SH,
+				SUM(MENA_B_RE) AS MENA_B_RE,
+				SUM(CASE WHEN MENA_B_SH = 0 THEN 0 ELSE round(MENA_B_RE/MENA_B_SH*100,'2') END )AS MENA_B_SR,
+				SUM(MENAC_A_SH) AS MENAC_A_SH,   
+				SUM(MENAC_A_RE) AS MENAC_A_RE,   
+				SUM(CASE WHEN MENAC_A_SH = 0 THEN 0 ELSE round(MENAC_A_RE/MENAC_A_SH*100,'2') END )AS MENAC_A_SR,
+				SUM(MENAC_B_SH) AS MENAC_B_SH,   
+				SUM(MENAC_B_RE) AS MENAC_B_RE,   
+				SUM(CASE WHEN MENAC_B_SH = 0 THEN 0 ELSE round(MENAC_B_RE/MENAC_B_SH*100,'2') END )AS MENAC_B_SR, 
+				SUM(JEL_A_SH) AS JEL_A_SH,  
+				SUM(JEL_A_RE) AS JEL_A_RE,  
+				SUM(CASE WHEN JEL_A_SH = 0 THEN 0 ELSE round(JEL_A_RE/JEL_A_SH*100,'2') END )AS JEL_A_SR,
+				SUM(JEL_B_SH) AS JEL_B_SH,  
+				SUM(JEL_B_RE) AS JEL_B_RE,  
+				SUM(CASE WHEN JEL_B_SH = 0 THEN 0 ELSE round(JEL_B_RE/JEL_B_SH*100,'2') END )AS JEL_B_SR,
+				SUM(JEI_A_SH) AS JEI_A_SH,  
+				SUM(JEI_A_RE) AS JEI_A_RE,  
+				SUM(CASE WHEN JEI_A_SH = 0 THEN 0 ELSE round(JEI_A_RE/JEI_A_SH*100,'2') END )AS JEI_A_SR,  
+				SUM(JEI_B_SH) AS JEI_B_SH, 
+				SUM(JEI_B_RE) AS JEI_B_RE,  
+				SUM(CASE WHEN JEI_B_SH = 0 THEN 0 ELSE round(JEI_B_RE/JEI_B_SH*100,'2') END )AS JEI_B_SR, 
+				SUM(JEI_C_SH) AS JEI_C_SH,  
+				SUM(JEI_C_RE) AS JEI_C_RE,  
+				SUM(CASE WHEN JEI_C_SH = 0 THEN 0 ELSE round(JEI_C_RE/JEI_C_SH*100,'2') END )AS JEI_C_SR,
+				SUM(JEI_D_SH) AS JEI_D_SH,  
+				SUM(JEI_D_RE) AS JEI_D_RE,  
+				SUM(CASE WHEN JEI_D_SH = 0 THEN 0 ELSE round(JEI_D_RE/JEI_D_SH*100,'2') END )AS JEI_D_SR, 
+				SUM(HEPAL_SH) AS HEPAL_SH,  
+				SUM(HEPAL_RE) AS HEPAL_RE,  
+				SUM(CASE WHEN HEPAL_SH = 0 THEN 0 ELSE round(HEPAL_RE/HEPAL_SH*100,'2') END )AS HEPAL_SR, 
+				SUM(HEPAI_A_SH) AS HEPAI_A_SH,   
+				SUM(HEPAI_A_RE) AS HEPAI_A_RE,   
+				SUM(CASE WHEN HEPAI_A_SH = 0 THEN 0 ELSE round(HEPAI_A_RE/HEPAI_A_SH*100,'2') END )AS HEPAI_A_SR,  
+				SUM(HEPAI_B_SH) AS HEPAI_B_SH,   
+				SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+				SUM(CASE WHEN HEPAI_B_SH = 0 THEN 0 ELSE round(HEPAI_B_RE/HEPAI_B_SH*100,'2') END )AS HEPAI_B_SR
+			FROM
+				(SELECT 
+					E.LABEL AS LABEL,
+					SUM(HEPB_A_SH) AS HEPB_A_SH,
+					SUM(HEPB_A_RE) AS HEPB_A_RE,			
+					SUM(HEPB_AA_SH) AS HEPB_AA_SH,
+					SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+					SUM(HEPB_B_SH) AS HEPB_B_SH,
+					SUM(HEPB_B_RE) AS HEPB_B_RE,
+					SUM(HEPB_C_SH) AS HEPB_C_SH,
+					SUM(HEPB_C_RE) AS HEPB_C_RE,
+					SUM(BCG_SH) AS BCG_SH,
+					SUM(BCG_RE) AS BCG_RE,
+					SUM(PV_A_SH) AS PV_A_SH,
+					SUM(PV_A_RE) AS PV_A_RE,
+					SUM(PV_B_SH) AS PV_B_SH,
+					SUM(PV_B_RE) AS PV_B_RE,
+					SUM(PV_C_SH) AS PV_C_SH,
+					SUM(PV_C_RE) AS PV_C_RE,
+					SUM(PV_D_SH) AS PV_D_SH,
+					SUM(PV_D_RE) AS PV_D_RE,
+					SUM(DTP_A_SH) AS DTP_A_SH,
+					SUM(DTP_A_RE) AS DTP_A_RE,
+					SUM(DTP_B_SH) AS DTP_B_SH,
+					SUM(DTP_B_RE) AS DTP_B_RE,
+					SUM(DTP_C_SH) AS DTP_C_SH,
+					SUM(DTP_C_RE) AS DTP_C_RE,
+					SUM(DTP_D_SH) AS DTP_D_SH,
+					SUM(DTP_D_RE) AS DTP_D_RE,
+					SUM(DT_SH) AS DT_SH,
+					SUM(DT_RE) AS DT_RE,
+					SUM(MR_A_SH) AS MR_A_SH,
+					SUM(MR_A_RE) AS MR_A_RE,
+					SUM(MR_B_SH) AS MR_B_SH,
+					SUM(MR_B_RE) AS MR_B_RE,
+					SUM(MMR_A_SH) AS MMR_A_SH,
+					SUM(MMR_A_RE) AS MMR_A_RE,
+					SUM(MMR_B_SH) AS MMR_B_SH,
+					SUM(MMR_B_RE) AS MMR_B_RE,
+					SUM(MM_A_SH) AS MM_A_SH,
+					SUM(MM_A_RE) AS MM_A_RE,
+					SUM(MM_B_SH) AS MM_B_SH,
+					SUM(MM_B_RE) AS MM_B_RE,
+					SUM(MV_A_SH) AS MV_A_SH,
+					SUM(MV_A_RE) AS MV_A_RE,
+					SUM(MV_B_SH) AS MV_B_SH,
+					SUM(MV_B_RE) AS MV_B_RE,
+					SUM(MENA_A_SH) AS MENA_A_SH,
+					SUM(MENA_A_RE) AS MENA_A_RE,
+					SUM(MENA_B_SH) AS MENA_B_SH,
+					SUM(MENA_B_RE) AS MENA_B_RE,
+					SUM(MENAC_A_SH) AS MENAC_A_SH,
+					SUM(MENAC_A_RE) AS MENAC_A_RE,
+					SUM(MENAC_B_SH) AS MENAC_B_SH,
+					SUM(MENAC_B_RE) AS MENAC_B_RE,
+					SUM(JEL_A_SH) AS JEL_A_SH,
+					SUM(JEL_A_RE) AS JEL_A_RE,
+					SUM(JEL_B_SH) AS JEL_B_SH,
+					SUM(JEL_B_RE) AS JEL_B_RE,
+					SUM(JEI_A_SH) AS JEI_A_SH,
+					SUM(JEI_A_RE) AS JEI_A_RE,
+					SUM(JEI_B_SH) AS JEI_B_SH,
+					SUM(JEI_B_RE) AS JEI_B_RE,
+					SUM(JEI_C_SH) AS JEI_C_SH,
+					SUM(JEI_C_RE) AS JEI_C_RE,
+					SUM(JEI_D_SH) AS JEI_D_SH,
+					SUM(JEI_D_RE) AS JEI_D_RE,
+					SUM(HEPAL_SH) AS HEPAL_SH,
+					SUM(HEPAL_RE) AS HEPAL_RE,
+					SUM(HEPAI_A_SH) AS HEPAI_A_SH,
+					SUM(HEPAI_A_RE) AS HEPAI_A_RE,
+					SUM(HEPAI_B_SH) AS HEPAI_B_SH,
+					SUM(HEPAI_B_RE) AS HEPAI_B_RE
+				FROM 
+					EXP_ROUTINEVACC_6_1 EXPVACC
+					INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside' AND (E.VALUE	= '1' OR E.VALUE = '2')
+				<where>
+					<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+						year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+					</if>   
+					<if test="localCode !=null  and localCode !=''">
+						AND LOCALCODE = #{localCode}
+					</if>   
+				</where>
+				GROUP BY e.LABEL)	GROUP BY LABEL))
+	</select>
+	
+	<!-- 按居委名称-按居住属性 -->
+	<select id="selectVaccData61_unitAndReside" resultType="java.util.HashMap">
+		SELECT 
+			EXPVACC.UNIT_NAME,
+			e.LABEL,
+			SUM(HEPB_A_SH) AS HEPB_A_SH,
+			SUM(HEPB_A_RE) AS HEPB_A_RE,
+			SUM(HEPB_A_SR) AS HEPB_A_SR,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH,
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+			SUM(HEPB_AA_SR) AS HEPB_AA_SR,
+			SUM(HEPB_B_SH) AS HEPB_B_SH,
+			SUM(HEPB_B_RE) AS HEPB_B_RE,
+			SUM(HEPB_B_SR) AS HEPB_B_SR,
+			SUM(HEPB_C_SH) AS HEPB_C_SH,
+			SUM(HEPB_C_RE) AS HEPB_C_RE,
+			SUM(HEPB_C_SR) AS HEPB_C_SR,
+			SUM(BCG_SH) AS BCG_SH,
+			SUM(BCG_RE) AS BCG_RE,
+			SUM(BCG_SR) AS BCG_SR,
+			SUM(PV_A_SH) AS PV_A_SH,
+			SUM(PV_A_RE) AS PV_A_RE,
+			SUM(PV_A_SR) AS PV_A_SR,
+			SUM(PV_B_SH) AS PV_B_SH,
+			SUM(PV_B_RE) AS PV_B_RE,
+			SUM(PV_B_SR) AS PV_B_SR,
+			SUM(PV_C_SH) AS PV_C_SH,
+			SUM(PV_C_RE) AS PV_C_RE,
+			SUM(PV_C_SR) AS PV_C_SR,
+			SUM(PV_D_SH) AS PV_D_SH,
+			SUM(PV_D_RE) AS PV_D_RE,
+			SUM(PV_D_SR) AS PV_D_SR,
+			SUM(DTP_A_SH) AS DTP_A_SH,
+			SUM(DTP_A_RE) AS DTP_A_RE,
+			SUM(DTP_A_SR) AS DTP_A_SR,
+			SUM(DTP_B_SH) AS DTP_B_SH,
+			SUM(DTP_B_RE) AS DTP_B_RE,
+			SUM(DTP_B_SR) AS DTP_B_SR,
+			SUM(DTP_C_SH) AS DTP_C_SH,
+			SUM(DTP_C_RE) AS DTP_C_RE,
+			SUM(DTP_C_SR) AS DTP_C_SR,
+			SUM(DTP_D_SH) AS DTP_D_SH,
+			SUM(DTP_D_RE) AS DTP_D_RE,
+			SUM(DTP_D_SR) AS DTP_D_SR,
+			SUM(DT_SH) AS DT_SH,
+			SUM(DT_RE) AS DT_RE,
+			SUM(DT_SR) AS DT_SR,
+			SUM(MR_A_SH) AS MR_A_SH,
+			SUM(MR_A_RE) AS MR_A_RE,
+			SUM(MR_A_SR) AS MR_A_SR,
+			SUM(MR_B_SH) AS MR_B_SH,
+			SUM(MR_B_RE) AS MR_B_RE,
+			SUM(MR_B_SR) AS MR_B_SR,
+			SUM(MMR_A_SH) AS MMR_A_SH,
+			SUM(MMR_A_RE) AS MMR_A_RE,
+			SUM(MMR_A_SR) AS MMR_A_SR,
+			SUM(MMR_B_SH) AS MMR_B_SH,
+			SUM(MMR_B_RE) AS MMR_B_RE,
+			SUM(MMR_B_SR) AS MMR_B_SR,
+			SUM(MM_A_SH) AS MM_A_SH,
+			SUM(MM_A_RE) AS MM_A_RE,
+			SUM(MM_A_SR) AS MM_A_SR,
+			SUM(MM_B_SH) AS MM_B_SH,
+			SUM(MM_B_RE) AS MM_B_RE,
+			SUM(MM_B_SR) AS MM_B_SR,
+			SUM(MV_A_SH) AS MV_A_SH,
+			SUM(MV_A_RE) AS MV_A_RE,
+			SUM(MV_A_SR) AS MV_A_SR,
+			SUM(MV_B_SH) AS MV_B_SH,
+			SUM(MV_B_RE) AS MV_B_RE,
+			SUM(MV_B_SR) AS MV_B_SR,
+			SUM(MENA_A_SH) AS MENA_A_SH,
+			SUM(MENA_A_RE) AS MENA_A_RE,
+			SUM(MENA_A_SR) AS MENA_A_SR,
+			SUM(MENA_B_SH) AS MENA_B_SH,
+			SUM(MENA_B_RE) AS MENA_B_RE,
+			SUM(MENA_B_SR) AS MENA_B_SR,
+			SUM(MENAC_A_SH) AS MENAC_A_SH,
+			SUM(MENAC_A_RE) AS MENAC_A_RE,
+			SUM(MENAC_A_SR) AS MENAC_A_SR,
+			SUM(MENAC_B_SH) AS MENAC_B_SH,
+			SUM(MENAC_B_RE) AS MENAC_B_RE,
+			SUM(MENAC_B_SR) AS MENAC_B_SR,
+			SUM(JEL_A_SH) AS JEL_A_SH,
+			SUM(JEL_A_RE) AS JEL_A_RE,
+			SUM(JEL_A_SR) AS JEL_A_SR,
+			SUM(JEL_B_SH) AS JEL_B_SH,
+			SUM(JEL_B_RE) AS JEL_B_RE,
+			SUM(JEL_B_SR) AS JEL_B_SR,
+			SUM(JEI_A_SH) AS JEI_A_SH,
+			SUM(JEI_A_RE) AS JEI_A_RE,
+			SUM(JEI_A_SR) AS JEI_A_SR,
+			SUM(JEI_B_SH) AS JEI_B_SH,
+			SUM(JEI_B_RE) AS JEI_B_RE,
+			SUM(JEI_B_SR) AS JEI_B_SR,
+			SUM(JEI_C_SH) AS JEI_C_SH,
+			SUM(JEI_C_RE) AS JEI_C_RE,
+			SUM(JEI_C_SR) AS JEI_C_SR,
+			SUM(JEI_D_SH) AS JEI_D_SH,
+			SUM(JEI_D_RE) AS JEI_D_RE,
+			SUM(JEI_D_SR) AS JEI_D_SR,
+			SUM(HEPAL_SH) AS HEPAL_SH,
+			SUM(HEPAL_RE) AS HEPAL_RE,
+			SUM(HEPAL_SR) AS HEPAL_SR,
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH,
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE,
+			SUM(HEPAI_A_SR) AS HEPAI_A_SR,
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH,
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM(HEPAI_B_SR) AS HEPAI_B_SR
+		from EXP_ROUTINEVACC_6_1 EXPVACC 
+			INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside'
+			AND e.TYPE = 'reside' AND e.VALUE IN('1','2') 
+		<where>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>
+		</where>
+		group by EXPVACC.UNIT_NAME,e.LABEL
+		order by EXPVACC.UNIT_NAME,e.LABEL
+	</select>
+	
+	<!-- 按居委名称-不按居住属性-常规类型统计-开始 -->
+	<select id="selectVaccData61_unitNoReside" resultType="java.util.Map">
+		SELECT
+			UNIT_NAME,
+			HEPB_A_SH,
+			HEPB_A_RE,
+			SUM(CASE WHEN TT.HEPB_A_SH = 0 THEN 0 ELSE round(TT.HEPB_A_RE/TT.HEPB_A_SH*100,'2') END )AS HEPB_A_SR,
+			HEPB_AA_SH,
+			HEPB_AA_RE,
+			SUM(CASE WHEN TT.HEPB_AA_SH = 0 THEN 0 ELSE round(TT.HEPB_AA_RE/TT.HEPB_AA_SH*100,'2') END )AS HEPB_AA_SR,
+			HEPB_B_SH,
+			HEPB_B_RE,
+			SUM(CASE WHEN TT.HEPB_B_SH = 0 THEN 0 ELSE round(TT.HEPB_B_RE/TT.HEPB_B_SH*100,'2') END )AS HEPB_B_SR,
+			HEPB_C_SH,
+			HEPB_C_RE,
+			SUM(CASE WHEN TT.HEPB_C_SH = 0 THEN 0 ELSE round(TT.HEPB_C_RE/TT.HEPB_C_SH*100,'2') END )AS HEPB_C_SR,
+			BCG_SH,
+			BCG_RE,
+			SUM(CASE WHEN TT.BCG_SH = 0 THEN 0 ELSE round(TT.BCG_RE/TT.BCG_SH*100,'2') END )AS BCG_SR,
+			PV_A_SH,
+			PV_A_RE,
+			SUM(CASE WHEN TT.PV_A_SH = 0 THEN 0 ELSE round(TT.PV_A_RE/TT.PV_A_SH*100,'2') END )AS PV_A_SR,
+			PV_B_SH,
+			PV_B_RE,
+			SUM(CASE WHEN TT.PV_B_SH = 0 THEN 0 ELSE round(TT.PV_B_RE/TT.PV_B_SH*100,'2') END )AS PV_B_SR,
+			PV_C_SH,
+			PV_C_RE,
+			SUM(CASE WHEN TT.PV_C_SH = 0 THEN 0 ELSE round(TT.PV_C_RE/TT.PV_C_SH*100,'2') END )AS PV_C_SR,
+			PV_D_SH,
+			PV_D_RE,
+			SUM(CASE WHEN TT.PV_D_SH = 0 THEN 0 ELSE round(TT.PV_D_RE/TT.PV_D_SH*100,'2') END )AS PV_D_SR,
+			DTP_A_SH,
+			DTP_A_RE,
+			SUM(CASE WHEN TT.DTP_A_SH = 0 THEN 0 ELSE round(TT.DTP_A_RE/TT.DTP_A_SH*100,'2') END )AS DTP_A_SR,
+			DTP_B_SH,
+			DTP_B_RE,
+			SUM(CASE WHEN TT.DTP_B_SH = 0 THEN 0 ELSE round(TT.DTP_B_RE/TT.DTP_B_SH*100,'2') END )AS DTP_B_SR,
+			DTP_C_SH,
+			DTP_C_RE,
+			SUM(CASE WHEN TT.DTP_C_SH = 0 THEN 0 ELSE round(TT.DTP_C_RE/TT.DTP_C_SH*100,'2') END )AS DTP_C_SR,
+			DTP_D_SH,
+			DTP_D_RE,
+			SUM(CASE WHEN TT.DTP_D_SH = 0 THEN 0 ELSE round(TT.DTP_D_RE/TT.DTP_D_SH*100,'2') END )AS DTP_D_SR,
+			DT_SH,
+			DT_RE,
+			SUM(CASE WHEN TT.DT_SH = 0 THEN 0 ELSE round(TT.DT_RE/TT.DT_SH*100,'2') END )AS DT_SR,
+			MR_A_SH,
+			MR_A_RE,
+			SUM(CASE WHEN TT.MR_A_SH = 0 THEN 0 ELSE round(TT.MR_A_RE/TT.MR_A_SH*100,'2') END )AS MR_A_SR,
+			MR_B_SH,
+			MR_B_RE,
+			SUM(CASE WHEN TT.MR_B_SH = 0 THEN 0 ELSE round(TT.MR_B_RE/TT.MR_B_SH*100,'2') END )AS MR_B_SR,
+			MMR_A_SH,
+			MMR_A_RE,
+			SUM(CASE WHEN TT.MMR_A_SH = 0 THEN 0 ELSE round(TT.MMR_A_RE/TT.MMR_A_SH*100,'2') END )AS MMR_A_SR,
+			MMR_B_SH,
+			MMR_B_RE,
+			SUM(CASE WHEN TT.MMR_B_SH = 0 THEN 0 ELSE round(TT.MMR_B_RE/TT.MMR_B_SH*100,'2') END )AS MMR_B_SR,
+			MM_A_SH,
+			MM_A_RE,
+			SUM(CASE WHEN TT.MM_A_SH = 0 THEN 0 ELSE round(TT.MM_A_RE/TT.MM_A_SH*100,'2') END )AS MM_A_SR,
+			MM_B_SH,
+			MM_B_RE,
+			SUM(CASE WHEN TT.MM_B_SH = 0 THEN 0 ELSE round(TT.MM_B_RE/TT.MM_B_SH*100,'2') END )AS MM_B_SR,
+			MV_A_SH,
+			MV_A_RE,
+			SUM(CASE WHEN TT.MV_A_SH = 0 THEN 0 ELSE round(TT.MV_A_RE/TT.MV_A_SH*100,'2') END )AS MV_A_SR,
+			MV_B_SH,
+			MV_B_RE,
+			SUM(CASE WHEN TT.MV_B_SH = 0 THEN 0 ELSE round(TT.MV_B_RE/TT.MV_B_SH*100,'2') END )AS MV_B_SR,
+			MENA_A_SH,
+			MENA_A_RE,
+			SUM(CASE WHEN TT.MENA_A_SH = 0 THEN 0 ELSE round(TT.MENA_A_RE/TT.MENA_A_SH*100,'2') END )AS MENA_A_SR,
+			MENA_B_SH,
+			MENA_B_RE,
+			SUM(CASE WHEN TT.MENA_B_SH = 0 THEN 0 ELSE round(TT.MENA_B_RE/TT.MENA_B_SH*100,'2') END )AS MENA_B_SR,
+			MENAC_A_SH,
+			MENAC_A_RE,
+			SUM(CASE WHEN TT.MENAC_A_SH = 0 THEN 0 ELSE round(TT.MENAC_A_RE/TT.MENAC_A_SH*100,'2') END )AS MENAC_A_SR,
+			MENAC_B_SH,
+			MENAC_B_RE,
+			SUM(CASE WHEN TT.MENAC_B_SH = 0 THEN 0 ELSE round(TT.MENAC_B_RE/TT.MENAC_B_SH*100,'2') END )AS MENAC_B_SR,
+			JEL_A_SH,
+			JEL_A_RE,
+			SUM(CASE WHEN TT.JEL_A_SH = 0 THEN 0 ELSE round(TT.JEL_A_RE/TT.JEL_A_SH*100,'2') END )AS JEL_A_SR,
+			JEL_B_SH,
+			JEL_B_RE,
+			SUM(CASE WHEN TT.JEL_B_SH = 0 THEN 0 ELSE round(TT.JEL_B_RE/TT.JEL_B_SH*100,'2') END )AS JEL_B_SR,
+			JEI_A_SH,
+			JEI_A_RE,
+			SUM(CASE WHEN TT.JEI_A_SH = 0 THEN 0 ELSE round(TT.JEI_A_RE/TT.JEI_A_SH*100,'2') END )AS JEI_A_SR,
+			JEI_B_SH,
+			JEI_B_RE,
+			SUM(CASE WHEN TT.JEI_B_SH = 0 THEN 0 ELSE round(TT.JEI_B_RE/TT.JEI_B_SH*100,'2') END )AS JEI_B_SR,
+			JEI_C_SH,
+			JEI_C_RE,
+			SUM(CASE WHEN TT.JEI_C_SH = 0 THEN 0 ELSE round(TT.JEI_C_RE/TT.JEI_C_SH*100,'2') END )AS JEI_C_SR,
+			JEI_D_SH,
+			JEI_D_RE,
+			SUM(CASE WHEN TT.JEI_D_SH = 0 THEN 0 ELSE round(TT.JEI_D_RE/TT.JEI_D_SH*100,'2') END )AS JEI_D_SR,
+			HEPAL_SH,
+			HEPAL_RE,
+			SUM(CASE WHEN TT.HEPAL_SH = 0 THEN 0 ELSE round(TT.HEPAL_RE/TT.HEPAL_SH*100,'2') END )AS HEPAL_SR,
+			HEPAI_A_SH,
+			HEPAI_A_RE,
+			SUM(CASE WHEN TT.HEPAI_A_SH = 0 THEN 0 ELSE round(TT.HEPAI_A_RE/TT.HEPAI_A_SH*100,'2') END )AS HEPAI_A_SR,
+			HEPAI_B_SH,
+			HEPAI_B_RE,
+			SUM(CASE WHEN TT.HEPAI_B_SH = 0 THEN 0 ELSE round(TT.HEPAI_B_RE/TT.HEPAI_B_SH*100,'2') END )AS HEPAI_B_SR
+		FROM
+			(SELECT
+				T1.UNIT_NAME AS UNIT_NAME,
+				SUM (HEPB_A_SH) AS HEPB_A_SH,
+				SUM (HEPB_A_RE) AS HEPB_A_RE,
+				SUM (HEPB_AA_SH) AS HEPB_AA_SH,
+				SUM (HEPB_AA_RE) AS HEPB_AA_RE,
+				SUM (HEPB_B_SH) AS HEPB_B_SH,
+				SUM (HEPB_B_RE) AS HEPB_B_RE,
+				SUM (HEPB_C_SH) AS HEPB_C_SH,
+				SUM (HEPB_C_RE) AS HEPB_C_RE,
+				SUM (BCG_SH) AS BCG_SH,
+				SUM (BCG_RE) AS BCG_RE,
+				SUM (PV_A_SH) AS PV_A_SH,
+				SUM (PV_A_RE) AS PV_A_RE,
+				SUM (PV_B_SH) AS PV_B_SH,
+				SUM (PV_B_RE) AS PV_B_RE,
+				SUM (PV_C_SH) AS PV_C_SH,
+				SUM (PV_C_RE) AS PV_C_RE,
+				SUM (PV_D_SH) AS PV_D_SH,
+				SUM (PV_D_RE) AS PV_D_RE,
+				SUM (DTP_A_SH) AS DTP_A_SH,
+				SUM (DTP_A_RE) AS DTP_A_RE,
+				SUM (DTP_B_SH) AS DTP_B_SH,
+				SUM (DTP_B_RE) AS DTP_B_RE,
+				SUM (DTP_C_SH) AS DTP_C_SH,
+				SUM (DTP_C_RE) AS DTP_C_RE,
+				SUM (DTP_D_SH) AS DTP_D_SH,
+				SUM (DTP_D_RE) AS DTP_D_RE,
+				SUM (DT_SH) AS DT_SH,
+				SUM (DT_RE) AS DT_RE,
+				SUM (MR_A_SH) AS MR_A_SH,
+				SUM (MR_A_RE) AS MR_A_RE,
+				SUM (MR_B_SH) AS MR_B_SH,
+				SUM (MR_B_RE) AS MR_B_RE,
+				SUM (MMR_A_SH) AS MMR_A_SH,
+				SUM (MMR_A_RE) AS MMR_A_RE,
+				SUM (MMR_B_SH) AS MMR_B_SH,
+				SUM (MMR_B_RE) AS MMR_B_RE,
+				SUM (MM_A_SH) AS MM_A_SH,
+				SUM (MM_A_RE) AS MM_A_RE,
+				SUM (MM_B_SH) AS MM_B_SH,
+				SUM (MM_B_RE) AS MM_B_RE,
+				SUM (MV_A_SH) AS MV_A_SH,
+				SUM (MV_A_RE) AS MV_A_RE,
+				SUM (MV_B_SH) AS MV_B_SH,
+				SUM (MV_B_RE) AS MV_B_RE,
+				SUM (MENA_A_SH) AS MENA_A_SH,
+				SUM (MENA_A_RE) AS MENA_A_RE,
+				SUM (MENA_B_SH) AS MENA_B_SH,
+				SUM (MENA_B_RE) AS MENA_B_RE,
+				SUM (MENAC_A_SH) AS MENAC_A_SH,
+				SUM (MENAC_A_RE) AS MENAC_A_RE,
+				SUM (MENAC_B_SH) AS MENAC_B_SH,
+				SUM (MENAC_B_RE) AS MENAC_B_RE,
+				SUM (JEL_A_SH) AS JEL_A_SH,
+				SUM (JEL_A_RE) AS JEL_A_RE,
+				SUM (JEL_B_SH) AS JEL_B_SH,
+				SUM (JEL_B_RE) AS JEL_B_RE,
+				SUM (JEI_A_SH) AS JEI_A_SH,
+				SUM (JEI_A_RE) AS JEI_A_RE,
+				SUM (JEI_B_SH) AS JEI_B_SH,
+				SUM (JEI_B_RE) AS JEI_B_RE,
+				SUM (JEI_C_SH) AS JEI_C_SH,
+				SUM (JEI_C_RE) AS JEI_C_RE,
+				SUM (JEI_D_SH) AS JEI_D_SH,
+				SUM (JEI_D_RE) AS JEI_D_RE,
+				SUM (HEPAL_SH) AS HEPAL_SH,
+				SUM (HEPAL_RE) AS HEPAL_RE,
+				SUM (HEPAI_A_SH) AS HEPAI_A_SH,
+				SUM (HEPAI_A_RE) AS HEPAI_A_RE,
+				SUM (HEPAI_B_SH) AS HEPAI_B_SH,
+				SUM (HEPAI_B_RE) AS HEPAI_B_RE
+			FROM
+				EXP_ROUTINEVACC_6_1 T1
+			<where>
+				<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+					year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+						to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+				</if>
+				<if test="localCode !=null  and localCode !=''">
+					AND LOCALCODE = #{localCode}
+				</if>
+			</where>
+			GROUP BY
+				T1.UNIT_NAME) TT
+		GROUP BY 
+		TT.UNIT_NAME,
+		TT.HEPB_A_SH,
+		TT.HEPB_A_RE,
+		TT.HEPB_AA_SH,
+		TT.HEPB_AA_RE,
+		TT.HEPB_B_SH,
+		TT.HEPB_B_RE,
+		TT.HEPB_C_SH,
+		TT.HEPB_C_RE,
+		TT.BCG_SH,
+		TT.BCG_RE,
+		TT.PV_A_SH,
+		TT.PV_A_RE,
+		TT.PV_B_SH,
+		TT.PV_B_RE,
+		TT.PV_C_SH,
+		TT.PV_C_RE,
+		TT.PV_D_SH,
+		TT.PV_D_RE,
+		TT.DTP_A_SH,
+		TT.DTP_A_RE,
+		TT.DTP_B_SH,
+		TT.DTP_B_RE,
+		TT.DTP_C_SH,
+		TT.DTP_C_RE,
+		TT.DTP_D_SH,
+		TT.DTP_D_RE,
+		TT.DT_SH,
+		TT.DT_RE,
+		TT.MR_A_SH,
+		TT.MR_A_RE,
+		TT.MR_B_SH,
+		TT.MR_B_RE,
+		TT.MMR_A_SH,
+		TT.MMR_A_RE,
+		TT.MMR_B_SH,
+		TT.MMR_B_RE,
+		TT.MM_A_SH,
+		TT.MM_A_RE,
+		TT.MM_B_SH,
+		TT.MM_B_RE,
+		TT.MV_A_SH,
+		TT.MV_A_RE,
+		TT.MV_B_SH,
+		TT.MV_B_RE,
+		TT.MENA_A_SH,
+		TT.MENA_A_RE,
+		TT.MENA_B_SH,
+		TT.MENA_B_RE,
+		TT.MENAC_A_SH,
+		TT.MENAC_A_RE,
+		TT.MENAC_B_SH,
+		TT.MENAC_B_RE,
+		TT.JEL_A_SH,
+		TT.JEL_A_RE,
+		TT.JEL_B_SH,
+		TT.JEL_B_RE,
+		TT.JEI_A_SH,
+		TT.JEI_A_RE,
+		TT.JEI_B_SH,
+		TT.JEI_B_RE,
+		TT.JEI_C_SH,
+		TT.JEI_C_RE,
+		TT.JEI_D_SH,
+		TT.JEI_D_RE,
+		TT.HEPAL_SH,
+		TT.HEPAL_RE,
+		TT.HEPAI_A_SH,
+		TT.HEPAI_A_RE,
+		TT.HEPAI_B_SH,		
+		TT.HEPAI_B_RE
+	</select>
+	<!-- 按居委名称-不按居住属性-常规类型统计-结束 -->
+	
+	<!-- 按居委名称-不按居住属性-特殊类型统计-开始 -->
+	<select id="selectVaccSpecData61_unitNoReside" resultType="java.util.Map">
+		SELECT
+			T1.UNIT_NAME AS UNIT_NAME,
+			SUM (HEPB_A_SH) AS HEPB_A_SH,
+			SUM (HEPB_A_RE) AS HEPB_A_RE,
+			SUM (HEPB_A_SR) AS HEPB_A_SR,
+			SUM (HEPB_AA_SH) AS HEPB_AA_SH,
+			SUM (HEPB_AA_RE) AS HEPB_AA_RE,
+			SUM (HEPB_AA_SR) AS HEPB_AA_SR,
+			SUM (HEPB_B_SH) AS HEPB_B_SH,
+			SUM (HEPB_B_RE) AS HEPB_B_RE,
+			SUM (HEPB_B_SR) AS HEPB_B_SR,
+			SUM (HEPB_C_SH) AS HEPB_C_SH,
+			SUM (HEPB_C_RE) AS HEPB_C_RE,
+			SUM (HEPB_C_SR) AS HEPB_C_SR,
+			SUM (BCG_SH) AS BCG_SH,
+			SUM (BCG_RE) AS BCG_RE,
+			SUM (BCG_SR) AS BCG_SR,
+			SUM (PV_A_SH) AS PV_A_SH,
+			SUM (PV_A_RE) AS PV_A_RE,
+			SUM (PV_A_SR) AS PV_A_SR,
+			SUM (PV_B_SH) AS PV_B_SH,
+			SUM (PV_B_RE) AS PV_B_RE,
+			SUM (PV_B_SR) AS PV_B_SR,
+			SUM (PV_C_SH) AS PV_C_SH,
+			SUM (PV_C_RE) AS PV_C_RE,
+			SUM (PV_C_SR) AS PV_C_SR,
+			SUM (PV_D_SH) AS PV_D_SH,
+			SUM (PV_D_RE) AS PV_D_RE,
+			SUM (PV_D_SR) AS PV_D_SR,
+			SUM (DTP_A_SH) AS DTP_A_SH,
+			SUM (DTP_A_RE) AS DTP_A_RE,
+			SUM (DTP_A_SR) AS DTP_A_SR,
+			SUM (DTP_B_SH) AS DTP_B_SH,
+			SUM (DTP_B_RE) AS DTP_B_RE,
+			SUM (DTP_B_SR) AS DTP_B_SR,
+			SUM (DTP_C_SH) AS DTP_C_SH,
+			SUM (DTP_C_RE) AS DTP_C_RE,
+			SUM (DTP_C_SR) AS DTP_C_SR,
+			SUM (DTP_D_SH) AS DTP_D_SH,
+			SUM (DTP_D_RE) AS DTP_D_RE,
+			SUM (DTP_D_SR) AS DTP_D_SR,
+			SUM (DT_SH) AS DT_SH,
+			SUM (DT_RE) AS DT_RE,
+			SUM (DT_SR) AS DT_SR,
+			SUM (MR_A_SH) AS MR_A_SH,
+			SUM (MR_A_RE) AS MR_A_RE,
+			SUM (MR_A_SR) AS MR_A_SR,
+			SUM (MR_B_SH) AS MR_B_SH,
+			SUM (MR_B_RE) AS MR_B_RE,
+			SUM (MR_B_SR) AS MR_B_SR,
+			SUM (MMR_A_SH) AS MMR_A_SH,
+			SUM (MMR_A_RE) AS MMR_A_RE,
+			SUM (MMR_A_SR) AS MMR_A_SR,
+			SUM (MMR_B_SH) AS MMR_B_SH,
+			SUM (MMR_B_RE) AS MMR_B_RE,
+			SUM (MMR_B_SR) AS MMR_B_SR,
+			SUM (MM_A_SH) AS MM_A_SH,
+			SUM (MM_A_RE) AS MM_A_RE,
+			SUM (MM_A_SR) AS MM_A_SR,
+			SUM (MM_B_SH) AS MM_B_SH,
+			SUM (MM_B_RE) AS MM_B_RE,
+			SUM (MM_B_SR) AS MM_B_SR,
+			SUM (MV_A_SH) AS MV_A_SH,
+			SUM (MV_A_RE) AS MV_A_RE,
+			SUM (MV_A_SR) AS MV_A_SR,
+			SUM (MV_B_SH) AS MV_B_SH,
+			SUM (MV_B_RE) AS MV_B_RE,
+			SUM (MV_B_SR) AS MV_B_SR,
+			SUM (MENA_A_SH) AS MENA_A_SH,
+			SUM (MENA_A_RE) AS MENA_A_RE,
+			SUM (MENA_A_SR) AS MENA_A_SR,
+			SUM (MENA_B_SH) AS MENA_B_SH,
+			SUM (MENA_B_RE) AS MENA_B_RE,
+			SUM (MENA_B_SR) AS MENA_B_SR,
+			SUM (MENAC_A_SH) AS MENAC_A_SH,
+			SUM (MENAC_A_RE) AS MENAC_A_RE,
+			SUM (MENAC_A_SR) AS MENAC_A_SR,
+			SUM (MENAC_B_SH) AS MENAC_B_SH,
+			SUM (MENAC_B_RE) AS MENAC_B_RE,
+			SUM (MENAC_B_SR) AS MENAC_B_SR,
+			SUM (JEL_A_SH) AS JEL_A_SH,
+			SUM (JEL_A_RE) AS JEL_A_RE,
+			SUM (JEL_A_SR) AS JEL_A_SR,
+			SUM (JEL_B_SH) AS JEL_B_SH,
+			SUM (JEL_B_RE) AS JEL_B_RE,
+			SUM (JEL_B_SR) AS JEL_B_SR,
+			SUM (JEI_A_SH) AS JEI_A_SH,
+			SUM (JEI_A_RE) AS JEI_A_RE,
+			SUM (JEI_A_SR) AS JEI_A_SR,
+			SUM (JEI_B_SH) AS JEI_B_SH,
+			SUM (JEI_B_RE) AS JEI_B_RE,
+			SUM (JEI_B_SR) AS JEI_B_SR,
+			SUM (JEI_C_SH) AS JEI_C_SH,
+			SUM (JEI_C_RE) AS JEI_C_RE,
+			SUM (JEI_C_SR) AS JEI_C_SR,
+			SUM (JEI_D_SH) AS JEI_D_SH,
+			SUM (JEI_D_RE) AS JEI_D_RE,
+			SUM (JEI_D_SR) AS JEI_D_SR,
+			SUM (HEPAL_SH) AS HEPAL_SH,
+			SUM (HEPAL_RE) AS HEPAL_RE,
+			SUM (HEPAL_SR) AS HEPAL_SR,
+			SUM (HEPAI_A_SH) AS HEPAI_A_SH,
+			SUM (HEPAI_A_RE) AS HEPAI_A_RE,
+			SUM (HEPAI_A_SR) AS HEPAI_A_SR,
+			SUM (HEPAI_B_SH) AS HEPAI_B_SH,
+			SUM (HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM (HEPAI_B_SR) AS HEPAI_B_SR,
+			
+			
+			SUM (MR_SUM_A_SH) AS MR_SUM_A_SH,
+			SUM (MR_SUM_A_RE) AS MR_SUM_A_RE,
+			SUM (MR_SUM_A_SR) AS MR_SUM_A_SR,
+			SUM (MR_SUM_B_SH) AS MR_SUM_B_SH,
+			SUM (MR_SUM_B_RE) AS MR_SUM_B_RE,
+			SUM (MR_SUM_B_SR) AS MR_SUM_B_SR,
+			SUM (MMR_SUM_A_SH) AS MMR_SUM_A_SH,
+			SUM (MMR_SUM_A_RE) AS MMR_SUM_A_RE,
+			SUM (MMR_SUM_A_SR) AS MMR_SUM_A_SR,
+			SUM (MMR_SUM_B_SH) AS MMR_SUM_B_SH,
+			SUM (MMR_SUM_B_RE) AS MMR_SUM_B_RE,
+			SUM (MMR_SUM_B_SR) AS MMR_SUM_B_SR,
+			SUM (MM_SUM_A_SH) AS MM_SUM_A_SH,
+			SUM (MM_SUM_A_RE) AS MM_SUM_A_RE,
+			SUM (MM_SUM_A_SR) AS MM_SUM_A_SR,
+			SUM (MM_SUM_B_SH) AS MM_SUM_B_SH,
+			SUM (MM_SUM_B_RE) AS MM_SUM_B_RE,
+			SUM (MM_SUM_B_SR) AS MM_SUM_B_SR,
+			SUM (MV_SUM_A_SH) AS MV_SUM_A_SH,
+			SUM (MV_SUM_A_RE) AS MV_SUM_A_RE,
+			SUM (MV_SUM_A_SR) AS MV_SUM_A_SR,
+			SUM (MV_SUM_B_SH) AS MV_SUM_B_SH,
+			SUM (MV_SUM_B_RE) AS MV_SUM_B_RE,
+			SUM (MV_SUM_B_SR) AS MV_SUM_B_SR,
+			SUM (HEPAL_SUM_A_SH) AS HEPAL_SUM_A_SH,
+			SUM (HEPAL_SUM_A_RE) AS HEPAL_SUM_A_RE,
+			SUM (HEPAL_SUM_A_SR) AS HEPAL_SUM_A_SR,
+			SUM (HEPAL_SUM_B_SH) AS HEPAL_SUM_B_SH,
+			SUM (HEPAL_SUM_B_RE) AS HEPAL_SUM_B_RE,
+			SUM (HEPAL_SUM_B_SR) AS HEPAL_SUM_B_SR,
+			SUM (HEPAI_SUM_A_SH) AS HEPAI_SUM_A_SH,
+			SUM (HEPAI_SUM_A_RE) AS HEPAI_SUM_A_RE,
+			SUM (HEPAI_SUM_A_SR) AS HEPAI_SUM_A_SR,
+			SUM (HEPAI_SUM_B_SH) AS HEPAI_SUM_B_SH,
+			SUM (HEPAI_SUM_B_RE) AS HEPAI_SUM_B_RE,
+			SUM (HEPAI_SUM_B_SR) AS HEPAI_SUM_B_SR,
+			
+			SUM (MCV_SUM_A_SH) AS MCV_SUM_A_SH,
+			SUM (MCV_SUM_A_RE) AS MCV_SUM_A_RE,
+			SUM (MCV_SUM_A_SR) AS MCV_SUM_A_SR,
+			SUM (MCV_SUM_B_SH) AS MCV_SUM_B_SH,
+			SUM (MCV_SUM_B_RE) AS MCV_SUM_B_RE,
+			SUM (MCV_SUM_B_SR) AS MCV_SUM_B_SR,
+			SUM (RCV_SUM_A_SH) AS RCV_SUM_A_SH,
+			SUM (RCV_SUM_A_RE) AS RCV_SUM_A_RE,
+			SUM (RCV_SUM_A_SR) AS RCV_SUM_A_SR,
+			SUM (RCV_SUM_B_SH) AS RCV_SUM_B_SH,
+			SUM (RCV_SUM_B_RE) AS RCV_SUM_B_RE,
+			SUM (RCV_SUM_B_SR) AS RCV_SUM_B_SR,
+			SUM (MUMCV_SUM_A_SH) AS MUMCV_SUM_A_SH,
+			SUM (MUMCV_SUM_A_RE) AS MUMCV_SUM_A_RE,
+			SUM (MUMCV_SUM_A_SR) AS MUMCV_SUM_A_SR,
+			SUM (MUMCV_SUM_B_SH) AS MUMCV_SUM_B_SH,
+			SUM (MUMCV_SUM_B_RE) AS MUMCV_SUM_B_RE,
+			SUM (MUMCV_SUM_B_SR) AS MUMCV_SUM_B_SR,
+			SUM (HEPA_SUM_A_SH) AS HEPA_SUM_A_SH,
+			SUM (HEPA_SUM_A_RE) AS HEPA_SUM_A_RE,
+			SUM (HEPA_SUM_A_SR) AS HEPA_SUM_A_SR,
+			SUM (HEPA_SUM_B_SH) AS HEPA_SUM_B_SH,
+			SUM (HEPA_SUM_B_RE) AS HEPA_SUM_B_RE,
+			SUM (HEPA_SUM_B_SR) AS HEPA_SUM_B_SR
+		FROM
+			EXP_ROUTINEVACC_6_1 T1
+		<where>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>		
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>
+		</where>
+		GROUP BY
+			T1.UNIT_NAME
+	</select>
+	<!-- 按居委名称-不按居住属性-特殊类型统计-结束 -->
+	
+	<select id="selectVaccData61_all" resultType="java.util.HashMap">
+		SELECT 
+			LABEL,
+			SUM(HEPB_A_SH) AS HEPB_A_SH,
+			SUM(HEPB_A_RE) AS HEPB_A_RE,
+			SUM(CASE WHEN HEPB_A_SH = 0 THEN 0 ELSE round(HEPB_A_RE/HEPB_A_SH*100,'2') END )AS HEPB_A_SR,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH,   
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE,   
+			SUM(CASE WHEN HEPB_AA_SH = 0 THEN 0 ELSE round(HEPB_AA_RE/HEPB_A_SH*100,'2') END )AS HEPB_AA_SR,	   
+			SUM(HEPB_B_SH) AS HEPB_B_SH,
+			SUM(HEPB_B_RE) AS HEPB_B_RE,
+			SUM(CASE WHEN HEPB_B_SH = 0 THEN 0 ELSE round(HEPB_B_RE/HEPB_B_SH*100,'2') END )AS HEPB_B_SR,
+			SUM(HEPB_C_SH) AS HEPB_C_SH,
+			SUM(HEPB_C_RE) AS HEPB_C_RE,
+			SUM(CASE WHEN HEPB_C_SH = 0 THEN 0 ELSE round(HEPB_C_RE/HEPB_C_SH*100,'2') END )AS HEPB_C_SR,
+			SUM(BCG_SH) AS BCG_SH,
+			SUM(BCG_RE) AS BCG_RE,
+			SUM(CASE WHEN BCG_SH = 0 THEN 0 ELSE round(BCG_RE/BCG_SH*100,'2') END )AS BCG_SR,
+			SUM(PV_A_SH) AS PV_A_SH,
+			SUM(PV_A_RE) AS PV_A_RE, 
+			SUM(CASE WHEN PV_A_SH = 0 THEN 0 ELSE round(PV_A_RE/PV_A_SH*100,'2') END )AS PV_A_SR,
+			SUM(PV_B_SH) AS PV_B_SH, 
+			SUM(PV_B_RE) AS PV_B_RE, 
+			SUM(CASE WHEN PV_B_SH = 0 THEN 0 ELSE round(PV_B_RE/PV_B_SH*100,'2') END )AS PV_B_SR,
+			SUM(PV_C_SH) AS PV_C_SH,
+			SUM(PV_C_RE) AS PV_C_RE,
+			SUM(CASE WHEN PV_C_SH = 0 THEN 0 ELSE round(PV_C_RE/PV_C_SH*100,'2') END )AS PV_C_SR,
+			SUM(PV_D_SH) AS PV_D_SH,
+			SUM(PV_D_RE) AS PV_D_RE,
+			SUM(CASE WHEN PV_D_SH = 0 THEN 0 ELSE round(PV_D_RE/PV_D_SH*100,'2') END )AS PV_D_SR,
+			SUM(DTP_A_SH) AS DTP_A_SH,
+			SUM(DTP_A_RE) AS DTP_A_RE,
+			SUM(CASE WHEN DTP_A_SH = 0 THEN 0 ELSE round(DTP_A_RE/DTP_A_SH*100,'2') END )AS DTP_A_SR,
+			SUM(DTP_B_SH) AS DTP_B_SH,
+			SUM(DTP_B_RE) AS DTP_B_RE,
+			SUM(CASE WHEN DTP_B_SH = 0 THEN 0 ELSE round(DTP_B_RE/DTP_B_SH*100,'2') END )AS DTP_B_SR,
+			SUM(DTP_C_SH) AS DTP_C_SH,
+			SUM(DTP_C_RE) AS DTP_C_RE,
+			SUM(CASE WHEN DTP_C_SH = 0 THEN 0 ELSE round(DTP_C_RE/DTP_C_SH*100,'2') END )AS DTP_C_SR,
+			SUM(DTP_D_SH) AS DTP_D_SH,
+			SUM(DTP_D_RE) AS DTP_D_RE,
+			SUM(CASE WHEN DTP_D_SH = 0 THEN 0 ELSE round(DTP_D_RE/DTP_D_SH*100,'2') END )AS DTP_D_SR,
+			SUM(DT_SH) AS DT_SH,
+			SUM(DT_RE) AS DT_RE,
+			SUM(CASE WHEN DT_SH = 0 THEN 0 ELSE round(DT_RE/DT_SH*100,'2') END )AS DT_SR,
+			SUM(MR_A_SH) AS MR_A_SH,
+			SUM(MR_A_RE) AS MR_A_RE,
+			SUM(CASE WHEN MR_A_SH = 0 THEN 0 ELSE round(MR_A_RE/MR_A_SH*100,'2') END )AS MR_A_SR,
+			SUM(MR_B_SH) AS MR_B_SH,
+			SUM(MR_B_RE) AS MR_B_RE,
+			SUM(CASE WHEN MR_B_SH = 0 THEN 0 ELSE round(MR_B_RE/MR_B_SH*100,'2') END )AS MR_B_SR,
+			SUM(MMR_A_SH) AS MMR_A_SH,
+			SUM(MMR_A_RE) AS MMR_A_RE,
+			SUM(CASE WHEN MMR_A_SH = 0 THEN 0 ELSE round(MMR_A_RE/MMR_A_SH*100,'2') END )AS MMR_A_SR,
+			SUM(MMR_B_SH) AS MMR_B_SH,
+			SUM(MMR_B_RE) AS MMR_B_RE,
+			SUM(CASE WHEN MMR_B_SH = 0 THEN 0 ELSE round(MMR_B_RE/MMR_B_SH*100,'2') END )AS MMR_B_SR,
+			SUM(MM_A_SH) AS MM_A_SH,
+			SUM(MM_A_RE) AS MM_A_RE,
+			SUM(CASE WHEN MM_A_SH = 0 THEN 0 ELSE round(MM_A_RE/MM_A_SH*100,'2') END )AS MM_A_SR,
+			SUM(MM_B_SH) AS MM_B_SH,
+			SUM(MM_B_RE) AS MM_B_RE,
+			SUM(CASE WHEN MM_B_SH = 0 THEN 0 ELSE round(MM_B_RE/MM_B_SH*100,'2') END )AS MM_B_SR,
+			SUM(MV_A_SH) AS MV_A_SH,
+			SUM(MV_A_RE) AS MV_A_RE,
+			SUM(CASE WHEN MV_A_SH = 0 THEN 0 ELSE round(MV_A_RE/MV_A_SH*100,'2') END )AS MV_A_SR,
+			SUM(MV_B_SH) AS MV_B_SH,
+			SUM(MV_B_RE) AS MV_B_RE,
+			SUM(CASE WHEN MV_B_SH = 0 THEN 0 ELSE round(MV_B_RE/MV_B_SH*100,'2') END )AS MV_B_SR,
+			SUM(MENA_A_SH) AS MENA_A_SH,
+			SUM(MENA_A_RE) AS MENA_A_RE,
+			SUM(CASE WHEN MENA_A_SH = 0 THEN 0 ELSE round(MENA_A_RE/MENA_A_SH*100,'2') END )AS MENA_A_SR,
+			SUM(MENA_B_SH) AS MENA_B_SH,
+			SUM(MENA_B_RE) AS MENA_B_RE,
+			SUM(CASE WHEN MENA_B_SH = 0 THEN 0 ELSE round(MENA_B_RE/MENA_B_SH*100,'2') END )AS MENA_B_SR,
+			SUM(MENAC_A_SH) AS MENAC_A_SH,   
+			SUM(MENAC_A_RE) AS MENAC_A_RE,   
+			SUM(CASE WHEN MENAC_A_SH = 0 THEN 0 ELSE round(MENAC_A_RE/MENAC_A_SH*100,'2') END )AS MENAC_A_SR,
+			SUM(MENAC_B_SH) AS MENAC_B_SH,   
+			SUM(MENAC_B_RE) AS MENAC_B_RE,   
+			SUM(CASE WHEN MENAC_B_SH = 0 THEN 0 ELSE round(MENAC_B_RE/MENAC_B_SH*100,'2') END )AS MENAC_B_SR, 
+			SUM(JEL_A_SH) AS JEL_A_SH,  
+			SUM(JEL_A_RE) AS JEL_A_RE,  
+			SUM(CASE WHEN JEL_A_SH = 0 THEN 0 ELSE round(JEL_A_RE/JEL_A_SH*100,'2') END )AS JEL_A_SR,
+			SUM(JEL_B_SH) AS JEL_B_SH,  
+			SUM(JEL_B_RE) AS JEL_B_RE,  
+			SUM(CASE WHEN JEL_B_SH = 0 THEN 0 ELSE round(JEL_B_RE/JEL_B_SH*100,'2') END )AS JEL_B_SR,
+			SUM(JEI_A_SH) AS JEI_A_SH,  
+			SUM(JEI_A_RE) AS JEI_A_RE,  
+			SUM(CASE WHEN JEI_A_SH = 0 THEN 0 ELSE round(JEI_A_RE/JEI_A_SH*100,'2') END )AS JEI_A_SR,  
+			SUM(JEI_B_SH) AS JEI_B_SH, 
+			SUM(JEI_B_RE) AS JEI_B_RE,  
+			SUM(CASE WHEN JEI_B_SH = 0 THEN 0 ELSE round(JEI_B_RE/JEI_B_SH*100,'2') END )AS JEI_B_SR, 
+			SUM(JEI_C_SH) AS JEI_C_SH,  
+			SUM(JEI_C_RE) AS JEI_C_RE,  
+			SUM(CASE WHEN JEI_C_SH = 0 THEN 0 ELSE round(JEI_C_RE/JEI_C_SH*100,'2') END )AS JEI_C_SR,
+			SUM(JEI_D_SH) AS JEI_D_SH,  
+			SUM(JEI_D_RE) AS JEI_D_RE,  
+			SUM(CASE WHEN JEI_D_SH = 0 THEN 0 ELSE round(JEI_D_RE/JEI_D_SH*100,'2') END )AS JEI_D_SR, 
+			SUM(HEPAL_SH) AS HEPAL_SH,  
+			SUM(HEPAL_RE) AS HEPAL_RE,  
+			SUM(CASE WHEN HEPAL_SH = 0 THEN 0 ELSE round(HEPAL_RE/HEPAL_SH*100,'2') END )AS HEPAL_SR, 
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH,   
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE,   
+			SUM(CASE WHEN HEPAI_A_SH = 0 THEN 0 ELSE round(HEPAI_A_RE/HEPAI_A_SH*100,'2') END )AS HEPAI_A_SR,  
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH,   
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM(CASE WHEN HEPAI_B_SH = 0 THEN 0 ELSE round(HEPAI_B_RE/HEPAI_B_SH*100,'2') END )AS HEPAI_B_SR
+		FROM
+			(SELECT 
+				E.LABEL AS LABEL,
+				SUM(HEPB_A_SH) AS HEPB_A_SH,
+				SUM(HEPB_A_RE) AS HEPB_A_RE,			
+				SUM(HEPB_A_SH) AS HEPB_AA_SH,
+				SUM(HEPB_AA_RE) AS HEPB_AA_RE,
+				SUM(HEPB_AA_SR) AS HEPB_AA_SR,
+				SUM(HEPB_B_SH) AS HEPB_B_SH,
+				SUM(HEPB_B_RE) AS HEPB_B_RE,
+				SUM(HEPB_B_SR) AS HEPB_B_SR,
+				SUM(HEPB_C_SH) AS HEPB_C_SH,
+				SUM(HEPB_C_RE) AS HEPB_C_RE,
+				SUM(HEPB_C_SR) AS HEPB_C_SR,
+				SUM(BCG_SH) AS BCG_SH,
+				SUM(BCG_RE) AS BCG_RE,
+				SUM(BCG_SR) AS BCG_SR,
+				SUM(PV_A_SH) AS PV_A_SH,
+				SUM(PV_A_RE) AS PV_A_RE,
+				SUM(PV_A_SR) AS PV_A_SR,
+				SUM(PV_B_SH) AS PV_B_SH,
+				SUM(PV_B_RE) AS PV_B_RE,
+				SUM(PV_B_SR) AS PV_B_SR,
+				SUM(PV_C_SH) AS PV_C_SH,
+				SUM(PV_C_RE) AS PV_C_RE,
+				SUM(PV_C_SR) AS PV_C_SR,
+				SUM(PV_D_SH) AS PV_D_SH,
+				SUM(PV_D_RE) AS PV_D_RE,
+				SUM(PV_D_SR) AS PV_D_SR,
+				SUM(DTP_A_SH) AS DTP_A_SH,
+				SUM(DTP_A_RE) AS DTP_A_RE,
+				SUM(DTP_A_SR) AS DTP_A_SR,
+				SUM(DTP_B_SH) AS DTP_B_SH,
+				SUM(DTP_B_RE) AS DTP_B_RE,
+				SUM(DTP_B_SR) AS DTP_B_SR,
+				SUM(DTP_C_SH) AS DTP_C_SH,
+				SUM(DTP_C_RE) AS DTP_C_RE,
+				SUM(DTP_C_SR) AS DTP_C_SR,
+				SUM(DTP_D_SH) AS DTP_D_SH,
+				SUM(DTP_D_RE) AS DTP_D_RE,
+				SUM(DTP_D_SR) AS DTP_D_SR,
+				SUM(DT_SH) AS DT_SH,
+				SUM(DT_RE) AS DT_RE,
+				SUM(DT_SR) AS DT_SR,
+				SUM(MR_A_SH) AS MR_A_SH,
+				SUM(MR_A_RE) AS MR_A_RE,
+				SUM(MR_A_SR) AS MR_A_SR,
+				SUM(MR_B_SH) AS MR_B_SH,
+				SUM(MR_B_RE) AS MR_B_RE,
+				SUM(MR_B_SR) AS MR_B_SR,
+				SUM(MMR_A_SH) AS MMR_A_SH,
+				SUM(MMR_A_RE) AS MMR_A_RE,
+				SUM(MMR_A_SR) AS MMR_A_SR,
+				SUM(MMR_B_SH) AS MMR_B_SH,
+				SUM(MMR_B_RE) AS MMR_B_RE,
+				SUM(MMR_B_SR) AS MMR_B_SR,
+				SUM(MM_A_SH) AS MM_A_SH,
+				SUM(MM_A_RE) AS MM_A_RE,
+				SUM(MM_A_SR) AS MM_A_SR,
+				SUM(MM_B_SH) AS MM_B_SH,
+				SUM(MM_B_RE) AS MM_B_RE,
+				SUM(MM_B_SR) AS MM_B_SR,
+				SUM(MV_A_SH) AS MV_A_SH,
+				SUM(MV_A_RE) AS MV_A_RE,
+				SUM(MV_A_SR) AS MV_A_SR,
+				SUM(MV_B_SH) AS MV_B_SH,
+				SUM(MV_B_RE) AS MV_B_RE,
+				SUM(MV_B_SR) AS MV_B_SR,
+				SUM(MENA_A_SH) AS MENA_A_SH,
+				SUM(MENA_A_RE) AS MENA_A_RE,
+				SUM(MENA_A_SR) AS MENA_A_SR,
+				SUM(MENA_B_SH) AS MENA_B_SH,
+				SUM(MENA_B_RE) AS MENA_B_RE,
+				SUM(MENA_B_SR) AS MENA_B_SR,
+				SUM(MENAC_A_SH) AS MENAC_A_SH,
+				SUM(MENAC_A_RE) AS MENAC_A_RE,
+				SUM(MENAC_A_SR) AS MENAC_A_SR,
+				SUM(MENAC_B_SH) AS MENAC_B_SH,
+				SUM(MENAC_B_RE) AS MENAC_B_RE,
+				SUM(MENAC_B_SR) AS MENAC_B_SR,
+				SUM(JEL_A_SH) AS JEL_A_SH,
+				SUM(JEL_A_RE) AS JEL_A_RE,
+				SUM(JEL_A_SR) AS JEL_A_SR,
+				SUM(JEL_B_SH) AS JEL_B_SH,
+				SUM(JEL_B_RE) AS JEL_B_RE,
+				SUM(JEL_B_SR) AS JEL_B_SR,
+				SUM(JEI_A_SH) AS JEI_A_SH,
+				SUM(JEI_A_RE) AS JEI_A_RE,
+				SUM(JEI_A_SR) AS JEI_A_SR,
+				SUM(JEI_B_SH) AS JEI_B_SH,
+				SUM(JEI_B_RE) AS JEI_B_RE,
+				SUM(JEI_B_SR) AS JEI_B_SR,
+				SUM(JEI_C_SH) AS JEI_C_SH,
+				SUM(JEI_C_RE) AS JEI_C_RE,
+				SUM(JEI_C_SR) AS JEI_C_SR,
+				SUM(JEI_D_SH) AS JEI_D_SH,
+				SUM(JEI_D_RE) AS JEI_D_RE,
+				SUM(JEI_D_SR) AS JEI_D_SR,
+				SUM(HEPAL_SH) AS HEPAL_SH,
+				SUM(HEPAL_RE) AS HEPAL_RE,
+				SUM(HEPAL_SR) AS HEPAL_SR,
+				SUM(HEPAI_A_SH) AS HEPAI_A_SH,
+				SUM(HEPAI_A_RE) AS HEPAI_A_RE,
+				SUM(HEPAI_A_SR) AS HEPAI_A_SR,
+				SUM(HEPAI_B_SH) AS HEPAI_B_SH,
+				SUM(HEPAI_B_RE) AS HEPAI_B_RE,
+				SUM(HEPAI_B_SR) AS HEPAI_B_SR
+			from EXP_ROUTINEVACC_6_1 EXPVACC
+			INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside'
+			<where>
+				<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+					and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+						to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+				</if>  
+				<if test="localCode !=null  and localCode !=''">
+					AND LOCALCODE = #{localCode}
+				</if> 
+			</where>	
+			group by e.LABEL)
+		GROUP BY LABEL
+	</select>
+	
+	<!-- 获取map数据结束 -->
+	
+	
+	
+	<!-- 常规免疫接种情况6-1汇总表 开始  -->	
+	
+	<!-- selectResideList开始 -->
+	<select id="selectResideList" resultType="java.util.Map"> 
+		SELECT *			
+			from sys_dict t			
+		<where> 
+			t.type = 'reside'
+		</where> 
+	</select> 
+	<!-- selectResideList结束 -->	
+	
+	<!-- selectCommunityList开始 -->
+	<select id="selectCommunityList" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			sys_community
+		<where>
+			<if test="officeStr !=null and officeStr != ''">
+				AND LOCALCODE = #{officeStr}
+			</if>
+		</where>
+	</select>
+	<!-- selectCommunityList结束 -->	
+	
+	<!-- selectCommunityListNetVersion查询互联网版本社区信息开始 -->
+	<select id="selectCommunityListNetVersion" resultType="java.util.Map">
+		SELECT
+			DISTINCT T1.LOCALCODE
+		FROM
+			sys_community T1
+	</select>
+	<!-- selectCommunityListNetVersion查询互联网版本社区信息结束 -->
+	
+	<!-- selectSqlQuery开始(sql_query开始)-->
+	<select id="selectSqlQuery" resultType="java.util.Map">
+		SELECT
+			months_between(trunc(add_months(sysdate,#{monthNum}),'MM') - 1/24/60/60, t.birthday) || '' as mon_age, 
+			months_between(trunc(add_months(sysdate,#{monthNum}),'MM') - 1/24/60/60, t.createdate) || '' as create_age, 
+			trunc(t.birthday) as aac,
+			t.*
+		FROM
+			bs_child_baseinfo t
+		<where>
+			months_between(trunc(add_months(sysdate,#{monthNum}),'MM') - 1/24/60/60, t.birthday)&lt;96 
+			AND t.LOCALCODE = #{officeStr}
+		</where>
+	</select> 
+	<!-- selectSqlQuery结束 -->
+	
+	<!-- selectSqlList开始 -->
+	<select id="selectSqlList" resultType="java.util.Map">
+		SELECT
+			t.vaccineid,
+			t.dosage,
+			trunc(t.vaccinatedate) as bbc, 
+			t.nid as vacc_pin ,t.vacc_name,
+			t.office,
+			t.source,
+			months_between(TRUNC (ADD_MONTHS(SYSDATE ,#{monthNum}), 'MM') - 1 / 24 / 60 / 60,t.vaccinatedate)||'' as  dif_mon
+		FROM 
+			bs_child_vaccinaterecord t
+		<where>
+			t.status='1'
+			<if test="id != null and id != ''">
+				and t.childid=#{id}
+				AND T.VACCINATEDATE &lt; TRUNC (ADD_MONTHS(SYSDATE ,#{monthNum}), 'MM') - 1 / 24 / 60 / 60
+			</if>
+		</where>
+	</select>
+	<!-- selectSqlList结束 -->
+
+	<!-- selectSqlYzrq开始 -->
+	<select id="selectSqlYzrq" resultType="java.util.Map">
+		SELECT
+			t.ID,
+			tt.childcode
+		FROM
+			bs_manage_vaccinenum t,
+			bs_child_baseinfo tt
+		<where>
+			t.ID NOT IN( SELECT nid FROM bs_child_vaccinaterecord WHERE childid=
+			<if test="id != null and id !=''">
+				#{param1} and status='1') AND tt.id=#{param1} AND (months_between(add_months(tt.birthday,t.mouage+13),TO_DATE(to_char("ADD_MONTHS"(SYSDATE, #{monthNum}),'yyyy-MM'),'yyyy-MM'))||'')>=0
+			</if>
+		</where>
+	</select>
+	<!-- selectSqlYzrq结束 -->
+	
+	
+	<!-- selectSqlListSpecial开始 -->
+		<select id="selectSqlListSpecial" resultType="java.util.Map">
+			SELECT
+				t.vaccineid,
+				t.dosage,
+				t.office,
+				t.source,
+				trunc(t.vaccinatedate) as bbc, 
+				nid as vacc_pin ,t.vacc_name ,
+				months_between(TRUNC (ADD_MONTHS(SYSDATE ,#{monthNum1}), 'MM') - 1 / 24 / 60 / 60,t.vaccinatedate)||'' as  dif_mon
+			FROM 
+				bs_child_vaccinaterecord t
+			<where>
+				t.status='1'
+				<if test="id != null and id != ''">
+					and t.childid=#{id}
+					AND T.VACCINATEDATE &lt; TRUNC (ADD_MONTHS(SYSDATE ,#{monthNum2}), 'MM') - 1 / 24 / 60 / 60
+				</if>
+			</where>
+		</select>
+	<!-- selectSqlListSpecial结束 -->
+	
+	<!-- get_yuefendayu84_Num开始 -->
+	<!-- 查询月份大于84个月且在给定的统计月时间范围内接种了白破疫苗的记录数 -->
+	<select id="get_yuefendayu84_Num" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM BS_CHILD_BASEINFO BB WHERE BB."ID" IN (
+			SELECT AA.CHILDID FROM BS_CHILD_VACCINATERECORD AA
+			WHERE AA.NID = #{nid} AND AA.VACCINATEDATE 
+			BETWEEN "TO_DATE"('2017-12-01 00:00:00', 'yyyy-MM-dd HH24:mi:ss')
+				AND "TO_DATE"('2017-12-31 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			) AND months_between(trunc(add_months(sysdate,#{monthNum}),'MM') - 1/24/60/60, BB.BIRTHDAY) > 84 
+			AND BB.RESIDE = #{reside} AND BB.AREA = #{area}
+	</select>
+	<!-- get_yuefendayu84_Num结束 -->
+	
+	
+	<!-- 常规免疫接种情况6-1汇总表 应种实种详细儿童个案查询 -->
+	<select id="queryDetailInfo" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					TT.*, ROWNUM RN
+				FROM
+					(
+					SELECT 
+						BB.ID AS CHILDID,BB.CHILDCODE,BB.CHILDNAME, BB.BIRTHDAY, BB.GUARDIANNAME, BB.GUARDIANMOBILE, BB.FATHER, BB.FATHERPHONE 
+					FROM 
+						BS_CHILD_BASEINFO BB LEFT JOIN EXP_ROUTINEVACC_6_1_DETAIL AA ON AA.CHILDCODE = BB.CHILDCODE
+					WHERE AA.UNIT_NAME = #{community} AND AA.VACC_CODE = #{vaccNum} AND AA."TYPE" = #{type} 
+					AND TO_DATE(AA.YEAR_MONTH, 'yyyy-MM') BETWEEN TO_DATE(#{startTime}, 'yyyy-MM') AND TO_DATE(#{endTime}, 'yyyy-MM')
+				) TT
+				WHERE
+					ROWNUM &lt;= #{endRowNum}
+			)
+		WHERE
+			RN &gt;= #{startRowNum}
+	</select>
+	
+	<!-- 常规免疫接种情况6-1汇总表 应种实种详细儿童个案查询总数-->
+	<select id="queryDetailInfoCount" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM(
+			SELECT 
+				BB.ID AS CHILDID,BB.CHILDCODE,BB.CHILDNAME, BB.BIRTHDAY, BB.GUARDIANNAME, BB.GUARDIANMOBILE, BB.FATHER, BB.FATHERPHONE 
+			FROM 
+				BS_CHILD_BASEINFO BB LEFT JOIN EXP_ROUTINEVACC_6_1_DETAIL AA ON AA.CHILDCODE = BB.CHILDCODE
+			WHERE AA.UNIT_NAME = #{community} AND AA.VACC_CODE = #{vaccNum} AND AA."TYPE" = #{type} 
+			AND TO_DATE(AA.YEAR_MONTH, 'yyyy-MM') BETWEEN TO_DATE(#{startTime}, 'yyyy-MM') AND TO_DATE(#{endTime}, 'yyyy-MM')
+		)
+	</select>
+	
+	
+	<!-- 常规免疫接种情况6-1汇总表 获取按社区划分的所有应种儿童个案信息-->
+	<select id="queryShouldDetailInfo" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					TT.*, ROWNUM RN
+				FROM(
+					SELECT 
+						BB.ID AS CHILDID,BB.CHILDCODE,BB.CHILDNAME, BB.BIRTHDAY, BB.GUARDIANNAME, BB.GUARDIANMOBILE, BB.FATHER, BB.FATHERPHONE 
+					FROM 
+						BS_CHILD_BASEINFO BB LEFT JOIN EXP_ROUTINEVACC_6_1_DETAIL AA ON AA.CHILDCODE = BB.CHILDCODE
+					WHERE AA.UNIT_NAME = #{community} AND AA.VACC_CODE = #{vaccNum} AND (AA.TYPE = '1' OR AA.TYPE = '3')
+					AND TO_DATE(AA.YEAR_MONTH, 'yyyy-MM') BETWEEN TO_DATE(#{startTime}, 'yyyy-MM') AND TO_DATE(#{endTime}, 'yyyy-MM')
+					) TT
+				WHERE
+					ROWNUM &lt;= #{endRowNum}
+			)
+		WHERE
+			RN &gt;= #{startRowNum}
+	</select>
+	
+	
+	<!-- 常规免疫接种情况6-1汇总表 获取按社区划分的所有应种儿童个案信息总数-->
+	<select id="queryShouldDetailInfoCount" resultType="java.lang.Integer">
+		SELECT 
+			COUNT(*)
+		FROM 
+			BS_CHILD_BASEINFO BB LEFT JOIN EXP_ROUTINEVACC_6_1_DETAIL AA ON AA.CHILDCODE = BB.CHILDCODE
+		WHERE AA.UNIT_NAME = #{community} AND AA.VACC_CODE = #{vaccNum} AND (AA.TYPE = '1' OR AA.TYPE = '3')
+		AND TO_DATE(AA.YEAR_MONTH, 'yyyy-MM') BETWEEN TO_DATE(#{startTime}, 'yyyy-MM') AND TO_DATE(#{endTime}, 'yyyy-MM')
+	</select>
+	
+	<!-- 根据儿童ID查询该儿童接种最后一针活苗的接种时间  -->
+	<select id="getLastLiveVaccDate" resultType="java.util.Date">
+		SELECT T2.VACCINATEDATE FROM BS_CHILD_VACCINATERECORD T2 
+		WHERE 
+			T2.VACCINEID IN(SELECT T1."ID" FROM BS_MANAGE_VACCINE T1 WHERE T1.LIVE = '1') 
+			AND T2.CHILDID = #{childId}
+		 	AND ROWNUM = 1 ORDER BY T2.VACCINATEDATE DESC 
+	</select>
+	
+	<!-- 根据儿童ID查询该儿童接种最后一针疫苗的接种时间  -->
+	<select id="getLastVaccDate" resultType="java.util.Date">
+		SELECT T2.VACCINATEDATE FROM BS_CHILD_VACCINATERECORD T2 
+		WHERE
+			T2.CHILDID = #{childId}
+		 	AND ROWNUM = 1 ORDER BY T2.VACCINATEDATE DESC 
+	</select>
+	
+	
+	<!-- 常规免疫接种情况6-1汇总表 查询截止到查询时间超过3个月仍应种未种的儿童个案 -->
+	<select id="getyzwzData" resultType="java.util.Map">
+		SELECT
+			* 
+		FROM(
+			SELECT 
+				TT.*,ROWNUM RN
+			FROM(
+				SELECT
+					BB. ID AS CHILDID,
+					BB.CHILDCODE,
+					BB.CHILDNAME,
+					BB.BIRTHDAY,
+					BB.GUARDIANNAME,
+					BB.GUARDIANMOBILE,
+					BB.FATHER,
+					BB.FATHERPHONE
+				FROM
+					BS_CHILD_BASEINFO BB
+				WHERE
+					BB.CHILDCODE IN(
+						SELECT 
+							T1.CHILDCODE 
+						FROM 
+							EXP_ROUTINEVACC_6_1_DETAIL T1 
+						WHERE 
+							T1.UNIT_NAME = #{community}
+							AND T1.VACC_CODE = #{vaccNum}
+							AND T1."TYPE" = #{type} 
+							AND TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; TO_DATE (#{timeStr,jdbcType=VARCHAR}, 'yyyy-MM') 
+							AND T1.CHILDCODE IN(
+								SELECT 
+									T2.CHILDCODE 
+								FROM 
+									EXP_ROUTINEVACC_6_1_DETAIL T2 
+								WHERE T2.UNIT_NAME = #{community}
+								AND T2.VACC_CODE = #{vaccNum}
+								AND T2."TYPE" = #{type} 
+								AND TO_DATE (T2.YEAR_MONTH, 'yyyy-MM') = TO_DATE (to_char(add_months(trunc(sysdate),-1),'yyyy-MM'), 'yyyy-MM')
+						)
+					)
+				) TT
+			WHERE ROWNUM &lt;= #{endRowNum}
+			)
+		WHERE 
+			RN &gt;= #{startRowNum}
+	</select>
+	
+	<!-- 常规免疫接种情况6-1汇总表 查询截止到查询时间超过3个月仍应种未种的儿童个案记录总数 -->
+	<select id="getyzwzDataCount" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM(
+			SELECT
+			BB. ID AS CHILDID,
+			BB.CHILDCODE,
+			BB.CHILDNAME,
+			BB.BIRTHDAY,
+			BB.GUARDIANNAME,
+			BB.GUARDIANMOBILE,
+			BB.FATHER,
+			BB.FATHERPHONE
+		FROM
+			BS_CHILD_BASEINFO BB
+		WHERE
+			BB.CHILDCODE IN(
+				SELECT 
+					T1.CHILDCODE 
+				FROM 
+					EXP_ROUTINEVACC_6_1_DETAIL T1 
+				WHERE 
+					T1.UNIT_NAME = #{community}
+					AND T1.VACC_CODE = #{vaccNum}
+					AND T1."TYPE" = #{type} 
+					AND TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; TO_DATE (#{timeStr}, 'yyyy-MM') 
+					AND T1.CHILDCODE IN(
+						SELECT 
+							T2.CHILDCODE 
+						FROM 
+							EXP_ROUTINEVACC_6_1_DETAIL T2 
+						WHERE T2.UNIT_NAME = #{community}
+						AND T2.VACC_CODE = #{vaccNum}
+						AND T2."TYPE" = #{type} 
+						AND TO_DATE (T2.YEAR_MONTH, 'yyyy-MM') = TO_DATE (to_char(add_months(trunc(sysdate),-1),'yyyy-MM'), 'yyyy-MM')
+				)
+			)
+		)
+	</select>
+	
+	<!-- 查询指定月份指定站点是否已生成数据 -->
+	<select id="countDataByMonthAndLocalCode" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			EXP_ROUTINEVACC_6_1 T1
+		WHERE 
+			T1.LOCALCODE = #{localCode}
+			AND T1.YEAR_MONTH = TO_DATE(#{yearMonth}, 'yyyy-MM')
+	</select>
+	
+	<!-- 常规免疫接种情况6-1汇总表 结束  -->
+
+
+	
+	<!-- 国家免疫规划疫苗常规接种情况报表6-1 开始 -->
+	
+	<!-- nationalRoutineVaccWithReside6_1开始 -->
+	<select id="nationalRoutineVaccWithReside6_1" resultType="java.util.Map">
+		SELECT
+			UNIT_CODE,
+			UNIT_NAME,
+			SUM (HEPB_A_SH) AS HEPB_A_SH,
+			SUM (HEPB_A_RE) AS HEPB_A_RE,
+			SUM (HEPB_AA_SH) AS HEPB_AA_SH,
+			SUM (HEPB_AA_RE) AS HEPB_AA_RE,
+			SUM (HEPB_AA_SR) AS HEPB_AA_SR,
+			SUM (HEPB_B_SH) AS HEPB_B_SH,
+			SUM (HEPB_B_RE) AS HEPB_B_RE,
+			SUM (HEPB_B_SR) AS HEPB_B_SR,
+			SUM (HEPB_C_SH) AS HEPB_C_SH,
+			SUM (HEPB_C_RE) AS HEPB_C_RE,
+			SUM (HEPB_C_SR) AS HEPB_C_SR,
+			SUM (BCG_SH) AS BCG_SH,
+			SUM (BCG_RE) AS BCG_RE,
+			SUM (BCG_SR) AS BCG_SR,
+			SUM (PV_A_SH) AS PV_A_SH,
+			SUM (PV_A_RE) AS PV_A_RE,
+			SUM (PV_A_SR) AS PV_A_SR,
+			SUM (PV_B_SH) AS PV_B_SH,
+			SUM (PV_B_RE) AS PV_B_RE,
+			SUM (PV_B_SR) AS PV_B_SR,
+			SUM (PV_C_SH) AS PV_C_SH,
+			SUM (PV_C_RE) AS PV_C_RE,
+			SUM (PV_C_SR) AS PV_C_SR,
+			SUM (PV_D_SH) AS PV_D_SH,
+			SUM (PV_D_RE) AS PV_D_RE,
+			SUM (PV_D_SR) AS PV_D_SR,
+			SUM (DTP_A_SH) AS DTP_A_SH,
+			SUM (DTP_A_RE) AS DTP_A_RE,
+			SUM (DTP_A_SR) AS DTP_A_SR,
+			SUM (DTP_B_SH) AS DTP_B_SH,
+			SUM (DTP_B_RE) AS DTP_B_RE,
+			SUM (DTP_B_SR) AS DTP_B_SR,
+			SUM (DTP_C_SH) AS DTP_C_SH,
+			SUM (DTP_C_RE) AS DTP_C_RE,
+			SUM (DTP_C_SR) AS DTP_C_SR,
+			SUM (DTP_D_SH) AS DTP_D_SH,
+			SUM (DTP_D_RE) AS DTP_D_RE,
+			SUM (DTP_D_SR) AS DTP_D_SR,
+			SUM (DT_SH) AS DT_SH,
+			SUM (DT_RE) AS DT_RE,
+			SUM (DT_SR) AS DT_SR,
+			SUM (MR_A_SH) AS MR_A_SH,
+			SUM (MR_A_RE) AS MR_A_RE,
+			SUM (MR_A_SR) AS MR_A_SR,
+			SUM (MR_B_SH) AS MR_B_SH,
+			SUM (MR_B_RE) AS MR_B_RE,
+			SUM (MR_B_SR) AS MR_B_SR,
+			SUM (MMR_A_SH) AS MMR_A_SH,
+			SUM (MMR_A_RE) AS MMR_A_RE,
+			SUM (MMR_A_SR) AS MMR_A_SR,
+			SUM (MMR_B_SH) AS MMR_B_SH,
+			SUM (MMR_B_RE) AS MMR_B_RE,
+			SUM (MMR_B_SR) AS MMR_B_SR,
+			SUM (MM_A_SH) AS MM_A_SH,
+			SUM (MM_A_RE) AS MM_A_RE,
+			SUM (MM_A_SR) AS MM_A_SR,
+			SUM (MM_B_SH) AS MM_B_SH,
+			SUM (MM_B_RE) AS MM_B_RE,
+			SUM (MM_B_SR) AS MM_B_SR,
+			SUM (MV_A_SH) AS MV_A_SH,
+			SUM (MV_A_RE) AS MV_A_RE,
+			SUM (MV_A_SR) AS MV_A_SR,
+			SUM (MV_B_SH) AS MV_B_SH,
+			SUM (MV_B_RE) AS MV_B_RE,
+			SUM (MV_B_SR) AS MV_B_SR,
+			SUM (MENA_A_SH) AS MENA_A_SH,
+			SUM (MENA_A_RE) AS MENA_A_RE,
+			SUM (MENA_A_SR) AS MENA_A_SR,
+			SUM (MENA_B_SH) AS MENA_B_SH,
+			SUM (MENA_B_RE) AS MENA_B_RE,
+			SUM (MENA_B_SR) AS MENA_B_SR,
+			SUM (MENAC_A_SH) AS MENAC_A_SH,
+			SUM (MENAC_A_RE) AS MENAC_A_RE,
+			SUM (MENAC_A_SR) AS MENAC_A_SR,
+			SUM (MENAC_B_SH) AS MENAC_B_SH,
+			SUM (MENAC_B_RE) AS MENAC_B_RE,
+			SUM (MENAC_B_SR) AS MENAC_B_SR,
+			SUM (JEL_A_SH) AS JEL_A_SH,
+			SUM (JEL_A_RE) AS JEL_A_RE,
+			SUM (JEL_A_SR) AS JEL_A_SR,
+			SUM (JEL_B_SH) AS JEL_B_SH,
+			SUM (JEL_B_RE) AS JEL_B_RE,
+			SUM (JEL_B_SR) AS JEL_B_SR,
+			SUM (JEI_A_SH) AS JEI_A_SH,
+			SUM (JEI_A_RE) AS JEI_A_RE,
+			SUM (JEI_A_SR) AS JEI_A_SR,
+			SUM (JEI_B_SH) AS JEI_B_SH,
+			SUM (JEI_B_RE) AS JEI_B_RE,
+			SUM (JEI_B_SR) AS JEI_B_SR,
+			SUM (JEI_C_SH) AS JEI_C_SH,
+			SUM (JEI_C_RE) AS JEI_C_RE,
+			SUM (JEI_C_SR) AS JEI_C_SR,
+			SUM (JEI_D_SH) AS JEI_D_SH,
+			SUM (JEI_D_RE) AS JEI_D_RE,
+			SUM (JEI_D_SR) AS JEI_D_SR,
+			SUM (HEPAL_SH) AS HEPAL_SH,
+			SUM (HEPAL_RE) AS HEPAL_RE,
+			SUM (HEPAL_SR) AS HEPAL_SR,
+			SUM (HEPAI_A_SH) AS HEPAI_A_SH,
+			SUM (HEPAI_A_RE) AS HEPAI_A_RE,
+			SUM (HEPAI_A_SR) AS HEPAI_A_SR,
+			SUM (HEPAI_B_SH) AS HEPAI_B_SH,
+			SUM (HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM (HEPAI_B_SR) AS HEPAI_B_SR
+		FROM
+			EXP_ROUTINEVACC_6_1 EXPVACC
+		INNER JOIN SYS_DICT E ON EXPVACC.RESIDE = E.VALUE AND E.TYPE = 'reside'
+		<where>
+			<if test="reside !=null and reside !=''">
+	        	 AND EXPVACC.RESIDE = #{reside}
+	        </if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and
+				to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if> 
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>
+		</where> 	
+		GROUP BY UNIT_CODE,UNIT_NAME
+	</select>
+	<!-- nationalRoutineVaccWithReside6_1结束 -->
+	
+	<!-- nationalRoutineVaccNoReside6_1开始 -->
+	<select id="nationalRoutineVaccNoReside6_1" resultType="java.util.Map">
+		SELECT
+			UNIT_CODE,
+			UNIT_NAME,
+			SUM (HEPB_A_SH) AS HEPB_A_SH,
+			SUM (HEPB_A_RE) AS HEPB_A_RE,
+			SUM (HEPB_AA_SH) AS HEPB_AA_SH,
+			SUM (HEPB_AA_RE) AS HEPB_AA_RE,
+			SUM (HEPB_AA_SR) AS HEPB_AA_SR,
+			SUM (HEPB_B_SH) AS HEPB_B_SH,
+			SUM (HEPB_B_RE) AS HEPB_B_RE,
+			SUM (HEPB_B_SR) AS HEPB_B_SR,
+			SUM (HEPB_C_SH) AS HEPB_C_SH,
+			SUM (HEPB_C_RE) AS HEPB_C_RE,
+			SUM (HEPB_C_SR) AS HEPB_C_SR,
+			SUM (BCG_SH) AS BCG_SH,
+			SUM (BCG_RE) AS BCG_RE,
+			SUM (BCG_SR) AS BCG_SR,
+			SUM (PV_A_SH) AS PV_A_SH,
+			SUM (PV_A_RE) AS PV_A_RE,
+			SUM (PV_A_SR) AS PV_A_SR,
+			SUM (PV_B_SH) AS PV_B_SH,
+			SUM (PV_B_RE) AS PV_B_RE,
+			SUM (PV_B_SR) AS PV_B_SR,
+			SUM (PV_C_SH) AS PV_C_SH,
+			SUM (PV_C_RE) AS PV_C_RE,
+			SUM (PV_C_SR) AS PV_C_SR,
+			SUM (PV_D_SH) AS PV_D_SH,
+			SUM (PV_D_RE) AS PV_D_RE,
+			SUM (PV_D_SR) AS PV_D_SR,
+			SUM (DTP_A_SH) AS DTP_A_SH,
+			SUM (DTP_A_RE) AS DTP_A_RE,
+			SUM (DTP_A_SR) AS DTP_A_SR,
+			SUM (DTP_B_SH) AS DTP_B_SH,
+			SUM (DTP_B_RE) AS DTP_B_RE,
+			SUM (DTP_B_SR) AS DTP_B_SR,
+			SUM (DTP_C_SH) AS DTP_C_SH,
+			SUM (DTP_C_RE) AS DTP_C_RE,
+			SUM (DTP_C_SR) AS DTP_C_SR,
+			SUM (DTP_D_SH) AS DTP_D_SH,
+			SUM (DTP_D_RE) AS DTP_D_RE,
+			SUM (DTP_D_SR) AS DTP_D_SR,
+			SUM (DT_SH) AS DT_SH,
+			SUM (DT_RE) AS DT_RE,
+			SUM (DT_SR) AS DT_SR,
+			SUM (MR_A_SH) AS MR_A_SH,
+			SUM (MR_A_RE) AS MR_A_RE,
+			SUM (MR_A_SR) AS MR_A_SR,
+			SUM (MR_B_SH) AS MR_B_SH,
+			SUM (MR_B_RE) AS MR_B_RE,
+			SUM (MR_B_SR) AS MR_B_SR,
+			SUM (MMR_A_SH) AS MMR_A_SH,
+			SUM (MMR_A_RE) AS MMR_A_RE,
+			SUM (MMR_A_SR) AS MMR_A_SR,
+			SUM (MMR_B_SH) AS MMR_B_SH,
+			SUM (MMR_B_RE) AS MMR_B_RE,
+			SUM (MMR_B_SR) AS MMR_B_SR,
+			SUM (MM_A_SH) AS MM_A_SH,
+			SUM (MM_A_RE) AS MM_A_RE,
+			SUM (MM_A_SR) AS MM_A_SR,
+			SUM (MM_B_SH) AS MM_B_SH,
+			SUM (MM_B_RE) AS MM_B_RE,
+			SUM (MM_B_SR) AS MM_B_SR,
+			SUM (MV_A_SH) AS MV_A_SH,
+			SUM (MV_A_RE) AS MV_A_RE,
+			SUM (MV_A_SR) AS MV_A_SR,
+			SUM (MV_B_SH) AS MV_B_SH,
+			SUM (MV_B_RE) AS MV_B_RE,
+			SUM (MV_B_SR) AS MV_B_SR,
+			SUM (MENA_A_SH) AS MENA_A_SH,
+			SUM (MENA_A_RE) AS MENA_A_RE,
+			SUM (MENA_A_SR) AS MENA_A_SR,
+			SUM (MENA_B_SH) AS MENA_B_SH,
+			SUM (MENA_B_RE) AS MENA_B_RE,
+			SUM (MENA_B_SR) AS MENA_B_SR,
+			SUM (MENAC_A_SH) AS MENAC_A_SH,
+			SUM (MENAC_A_RE) AS MENAC_A_RE,
+			SUM (MENAC_A_SR) AS MENAC_A_SR,
+			SUM (MENAC_B_SH) AS MENAC_B_SH,
+			SUM (MENAC_B_RE) AS MENAC_B_RE,
+			SUM (MENAC_B_SR) AS MENAC_B_SR,
+			SUM (JEL_A_SH) AS JEL_A_SH,
+			SUM (JEL_A_RE) AS JEL_A_RE,
+			SUM (JEL_A_SR) AS JEL_A_SR,
+			SUM (JEL_B_SH) AS JEL_B_SH,
+			SUM (JEL_B_RE) AS JEL_B_RE,
+			SUM (JEL_B_SR) AS JEL_B_SR,
+			SUM (JEI_A_SH) AS JEI_A_SH,
+			SUM (JEI_A_RE) AS JEI_A_RE,
+			SUM (JEI_A_SR) AS JEI_A_SR,
+			SUM (JEI_B_SH) AS JEI_B_SH,
+			SUM (JEI_B_RE) AS JEI_B_RE,
+			SUM (JEI_B_SR) AS JEI_B_SR,
+			SUM (JEI_C_SH) AS JEI_C_SH,
+			SUM (JEI_C_RE) AS JEI_C_RE,
+			SUM (JEI_C_SR) AS JEI_C_SR,
+			SUM (JEI_D_SH) AS JEI_D_SH,
+			SUM (JEI_D_RE) AS JEI_D_RE,
+			SUM (JEI_D_SR) AS JEI_D_SR,
+			SUM (HEPAL_SH) AS HEPAL_SH,
+			SUM (HEPAL_RE) AS HEPAL_RE,
+			SUM (HEPAL_SR) AS HEPAL_SR,
+			SUM (HEPAI_A_SH) AS HEPAI_A_SH,
+			SUM (HEPAI_A_RE) AS HEPAI_A_RE,
+			SUM (HEPAI_A_SR) AS HEPAI_A_SR,
+			SUM (HEPAI_B_SH) AS HEPAI_B_SH,
+			SUM (HEPAI_B_RE) AS HEPAI_B_RE,
+			SUM (HEPAI_B_SR) AS HEPAI_B_SR
+		FROM
+			EXP_ROUTINEVACC_6_1 EXPVACC
+		INNER JOIN SYS_DICT E ON EXPVACC.RESIDE = E.VALUE AND E.TYPE = 'reside'
+		<where>			
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and
+				to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if> 
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>
+		</where> 	
+		GROUP BY UNIT_CODE,UNIT_NAME
+	</select>
+	<!-- nationalRoutineVaccNoReside6_1结束 -->
+	
+	<!-- 计算国家6-1现有本地疫苗统计数据开始 -->
+	<select id="getExistLocalDataList" resultType="java.util.Map">
+		SELECT
+			SUM(HEPB_A_SH) AS HEPB_A_SH_LOCAL,
+			SUM(HEPB_A_RE) AS HEPB_A_RE_LOCAL,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH_LOCAL,
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE_LOCAL,
+			SUM(HEPB_B_SH) AS HEPB_B_SH_LOCAL,
+			SUM(HEPB_B_RE) AS HEPB_B_RE_LOCAL,
+			SUM(HEPB_C_SH) AS HEPB_C_SH_LOCAL,
+			SUM(HEPB_C_RE) AS HEPB_C_RE_LOCAL,
+			SUM(BCG_SH) AS BCG_SH_LOCAL,
+			SUM(BCG_RE) AS BCG_RE_LOCAL,
+			SUM(PV_A_SH) AS PV_A_SH_LOCAL,
+			SUM(PV_A_RE) AS PV_A_RE_LOCAL,
+			SUM(PV_B_SH) AS PV_B_SH_LOCAL,
+			SUM(PV_B_RE) AS PV_B_RE_LOCAL,
+			SUM(PV_C_SH) AS PV_C_SH_LOCAL,
+			SUM(PV_C_RE) AS PV_C_RE_LOCAL,
+			SUM(PV_D_SH) AS PV_D_SH_LOCAL,
+			SUM(PV_D_RE) AS PV_D_RE_LOCAL,  
+			SUM(DTP_A_SH) AS DTP_A_SH_LOCAL,
+			SUM(DTP_A_RE) AS DTP_A_RE_LOCAL,
+			SUM(DTP_B_SH) AS DTP_B_SH_LOCAL,
+			SUM(DTP_B_RE) AS DTP_B_RE_LOCAL,
+			SUM(DTP_C_SH) AS DTP_C_SH_LOCAL,
+			SUM(DTP_C_RE) AS DTP_C_RE_LOCAL,
+			SUM(DTP_D_SH) AS DTP_D_SH_LOCAL,
+			SUM(DTP_D_RE) AS DTP_D_RE_LOCAL,
+			SUM(DT_SH) AS DT_SH_LOCAL,
+			SUM(DT_RE) AS DT_RE_LOCAL,
+			SUM(MR_A_SH) AS MR_A_SH_LOCAL,
+			SUM(MR_A_RE) AS MR_A_RE_LOCAL,
+			SUM(MR_B_SH) AS MR_B_SH_LOCAL,
+			SUM(MR_B_RE) AS MR_B_RE_LOCAL,
+			SUM(MMR_A_SH) AS MMR_A_SH_LOCAL,
+			SUM(MMR_A_RE) AS MMR_A_RE_LOCAL,
+			SUM(MMR_B_SH) AS MMR_B_SH_LOCAL,
+			SUM(MMR_B_RE) AS MMR_B_RE_LOCAL,
+			SUM(MM_A_SH) AS MM_A_SH_LOCAL,
+			SUM(MM_A_RE) AS MM_A_RE_LOCAL,
+			SUM(MM_B_SH) AS MM_B_SH_LOCAL,
+			SUM(MM_B_RE) AS MM_B_RE_LOCAL,
+			SUM(MV_A_SH) AS MV_A_SH_LOCAL,
+			SUM(MV_A_RE) AS MV_A_RE_LOCAL,
+			SUM(MV_B_SH) AS MV_B_SH_LOCAL,
+			SUM(MV_B_RE) AS MV_B_RE_LOCAL,
+			SUM(MENA_A_SH) AS MENA_A_SH_LOCAL,
+			SUM(MENA_A_RE) AS MENA_A_RE_LOCAL,
+			SUM(MENA_B_SH) AS MENA_B_SH_LOCAL,
+			SUM(MENA_B_RE) AS MENA_B_RE_LOCAL,
+			SUM(MENAC_A_SH) AS MENAC_A_SH_LOCAL,
+			SUM(MENAC_A_RE) AS MENAC_A_RE_LOCAL,
+			SUM(MENAC_B_SH) AS MENAC_B_SH_LOCAL,
+			SUM(MENAC_B_RE) AS MENAC_B_RE_LOCAL,
+			SUM(JEL_A_SH) AS JEL_A_SH_LOCAL,
+			SUM(JEL_A_RE) AS JEL_A_RE_LOCAL,
+			SUM(JEL_B_SH) AS JEL_B_SH_LOCAL,
+			SUM(JEL_B_RE) AS JEL_B_RE_LOCAL,
+			SUM(JEI_A_SH) AS JEI_A_SH_LOCAL,
+			SUM(JEI_A_RE) AS JEI_A_RE_LOCAL,
+			SUM(JEI_B_SH) AS JEI_B_SH_LOCAL,
+			SUM(JEI_B_RE) AS JEI_B_RE_LOCAL,
+			SUM(JEI_C_SH) AS JEI_C_SH_LOCAL,
+			SUM(JEI_C_RE) AS JEI_C_RE_LOCAL,
+			SUM(JEI_D_SH) AS JEI_D_SH_LOCAL,
+			SUM(JEI_D_RE) AS JEI_D_RE_LOCAL,
+			SUM(HEPAL_SH) AS HEPAL_A_SH_LOCAL,
+			SUM(HEPAL_RE) AS HEPAL_A_RE_LOCAL,
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH_LOCAL,
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE_LOCAL,
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH_LOCAL,
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE_LOCAL
+		FROM
+			EXP_ROUTINEVACC_6_1 EXPVACC
+			INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside'
+			AND e.TYPE = 'reside' AND e.VALUE = '1'
+		<where>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				year_month between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>  
+		</where>
+	</select>
+	<!-- 计算国家6-1现有本地疫苗统计数据结束 -->
+		
+		
+	<!-- 计算国家6-1现有流动疫苗统计数据开始 -->
+	<select id="getExistFlowDataList" resultType="java.util.Map">
+		SELECT
+			SUM(HEPB_A_SH) AS HEPB_A_SH_FLOW,
+			SUM(HEPB_A_RE) AS HEPB_A_RE_FLOW,
+			SUM(HEPB_AA_SH) AS HEPB_AA_SH_FLOW,
+			SUM(HEPB_AA_RE) AS HEPB_AA_RE_FLOW,
+			SUM(HEPB_B_SH) AS HEPB_B_SH_FLOW,
+			SUM(HEPB_B_RE) AS HEPB_B_RE_FLOW,
+			SUM(HEPB_C_SH) AS HEPB_C_SH_FLOW,
+			SUM(HEPB_C_RE) AS HEPB_C_RE_FLOW,
+			SUM(BCG_SH) AS BCG_SH_FLOW,
+			SUM(BCG_RE) AS BCG_RE_FLOW,
+			SUM(PV_A_SH) AS PV_A_SH_FLOW,
+			SUM(PV_A_RE) AS PV_A_RE_FLOW,
+			SUM(PV_B_SH) AS PV_B_SH_FLOW,
+			SUM(PV_B_RE) AS PV_B_RE_FLOW,
+			SUM(PV_C_SH) AS PV_C_SH_FLOW,
+			SUM(PV_C_RE) AS PV_C_RE_FLOW,
+			SUM(PV_D_SH) AS PV_D_SH_FLOW,
+			SUM(PV_D_RE) AS PV_D_RE_FLOW,  
+			SUM(DTP_A_SH) AS DTP_A_SH_FLOW,
+			SUM(DTP_A_RE) AS DTP_A_RE_FLOW,
+			SUM(DTP_B_SH) AS DTP_B_SH_FLOW,
+			SUM(DTP_B_RE) AS DTP_B_RE_FLOW,
+			SUM(DTP_C_SH) AS DTP_C_SH_FLOW,
+			SUM(DTP_C_RE) AS DTP_C_RE_FLOW,
+			SUM(DTP_D_SH) AS DTP_D_SH_FLOW,
+			SUM(DTP_D_RE) AS DTP_D_RE_FLOW,
+			SUM(DT_SH) AS DT_SH_FLOW,
+			SUM(DT_RE) AS DT_RE_FLOW,
+			SUM(MR_A_SH) AS MR_A_SH_FLOW,
+			SUM(MR_A_RE) AS MR_A_RE_FLOW,
+			SUM(MR_B_SH) AS MR_B_SH_FLOW,
+			SUM(MR_B_RE) AS MR_B_RE_FLOW,
+			SUM(MMR_A_SH) AS MMR_A_SH_FLOW,
+			SUM(MMR_A_RE) AS MMR_A_RE_FLOW,
+			SUM(MMR_B_SH) AS MMR_B_SH_FLOW,
+			SUM(MMR_B_RE) AS MMR_B_RE_FLOW,
+			SUM(MM_A_SH) AS MM_A_SH_FLOW,
+			SUM(MM_A_RE) AS MM_A_RE_FLOW,
+			SUM(MM_B_SH) AS MM_B_SH_FLOW,
+			SUM(MM_B_RE) AS MM_B_RE_FLOW,
+			SUM(MV_A_SH) AS MV_A_SH_FLOW,
+			SUM(MV_A_RE) AS MV_A_RE_FLOW,
+			SUM(MV_B_SH) AS MV_B_SH_FLOW,
+			SUM(MV_B_RE) AS MV_B_RE_FLOW,
+			SUM(MENA_A_SH) AS MENA_A_SH_FLOW,
+			SUM(MENA_A_RE) AS MENA_A_RE_FLOW,
+			SUM(MENA_B_SH) AS MENA_B_SH_FLOW,
+			SUM(MENA_B_RE) AS MENA_B_RE_FLOW,
+			SUM(MENAC_A_SH) AS MENAC_A_SH_FLOW,
+			SUM(MENAC_A_RE) AS MENAC_A_RE_FLOW,
+			SUM(MENAC_B_SH) AS MENAC_B_SH_FLOW,
+			SUM(MENAC_B_RE) AS MENAC_B_RE_FLOW,
+			SUM(JEL_A_SH) AS JEL_A_SH_FLOW,
+			SUM(JEL_A_RE) AS JEL_A_RE_FLOW,
+			SUM(JEL_B_SH) AS JEL_B_SH_FLOW,
+			SUM(JEL_B_RE) AS JEL_B_RE_FLOW,
+			SUM(JEI_A_SH) AS JEI_A_SH_FLOW,
+			SUM(JEI_A_RE) AS JEI_A_RE_FLOW,
+			SUM(JEI_B_SH) AS JEI_B_SH_FLOW,
+			SUM(JEI_B_RE) AS JEI_B_RE_FLOW,
+			SUM(JEI_C_SH) AS JEI_C_SH_FLOW,
+			SUM(JEI_C_RE) AS JEI_C_RE_FLOW,
+			SUM(JEI_D_SH) AS JEI_D_SH_FLOW,
+			SUM(JEI_D_RE) AS JEI_D_RE_FLOW,
+			SUM(HEPAL_SH) AS HEPAL_A_SH_FLOW,
+			SUM(HEPAL_RE) AS HEPAL_A_RE_FLOW,
+			SUM(HEPAI_A_SH) AS HEPAI_A_SH_FLOW,
+			SUM(HEPAI_A_RE) AS HEPAI_A_RE_FLOW,
+			SUM(HEPAI_B_SH) AS HEPAI_B_SH_FLOW,
+			SUM(HEPAI_B_RE) AS HEPAI_B_RE_FLOW
+		FROM
+			EXP_ROUTINEVACC_6_1 EXPVACC
+			INNER JOIN SYS_DICT e ON EXPVACC.RESIDE = e.VALUE AND e.TYPE = 'reside'
+			AND e.TYPE = 'reside' AND e.VALUE = '2'
+		<where>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				year_month between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="localCode !=null  and localCode !=''">
+				AND LOCALCODE = #{localCode}
+			</if>
+		</where>
+	</select>
+	<!-- 计算国家6-1现有流动疫苗统计数据结束 -->
+	
+	
+	<!-- 国家免疫规划疫苗常规接种情况报表6-1 结束 -->
+	
+	
+	<!-- 计算指定年的某个月份范围内EXP_ROUTINEVACC_6_1表数据总条数 -->
+	<select id="getDataCount61ByTimeRange" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			EXP_ROUTINEVACC_6_1 T1
+		<where>
+			<if test="localCode != null and localCode != ''">
+				T1.LOCALCODE = #{localCode}
+			</if>
+			<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+				AND T1.YEAR_MONTH BETWEEN TO_DATE(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') AND TO_DATE(#{endTime}, 'yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+	</select>
+	
+	<!-- 计算指定年的某个月份范围内EXP_ROUTINEVACC_6_1_Detail表数据总条数 -->
+	<select id="getDataCount61DetailByTimeRange" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			EXP_ROUTINEVACC_6_1_DETAIL T1
+		<where>
+			<if test="localCode != null and localCode != ''">
+				T1.LOCALCODE = #{localCode}
+			</if>
+			<if test="yearMonth != null and yearMonth != ''">
+				AND T1.YEAR_MONTH = #{yearMonth}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 清空指定年的某个月份范围内EXP_ROUTINEVACC_6_1表数据总条数 -->
+	<select id="clearDataCount61ByTimeRange" resultType="java.lang.Integer">
+		DELETE FROM
+			EXP_ROUTINEVACC_6_1
+		<where>
+			ID IN(
+				SELECT
+					ID
+				FROM
+					EXP_ROUTINEVACC_6_1
+				<where>
+					<if test="localCode != null and localCode != ''">
+						LOCALCODE = #{localCode}
+					</if>
+					<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+						AND YEAR_MONTH BETWEEN TO_DATE(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') AND TO_DATE(#{endTime}, 'yyyy-MM-dd HH24:mi:ss')
+					</if>
+				</where>
+			) 
+		</where>
+	</select>
+	
+	<!-- 清空指定年的某个月份范围内EXP_ROUTINEVACC_6_1_Detail表数据总条数 -->
+	<select id="clearDataCount61DetailByTimeRange" resultType="java.lang.Integer">
+		DELETE FROM
+			EXP_ROUTINEVACC_6_1_DETAIL
+		<where>
+			ID IN(
+				SELECT
+					ID
+				FROM
+					EXP_ROUTINEVACC_6_1_DETAIL
+				<where>
+					<if test="localCode != null and localCode != ''">
+						LOCALCODE = #{localCode}
+					</if>
+					<if test="yearMonth != null and yearMonth != ''">
+						AND YEAR_MONTH = #{yearMonth}
+					</if>
+				</where>
+			) 
+		</where>
+	</select>
+	
+</mapper>

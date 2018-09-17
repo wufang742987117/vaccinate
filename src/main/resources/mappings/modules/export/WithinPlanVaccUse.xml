@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.export.dao.WithinPlanVaccUseDao">
+    
+    <sql id="bsManageCheckColumns">
+		a.id AS "id",
+		a.last_date AS "lastDate",
+		a.last_num AS "lastNum",
+		a.in_num AS "inNum",
+		a.out_num AS "outNum",
+		a.use_num AS "useNum",
+		a.rest_num AS "restNum",
+		a.scrap_num AS "scrapNum",
+		a.exchange_num AS "exchangeNum",
+		a.check_date AS "checkDate",
+		a.check_type AS "checkType",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		u.name AS "createBy.name"
+	</sql>
+    
+	<sql id="withinPlanVaccUseColumns">
+		a.yearMonth AS "yearMonth",
+		a.vaccName AS "vaccName",
+		a.specification AS "specification",
+		a.lastNonthNum AS "lastNonthNum",
+		a.gainNum AS "gainNum",
+		a.usedNum AS "usedNum",
+		a.discardNum AS "discardNum",
+		a.thisMonthEndNum AS "thisMonthEndNum",
+		a.nextMonthNeedNum AS "nextMonthNeedNum",
+	</sql>
+	
+	<sql id="WithinPlanVaccUseJoins">
+	</sql>
+	
+	
+	<select id="getWithinPlanVaccUseDataByMonth" resultType="java.util.Map">
+		SELECT 
+			p.vacc_name AS "NAME",<!-- 名称 -->
+       		p.specification AS "SPECIFICATION", <!-- 规格 -->
+       		l.LAST_NUM AS "LAST_NUM", <!-- 上月末库存 -->
+		    "NVL"(i.IN_NUM, '0') AS "IN_NUM", <!-- 领苗数 -->
+		    "NVL"(R.USE_NUM, '0') AS "USE_NUM", <!-- 使用数 -->
+		    "NVL"(O.OUT_NUM, '0') AS "OUT_NUM", <!-- 报废数 -->
+		    p.storenum AS "REST_NUM" <!-- 查询月月底库存数 -->
+		FROM 
+		(<!-- 当前库存 -->
+			SELECT * FROM BS_MANAGE_PRODUCT WHERE LOCALCODE = #{localCode}
+			AND SELLPRICE > 0
+			AND STORENUM > 0
+			<!-- <if test="!showNull">AND STORENUM > 0</if>
+			<if test="!showAll">AND OFFICECODE = #{product.officeCode} </if> -->
+			<!-- <if test="product.vaccineid != null and product.vaccineid != ''">AND vaccineid = #{product.vaccineid} </if>
+			<if test="product.batchno != null and product.batchno != ''">AND batchno = #{product.batchno} </if>
+			<if test="product.code != null and product.code != ''">AND code = #{product.code} </if> -->
+		 )p 
+		LEFT JOIN( <!-- 上期盘库 -->
+			SELECT 
+				TL.CREATE_DATE "LAST_DATE", 
+				TL.PRODUCT_ID, 
+				TL.REST_NUM "LAST_NUM"
+			FROM BS_MANAGE_CHECK TL
+			RIGHT JOIN (
+				SELECT
+					"MAX" (create_date) "LAST_DATE",
+					PRODUCT_ID,
+					LOCALCODE
+				FROM
+					BS_MANAGE_CHECK
+				WHERE
+					LOCALCODE = #{localCode}
+					<if test="startTime != null and startTime !='' and endTime != null and endTime != '' " >
+						AND CREATE_DATE BETWEEN "TO_DATE"(#{lastMonthStartTime}, 'yyyy-MM-dd HH24:mi:ss') 
+						AND "TO_DATE"(#{lastMonthEndTime}, 'yyyy-MM-dd HH24:mi:ss')
+					</if>
+				GROUP BY
+					PRODUCT_ID,
+					LOCALCODE
+			) tp ON TL.CREATE_DATE = TP.LAST_DATE AND TL.LOCALCODE = TP.LOCALCODE AND TL.PRODUCT_ID = TP.PRODUCT_ID
+		) l ON l.PRODUCT_ID = p."ID"
+		LEFT JOIN
+			(<!-- 入库 -->
+				SELECT "SUM"(NUM) "IN_NUM", PID 
+				FROM 
+					BS_MANAGE_STOCKIN 
+				<where>
+					"TYPE" = '0' 
+					<if test="startTime != null and startTime !='' and endTime != null and endTime != '' " >
+						AND INDATE BETWEEN "TO_DATE"(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') 
+						AND "TO_DATE"(#{endTime}, 'yyyy-MM-dd HH24:mi:ss')
+					</if>
+					AND LOCALCODE = #{localCode} GROUP BY PID
+				</where> 
+			) i ON i.PID = P."ID"
+		LEFT JOIN
+			(<!-- 报损 -->
+				SELECT SUM(NUM) AS OUT_NUM, PID FROM BS_MANAGE_STOCKIN WHERE "TYPE" = '1'  
+				<if test="startTime != null and startTime !='' and endTime != null and endTime != '' " >
+					AND INDATE BETWEEN "TO_DATE"(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') 
+					AND "TO_DATE"(#{endTime}, 'yyyy-MM-dd HH24:mi:ss')
+				</if>
+				and LOCALCODE = #{localCode} AND state = '1' GROUP BY PID
+			) s ON s.pid = p."ID"
+		LEFT JOIN
+			(<!-- 报废 -->
+				SELECT 
+					SUM(NUM) AS OUT_NUM, 
+					PID 
+				FROM 
+					BS_MANAGE_STOCKIN 
+				WHERE 
+					"TYPE" = '1' 
+				<if test="startTime != null and startTime !='' and endTime != null and endTime != '' " >
+					AND INDATE BETWEEN "TO_DATE"(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') 
+					AND "TO_DATE"(#{endTime}, 'yyyy-MM-dd HH24:mi:ss')
+				</if>
+				and LOCALCODE = #{localCode} AND state = '3' GROUP BY PID
+			) o ON o.pid = p."ID"
+		LEFT JOIN 
+			(<!-- 使用记录 -->
+		 		SELECT 
+		 			"SUM"(1) AS "USE_NUM", PRODUCTID 
+		 		FROM 
+		 			BS_CHILD_VACCINATERECORD 
+		 		WHERE 
+	 			<if test="startTime != null and startTime !='' and endTime != null and endTime != '' " >
+					VACCINATEDATE BETWEEN "TO_DATE"(#{startTime}, 'yyyy-MM-dd HH24:mi:ss') 
+					AND "TO_DATE"(#{endTime}, 'yyyy-MM-dd HH24:mi:ss') AND
+				</if>
+		 		LOCALCODE = #{localCode} and STATUS = '1' and SOURCE &lt;&gt; '3' and SOURCE &lt;&gt; '4' GROUP BY PRODUCTID
+			) r ON r.PRODUCTID = p."ID"
+		 group by 
+		 	p.vaccineid,
+	        p.batchno,
+	        p.create_date,
+	        p.vacc_name,
+	        p.specification,
+	        p.storenum,
+	        l.LAST_NUM,
+	        i.IN_NUM,
+	        R.USE_NUM,
+	        O.OUT_NUM
+		order by 
+			p.vaccineid , 
+			p.batchno, 
+			p.create_date
+	</select>
+	
+	
+</mapper>

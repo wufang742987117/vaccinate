@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.department.dao.SysVaccDepartmentDao">
+    
+	<sql id="sysVaccDepartmentColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.all_name AS "allName",
+		a.code_level AS "codeLevel",
+		a.f_code AS "fCode",
+		a.n_code AS "nCode",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="sysVaccDepartmentJoins">
+	</sql>
+    
+	<select id="get" resultType="SysVaccDepartment">
+		SELECT 
+			<include refid="sysVaccDepartmentColumns"/>
+		FROM sys_vacc_department a
+		<include refid="sysVaccDepartmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysVaccDepartment">
+		SELECT 
+			<include refid="sysVaccDepartmentColumns"/>
+		FROM sys_vacc_department a
+		<include refid="sysVaccDepartmentJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name =#{name}
+					<!-- <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if> -->
+			</if>
+			<if test="allName != null and allName != ''">
+				AND a.all_name = #{allName}
+			</if>
+			<if test="codeLevel != null and codeLevel != ''">
+				AND a.code_level = #{codeLevel}
+			</if>
+			<if test="fCode != null and fCode != ''">
+				AND a.f_code = #{fCode}
+			</if>
+			<if test="nCode != null and nCode != ''">
+				AND a.n_code = #{nCode}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+			AND length(nvl(a.CODE,''))=10 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysVaccDepartment">
+		SELECT 
+			<include refid="sysVaccDepartmentColumns"/>
+		FROM sys_vacc_department a
+		<include refid="sysVaccDepartmentJoins"/>
+		<where>
+			and a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_vacc_department(
+			id,
+			code,
+			name,
+			all_name,
+			code_level,
+			f_code,
+			n_code,
+			remarks,
+			localcode
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{allName},
+			#{codeLevel},
+			#{fCode},
+			#{nCode},
+			#{remarks},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_vacc_department SET 	
+			code = #{code},
+			name = #{name},
+			all_name = #{allName},
+			code_level = #{codeLevel},
+			f_code = #{fCode},
+			n_code = #{nCode},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_vacc_department
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

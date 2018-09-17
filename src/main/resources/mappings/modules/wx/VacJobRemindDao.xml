@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.wx.dao.VacJobRemindDao">
+    
+	<sql id="vacJobRemindColumns">
+		a.id AS "id",
+		a.openid AS "openid",
+		a.ctxusername AS "ctxusername",
+		a.rtype AS "rtype",
+		a.ctxdate AS "ctxdate",
+		a.createdate AS "createdate",
+		a.ctxvaccname AS "ctxvaccname",
+		a.rstatus AS "rstatus",
+		a.code AS "code",
+		a.office AS "office"
+	</sql>
+	
+	<sql id="vacJobRemindJoins">
+	</sql>
+    
+	<select id="get" resultType="VacJobRemind">
+		SELECT 
+			<include refid="vacJobRemindColumns"/>
+		FROM vac_job_remind a
+		<include refid="vacJobRemindJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="VacJobRemind">
+		SELECT 
+			<include refid="vacJobRemindColumns"/>
+		FROM vac_job_remind a
+		<include refid="vacJobRemindJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="VacJobRemind">
+		SELECT 
+			<include refid="vacJobRemindColumns"/>
+		FROM vac_job_remind a
+		<include refid="vacJobRemindJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO vac_job_remind(
+			id,
+			openid,
+			ctxusername,
+			rtype,
+			ctxdate,
+			createdate,
+			ctxvaccname,
+			rstatus,
+			code,
+			office
+		) VALUES (
+			#{id},
+			#{openid},
+			#{ctxusername},
+			#{rtype},
+			#{ctxdate},
+			#{createdate},
+			#{ctxvaccname},
+			#{rstatus},
+			#{code},
+			#{office}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE vac_job_remind SET 	
+			openid = #{openid},
+			ctxusername = #{ctxusername},
+			rtype = #{rtype},
+			ctxdate = #{ctxdate},
+			createdate = #{createdate},
+			ctxvaccname = #{ctxvaccname},
+			rstatus = #{rstatus},
+			code = #{code},
+			office = #{office}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM vac_job_remind
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

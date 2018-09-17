@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.export.dao.ExportDao">
+
+	<!--查询出去年儿童总数和新出的儿童数  -->
+	<select id="findNewAndAll311" resultType="ExportChildhelp">
+		select * FROM 
+			(
+			select 
+				count(b.id) as numAll
+			from BS_CHILD_BASEINFO b
+			) aa
+		LEFT JOIN
+		(
+		select 
+			count(b.id) as numNew
+		from BS_CHILD_BASEINFO b
+		<where>
+			 <if test="startDate !=null  and startDate !='' and endDate !=null and endDate !=''">
+				and birthday between to_date('${startDate}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endDate}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		)cc
+		on 1=1
+	</select>	
+	
+	<select id="selectVaccData311_" resultType="java.util.HashMap">
+		select *
+		from EXP_ROUTINEVACC_3_1_1
+		<where>
+			<if test="reside != null and reside != '' ">
+				and reside=#{reside}
+			</if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+		</where>
+	</select>
+	
+	<select id="selectVaccData312_" resultType="java.util.HashMap">
+		select *
+		from EXP_ROUTINEVACC_3_1_2
+		<where>
+			<if test="reside != null and reside != '' ">
+				and reside=#{reside}
+			</if>
+			<if test="display != null and display != '' ">
+				and display=#{display}
+			</if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+		</where>
+	</select>
+	
+	<select id="selectVaccData313_" resultType="java.util.HashMap">
+		select *
+		from EXP_ROUTINEVACC_3_1_3
+		<where>
+			<if test="reside != null and reside != '' ">
+				and reside=#{reside}
+			</if>
+			<if test="display != null and display != '' ">
+				and display=#{display}
+			</if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+		</where>
+	</select>
+	
+	<select id="selectVaccData314_" resultType="java.util.HashMap">
+		select *
+		from EXP_ROUTINEVACC_3_1_4
+		<where>
+			<if test="reside != null and reside != '' ">
+				and reside=#{reside}
+			</if>
+			<if test="display != null and display != '' ">
+				and display=#{display}
+			</if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+		</where>
+	</select>
+	
+	<select id="selectVaccData315_" resultType="java.util.HashMap">
+		select *
+		from EXP_ROUTINEVACC_3_1_5
+		<where>
+			<if test="reside != null and reside != '' ">
+				and reside=#{reside}
+			</if>
+			<if test="display != null and display != '' ">
+				and display=#{display}
+			</if>
+			<if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+				and year_month between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>   
+		</where>
+	</select>
+	
+	<select id="hepatitisBSchedule" resultType="HepatitisBSchedule">
+					SELECT
+			b.childcode,
+			b.childname,
+			b.gender,
+			b.birthday,
+			b.createdate,
+			v.DOSAGE,
+			v.VACCINATEDATE
+		FROM
+			SYS_VACC_RECORD r
+		LEFT JOIN BS_CHILD_VACCINATERECORD v ON v."ID" = r."ID"
+		LEFT JOIN BS_CHILD_BASEINFO b ON b."ID" = v.childid
+		LEFT JOIN BS_MANAGE_PRODUCT P ON P ."ID" = R.PID
+		WHERE
+			"SUBSTR" (P .VACCINEID, 0, 2) = '02'
+			<if
+				test="begintime != null and begintime != '' and endtime != null and endtime != ''">
+				AND r.CREATEDATE between to_date('${begintime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endtime}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+		ORDER BY
+			b.childcode,
+			v.DOSAGE DESC
+	</select>
+	
+	<select id="monthlyReportOnVaccConsumption" resultType="MonthlyReportOnVaccConsumption">
+		SELECT
+			"COUNT" (P .VACCINEID || P .BATCHNO) AS count,
+			P .VACC_NAME AS name,
+			P .MANUFACTURER,
+			P .BATCHNO,
+			P .VACCINEID,
+			P .ISFOREIGN
+		FROM
+			SYS_VACC_RECORD r
+		LEFT JOIN BS_MANAGE_PRODUCT P ON r.PID = P ."ID"
+		<where>
+			<if test="begintime != null and begintime != '' and endtime != null and endtime != ''">
+				r.CREATEDATE between to_date('${begintime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endtime}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		GROUP BY
+			P .VACCINEID,
+			P .VACC_NAME,
+			P .MANUFACTURER,
+			P .BATCHNO,
+			P .ISFOREIGN
+			
+	</select>
+	
+	<!-- 二类疫苗统计表 -->
+	<select id="twoCategoriesOfVaccStatistics" resultType="ExportTeo">
+		SELECT
+			AA.name as name,
+			AA.specification as specification,
+			AA.num as num,
+			BB.num2 as num1,
+			AA.num-BB.num2-AA.num1 as num2
+		FROM(
+			SELECT
+					P .VACC_NAME AS name,
+					P . "SPECIFICATION" AS specification,
+					P."ID" || P.BATCHNO AS "UU",			
+					"SUM"(CASE WHEN S."TYPE" = 0 THEN S.NUM ELSE 0 END) AS num,
+					"SUM"(CASE WHEN S."TYPE" = 1 THEN S.NUM ELSE 0 END) AS num1
+				FROM
+					BS_MANAGE_PRODUCT P
+				LEFT JOIN BS_MANAGE_STOCKIN S ON P."ID" = S.STOREID
+				WHERE
+					P .ISFOREIGN = 'N'
+					<if test="begintime != null and begintime != '' and endtime != null and endtime != ''">
+						AND S.INDATE between to_date('${begintime}','yyyy-MM-dd
+						HH24:mi:ss') and to_date('${endtime}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+				GROUP BY
+					P .VACC_NAME,P . "SPECIFICATION", P."ID" || P.BATCHNO
+				ORDER BY
+					P .VACC_NAME
+		)AA
+		JOIN (
+			SELECT
+					P .VACC_NAME AS name,
+					P . "SPECIFICATION" AS specification,
+					P."ID" || P.BATCHNO AS "UU",		
+					"COUNT"(X.PID) AS num2
+				FROM
+					BS_MANAGE_PRODUCT P
+				LEFT JOIN SYS_VACC_RECORD X ON P."ID" = X.PID
+				WHERE
+					P .ISFOREIGN = 'N'
+					<if test="begintime != null and begintime != '' and endtime != null and endtime != ''">
+						AND X.CREATEDATE between to_date('${begintime}','yyyy-MM-dd
+						HH24:mi:ss') and to_date('${endtime}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+				GROUP BY
+					P .VACC_NAME,P . "SPECIFICATION",P."ID" || P.BATCHNO
+				ORDER BY
+					P .VACC_NAME,NUM2
+		)BB
+		ON AA."UU" = BB."UU"
+	</select>
+	
+	<!--查询出去年儿童总数和新出的儿童数  -->
+	<select id="findNewAndAll" resultType="ExportChildhelp">
+		select * from
+		(select c.name ,c.code
+		from sys_community c) a0
+		left join 
+		(select 
+			count(b.id) as numNew,
+			a.code 
+			from sys_community a inner join bs_child_baseinfo b on a.code=b.area
+			<where>
+				<if test="startDate !=null  and startDate !='' and endDate !=null and endDate !=''">
+				and birthday between to_date('${startDate}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endDate}','yyyy-MM-dd HH24:mi:ss')
+				</if>
+				<if test="reside !=null and reside !=''">
+				and b.reside=#{reside}
+				</if>
+			</where>
+			group by a.code) aa
+			on aa.code=a0.code
+		  	left join
+		  	(select
+				count(b.id) as numAll,
+				a.code 
+			from sys_community a left join bs_child_baseinfo b on a.code=b.area
+			<where>
+				<if test="reside !=null and reside !=''">
+				and b.reside=#{reside}
+				</if>
+			</where>
+			group by a.code
+			) bb
+		on bb.code=a0.code
+	</select>
+
+	<!--查询所有的社区 -->
+	<select id="findAllshequ" resultType="java.util.HashMap">
+		select
+			c.name as "shequName",
+			c.code as "shequCode"
+		from SYS_COMMUNITY c
+	</select>
+	
+	<!--查询建卡及时率  -->   <!-- count (b.TEMPID) as "card_num", -->
+	<select id="findCard_in_time" resultType="java.util.HashMap">
+	select 
+		<![CDATA[CC.name as "name" ,
+		CC.code ,
+		BB."chirld_num",
+		BB."card_num",
+		(BB."card_num"/BB."chirld_num") as "card_lv",
+		 bb."jishi_num",
+		(BB."jishi_num"/BB."chirld_num") as "jishi_lv",
+		 bb."hege_num" ,
+		(BB."hege_num"/BB."chirld_num") as "hege_lv"]]>
+	from 
+		SYS_COMMUNITY cc
+	LEFT JOIN 
+		(<![CDATA[select 
+			c.code ,
+			count (b.CHILDCODE) as "chirld_num",
+			count (b.CHILDCODE) as "card_num",     
+			COUNT(CASE WHEN (  MONTHS_BETWEEN(b.CREATEDATE,b.BIRTHDAY)<1 )THEN 1 ELSE NULL END) AS "jishi_num" ,]]>
+			count (b.CHILDCODE) as "hege_num"
+		from
+			BS_CHILD_BASEINFO b
+			INNER JOIN SYS_COMMUNITY c ON b.AREA = c.CODE
+		<where>
+			 <if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between to_date('${startBirthday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endBirthday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between to_date('${startCarday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endCarday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			 <if test="areaCodes !=null and areaCodes !=''">
+				 	and c.code in 
+				  <foreach collection="list" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="codelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 	
+		</where>
+			GROUP BY c.code 
+			ORDER BY c.code)bb
+	on CC.CODE = bb.code
+	
+	</select>
+	
+	<!--按居住情况  查询儿童建卡数  --> 
+	<select id="findCard_num" resultType="java.util.HashMap">
+	select 
+		*
+	from
+		(select 
+		b.RESIDE as "reside",
+		count( b.id) as "card_num"
+		from BS_CHILD_BASEINFO b
+		<where>
+			 <if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between to_date('${startBirthday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endBirthday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between to_date('${startCarday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endCarday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="hukouCodes !=null and hukouCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="hukoulist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="sex !=null and sex !=''">
+			 	and b.sex=#{sex}
+			 </if>
+		</where>
+		GROUP BY b.RESIDE 
+		ORDER BY b.reside)
+	UNION
+		(select 
+		 '4'  as "reside",
+		count( b.id)  as "card_num"
+		from BS_CHILD_BASEINFO b
+		<where>
+			 <if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between to_date('${startBirthday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endBirthday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between to_date('${startCarday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endCarday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="hukouCodes !=null and hukouCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="hukoulist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="sex !=null and sex !=''">
+			 	and b.sex=#{sex}
+			 </if>
+		</where>
+		)
+	</select>
+
+	<!-- 按在册情况查询儿童建卡数 -->
+	<select id="findCard_num2" resultType="java.util.HashMap">
+	select *
+	  from 
+		(select 
+			*
+		from
+			(select 
+			b.SITUATION as "situation",
+			count( b.id) as "card_num"
+			from BS_CHILD_BASEINFO b
+			<where>
+			 <if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between to_date('${startBirthday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endBirthday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between to_date('${startCarday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endCarday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="hukouCodes !=null and hukouCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="hukoulist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="sex !=null and sex !=''">
+			 	and b.sex=#{sex}
+			 </if>
+		</where>
+			GROUP BY b.SITUATION 
+			ORDER BY b.SITUATION) 
+		UNION
+			(select 
+			 '99'  as "situation",
+			count( b.id)  as "card_num"
+			from BS_CHILD_BASEINFO b
+			<where>
+			 <if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between to_date('${startBirthday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endBirthday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between to_date('${startCarday}','yyyy-MM-dd HH24:mi:ss') and
+					to_date('${endCarday}','yyyy-MM-dd HH24:mi:ss')
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="hukouCodes !=null and hukouCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="hukoulist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="sex !=null and sex !=''">
+			  and b.sex=#{sex}
+			 </if>
+		</where>
+		)
+		
+	)aa
+	ORDER BY aa."situation"
+	</select>
+
+	<!--统计儿童基础档案完整性 -->
+	<select id="findChirld_baseInfo_integrity" resultType="java.util.HashMap">
+	select 
+		round(aa."ch_name_num"*100/"ch_num",2)||'%' as "ch_name_lv", 
+		round(aa."ch_gender_num"*100/"ch_num",2)||'%' as "ch_gender_lv",  
+		round(aa."ch_birth_num"*100/"ch_num",2)||'%' as "ch_birth_lv",  
+		round(aa."createBy_num"*100/"ch_num",2)||'%' as "createBy_lv",  
+		round(aa."createDate_num"*100/"ch_num",2)||'%' as "createDate_lv",  
+		round(aa."far_phone_num"*100/"ch_num",2)||'%' as "far_phone_lv",  
+		round(aa."mar_phone_num"*100/"ch_num",2)||'%' as "mar_phone_lv",  
+		round(aa."far_name_num"*100/"ch_num",2)||'%' as "far_name_lv",  
+		round(aa."mar_name_num"*100/"ch_num",2)||'%' as "mar_name_lv",  
+		round(aa."birthcode_num"*100/"ch_num",2)||'%' as "birthcode_lv",  
+		round(aa."area_num"*100/"ch_num",2)||'%' as "area_lv",  
+		round(aa."co_num"*100/"ch_num",2)||'%' as "co_lv" ,  
+		round(aa."mailinGaddress_num"*100/"ch_num",2)||'%' as  "mailinGaddress_lv" ,
+		round(aa."ch_card_num"*100/"ch_num",2)||'%' as  "ch_card_lv" ,
+		aa."nianfen" ,
+		aa."ch_num" ,
+		aa."ch_name_num" ,
+		aa."ch_gender_num" ,
+		aa."ch_birth_num" ,
+		aa."ch_card_num" ,
+		aa."createBy_num" ,
+		aa."createDate_num" ,
+		aa."far_phone_num",
+		aa."mar_phone_num" ,
+		aa."mar_name_num" ,
+		aa."far_name_num" ,
+		aa."birthcode_num" ,
+		aa."area_num" ,
+		aa."co_num" ,
+		aa."mailinGaddress_num" 
+	
+	from
+		(select 
+			TRUNC(b.CREATEDATE,'yyyy') as "nianfen",
+			count(b.id) as "ch_num",
+			count(b.CHILDNAME) as "ch_name_num",
+			count(b.GENDER) as "ch_gender_num",
+			count(b.BIRTHDAY) as "ch_birth_num",
+			count(b.CARDCODE) as "ch_card_num",
+			count(b.CREATER) as "createBy_num",
+			count(b.CREATEDATE) as "createDate_num",
+			count(b.FATHERPHONE)as "far_phone_num",
+			count(b.GUARDIANMOBILE)as "mar_phone_num",
+			count(b.FATHER) as "far_name_num",
+			count(b.GUARDIANNAME) as "mar_name_num",
+			count(b.BIRTHCODE) as "birthcode_num",
+			count(b.AREA)as "area_num",
+			count(b.CO) as "co_num",
+			count(b.MAILINGADDRESS) as "mailinGaddress_num"
+		from BS_CHILD_BASEINFO b INNER JOIN
+		SYS_COMMUNITY  s on b.AREA =s.CODE
+	<where>
+			<if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between #{startBirthday} and
+					#{endBirthday}
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between #{startCarday} and
+					#{tendCarday}
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.reside in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="areaCodes !=null and areaCodes !=''">
+				 	and s.code in 
+				  <foreach collection="arealist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="sex !=null and sex !=''">
+			  and b.gender=#{sex}
+			 </if>
+	</where>
+		GROUP BY TRUNC(b.CREATEDATE,'yyyy') 
+		)aa
+	order by aa."nianfen" desc 
+	
+	</select>
+
+	<!--统计儿童基础信息时查询出儿童的档案信息  -->
+	<select id="findChirld_baseInfo"  resultType="java.util.HashMap">
+	select 
+		b.CHILDCODE as "ch_code",
+		b.CHILDNAME as "ch_name",
+	    b.BIRTHCODE as "birthcode",
+	    b.SITUATION  as "situation",
+	    b.CREATER as "creater",
+	    s.code as "code",
+	    b.CO as "co",
+		b.GENDER as "gender",
+		b.BIRTHDAY as "birthday",
+		b.FATHER  as "far_name",
+		b.GUARDIANNAME as "mar_name",
+		b.FATHERPHONE as "far_phone",
+		b.GUARDIANMOBILE as "mar_phone",
+		b.MAILINGADDRESS as "mail_add",
+		s.name as "shequ",
+		b.reside as "live_type",
+		b.CREATEDATE as "create_date",
+		b.CARDCODE as "cardcode",
+		b.ADDRESS as "address",
+		b.FATHERCARD as "father_card"
+		from BS_CHILD_BASEINFO b INNER JOIN
+		SYS_COMMUNITY  s on b.AREA =s.CODE
+	<where>
+			<if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between #{startBirthday} and
+					#{endBirthday}
+			 </if>
+			  <if test="startCarday !=null  and startCarday !='' and endCarday !=null and endCarday !=''">
+				and b.CREATEDATE between #{startCarday} and
+					#{tendCarday}
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.reside in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="areaCodes !=null and areaCodes !=''">
+				 	and s.code in 
+				  <foreach collection="arealist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="sex !=null and sex !=''">
+			  and b.gender=#{sex}
+			 </if>
+	</where>
+	order by b.CREATEDATE
+	</select>
+	
+	<!-- 儿童接种记录完整性统计 -->
+	<select id="findChirld_vaccnum_integrity" resultType="java.util.HashMap">
+	select 
+		AA."vacc_name",
+		round(aa."vacc_name_num"*100/"jici_num",2)||'%' as "vacc_name_lv", 
+		round(aa."vacc_date_num"*100/"jici_num",2)||'%' as "vacc_date_lv", 
+		round(aa."batch_num"*100/"jici_num",2)||'%' as "batch_lv", 
+		round(aa."manufacturer_num"*100/"jici_num",2)||'%' as "manufacturer_lv", 
+		round(aa."office_num"*100/"jici_num",2)||'%' as "office_lv", 
+		round(aa."paystatus_num"*100/"jici_num",2)||'%' as "paystatus_lv", 
+		round(aa."doctor_num"*100/"jici_num",2)||'%' as "doctor_lv", 
+		round(aa."bodypart_num"*100/"jici_num",2)||'%' as "bodypart_lv", 
+	
+		AA."jici_num",
+		AA."vacc_name_num",
+		AA."vacc_date_num",
+		AA."batch_num",
+		AA."manufacturer_num",
+		AA."vacctype_num",
+		AA."office_num",
+		AA."paystatus_num",
+		AA."doctor_num",
+		AA. "bodypart_num"
+	from 
+		(
+		select 
+			v.VACC_NAME as "vacc_name",
+			count (v.id) "jici_num",
+			count(v.VACC_NAME) as "vacc_name_num",
+			count(v.VACCINATEDATE) as "vacc_date_num",
+			count(v.BATCH) as "batch_num",
+			count(v.MANUFACTURER) as "manufacturer_num",
+			count(v.VACCTYPE) as "vacctype_num",
+			count(v.office) as "office_num",
+			count(v.PAYSTATUS)  as "paystatus_num", 
+			count(v.DOCTOR) as "doctor_num",
+			count (v.BODYPART) as  "bodypart_num"
+		FROM
+			BS_CHILD_VACCINATERECORD v
+			INNER JOIN BS_CHILD_BASEINFO b ON v.CHILDID = b.ID
+			INNER JOIN SYS_COMMUNITY  s on s.code =b.AREA 
+		<where>
+			<if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between #{startBirthday} and
+					#{endBirthday}
+			 </if>
+			  <if test="startVaccday !=null  and startVAccday !='' and endVaccday !=null and endVaccday !=''">
+				and b.VACCINATEDATE  between #{startVaccday} and
+					#{endVaccday}
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.reside in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="areaCodes !=null and areaCodes !=''">
+				 	and s.code in 
+				  <foreach collection="arealist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="vaccCodes !=null and vaccCodes !=''">
+				 	and v.VACCINEID in 
+				  <foreach collection="vacclist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  
+	</where>
+		group by v.vacc_name 
+		order by v.VACC_NAME
+		)aa 
+	order by  aa ."vacc_name" 
+	</select>
+
+	<!--统计儿童接种记录完整性 的同时查询一些接种纪录的基本信息  -->
+	<select id="findChirld_vaccnumInfo" resultType="java.util.HashMap">
+	select 
+		b.CHILDCODE as "childcode",
+		b.CHILDNAME as "childname",
+		b.gender as "gender",
+		b.birthday as "birthday",
+		v.vacc_name as "vacc_name",
+		v.dosage as "dosage" ,
+		v.VACCINATEDATE as "vacc_date",
+		v.REMARKS as "remarks" 
+	from 
+		BS_CHILD_VACCINATERECORD v
+		INNER JOIN BS_CHILD_BASEINFO b ON v.CHILDID = b.ID
+	<where>
+			<if test="startBirthday !=null  and startBirthday !='' and endBirthday !=null and endBirthday !=''">
+				and b.BIRTHDAY between #{startBirthday} and
+					#{endBirthday}
+			 </if>
+			  <if test="startVaccday !=null  and startVAccday !='' and endVaccday !=null and endVaccday !=''">
+				and b.VACCINATEDATE  between #{startVaccday} and
+					#{endVaccday}
+			 </if>
+			 <if test="recordCodes !=null and recordCodes !=''">
+				 	and b.SITUATION in 
+				  <foreach collection="recordlist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			 <if test="resideCodes !=null and resideCodes !=''">
+				 	and b.reside in 
+				  <foreach collection="residelist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="areaCodes !=null and areaCodes !=''">
+				 	and s.code in 
+				  <foreach collection="arealist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  <if test="vaccCodes !=null and vaccCodes !=''">
+				 	and v.VACCINEID in 
+				  <foreach collection="vacclist" item="code" index="index"
+			            open="(" close=")" separator=",">
+			            #{code}
+			      </foreach>
+			 </if>
+			  
+	</where>
+	order by v.VACCINATEDATE
+	</select>
+	
+	<!-- 常规接种3-1-1报表数据初始化SQL开始 -->
+	<select id="selectRoutine3_1_1" resultType="Map">
+		SELECT
+			T1."NAME" AS "NAME",
+			T1.ID AS "ID",
+			NVL(COUNT(*), 0) AS "NUMS"
+		FROM BS_MANAGE_VACCINE T1
+		LEFT JOIN BS_CHILD_VACCINATERECORD  T2 ON T2.VACCINEID = T1."ID"
+		LEFT JOIN BS_MANAGE_VACCINENUM T3 ON T3."ID" = T2.VACCINEID
+		<where>
+			T2.STATUS = '1'
+			 <if test="startDate !=null  and startDate !='' and endDate !=null and endDate !=''">
+				AND T2.VACCINATEDATE BETWEEN "TO_DATE"(#{startDate}, 'yyyy-MM-dd hh24:mi:ss')
+				AND "TO_DATE"(#{endDate}, 'yyyy-MM-dd hh24:mi:ss')
+			</if>
+		</where>
+		GROUP BY
+			T1."NAME",
+			T1."ID"
+	</select>
+	
+	<!-- 常规接种3-1-1报表数据初始化SQL结束 -->
+
+</mapper>

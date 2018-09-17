@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.refund.dao.SysRefundDao">
+    
+	<sql id="sysRefundColumns">
+		a.id AS "id",
+		a.childcode AS "childcode",
+		a.childname AS "childname",
+		a.nid AS "nid",
+		a.userid AS "uid",
+		a.pid AS "pid",
+		a.orderNo AS "orderNo",
+		a.insuranceorderno AS "insuranceorderno",
+		a.create_date AS "createDate",
+		a.refundsource AS "refundsource",
+		a.refundmoney AS "refundmoney",
+		a.localcode AS "localCode",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="sysRefundJoins">
+	</sql>
+    
+	<select id="get" resultType="SysRefund">
+		SELECT 
+			<include refid="sysRefundColumns"/>
+		FROM sys_refund a
+		<include refid="sysRefundJoins"/>
+		WHERE a.id = #{id} 
+	</select>
+	
+	<select id="findList" resultType="SysRefund">
+		SELECT 
+			<include refid="sysRefundColumns"/>
+		FROM sys_refund a
+		<include refid="sysRefundJoins"/>
+		<where>
+			and a.localcode = #{localCode}
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode = #{childcode}
+			</if>
+			<if test="childname != null and childname != ''">
+				AND a.childname = #{childname}
+			</if>
+			<if test="nid != null and nid != ''">
+				AND a.nid = #{nid}
+			</if>
+			<if test="uid != null and uid != ''">
+				AND a.uid = #{uid}
+			</if>
+			<if test="pid != null and pid != ''">
+				AND a.pid = #{pid}
+			</if>
+			<if test="createdate != null and createdate != ''">
+				AND a.createdate = #{createdate}
+			</if>
+			<if test="refundsource != null and refundsource != ''">
+				AND a.refundsource = #{refundsource}
+			</if>
+			<if test="refundmoney != null and refundmoney != ''">
+				AND a.refundmoney = #{refundmoney}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				AND a.orderNo = #{orderNo}
+			</if>
+			<if test="insuranceorderno != null and insuranceorderno != ''">
+				AND a.insuranceorderno = #{insuranceorderno}
+			</if>
+			a.localcode = #{localCode} AND a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysRefund">
+		SELECT 
+			<include refid="sysRefundColumns"/>
+		FROM sys_refund a
+		<include refid="sysRefundJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_refund(
+			id,
+			childcode,
+			childname,
+			nid,
+			userid,
+			pid,
+			orderNo,
+			insuranceorderno,
+			createdate,
+			refundsource,
+			refundmoney,
+			localcode
+		) VALUES (
+			#{id},
+			#{childcode},
+			#{childname},
+			#{nid},
+			#{uid},
+			#{pid},
+			#{orderNo},
+			#{insuranceorderno},
+			sysdate,
+			#{refundsource},
+			#{refundmoney},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_refund SET 	
+			childcode = #{childcode},
+			childname = #{childname},
+			userid = #{nid},
+			uid = #{uid},
+			pid = #{pid},
+			orderNo = #{orderNo},
+			insuranceorderno = #{insuranceorderno},
+			createdate = #{createdate},
+			refundsource = #{refundsource},
+			refundmoney = #{refundmoney}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_refund
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

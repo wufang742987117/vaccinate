@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.reconciliation.dao.ReconciliationStockDao">
+	
+	<select id="reconciliationStockQuery" resultType="ReconciliationStock">
+		SELECT
+			"NVL"(AA."price",0) AS "price",
+			"NVL"(BB."price1",0) AS "price1",
+			"NVL"(CC."price2",0) AS "price2",
+			AA."gname" AS "gname",
+			AA."gnum" AS "gnum"
+		FROM(
+			SELECT
+				"SUM" (V.PRICE) AS "price",
+				N.G_NAME AS "gname",
+				N.G_NUM AS "gnum"
+			FROM
+				SYS_VACC_RECORD S
+			LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+			LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+			LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+			WHERE
+				V.PRICE != 0
+			AND V."SOURCE" = 0
+			GROUP BY
+				N.G_NUM,
+				N.G_NAME
+			ORDER BY
+				N.G_NUM
+		)AA
+		LEFT JOIN
+		(
+			SELECT
+				"SUM" (V.PRICE) AS "price1",
+				N.G_NAME AS "gname",
+				N.G_NUM AS "gnum"
+			FROM
+				SYS_VACC_RECORD S
+			LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+			LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+			LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+			WHERE
+				V.PRICE != 0
+			AND V."SOURCE" = 1
+			GROUP BY
+				N.G_NUM,
+				N.G_NAME
+			ORDER BY
+				N.G_NUM
+		)BB
+		ON AA."gnum" = BB."gnum"
+		LEFT JOIN
+		(
+			SELECT
+				"SUM" (V.PRICE) AS "price2",
+				N.G_NAME AS "gname",
+				N.G_NUM AS "gnum"
+			FROM
+				SYS_VACC_RECORD S
+			LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+			LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+			LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+			WHERE
+				V.PRICE != 0
+			AND V."SOURCE" = 2
+			GROUP BY
+				N.G_NUM,
+				N.G_NAME
+			ORDER BY
+				N.G_NUM
+		)CC
+		ON AA."gnum" = CC."gnum"
+	</select>
+	
+	<select id="reconciliationStockQuery0" resultType="ReconciliationStock">
+		SELECT
+			"SUM"(V.PRICE) AS "price",
+			N.G_NAME as "gname",
+			N.G_NUM as "gnum",
+			V."SOURCE" as "source"
+		FROM
+			SYS_VACC_RECORD S
+		LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+		LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+		LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+		WHERE
+			V.PRICE != 0
+		AND V."SOURCE" = 0
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND S.CREATEDATE between to_date('${beginTime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+		GROUP BY 
+			N.G_NUM,
+			N.G_NAME,
+			V."SOURCE"
+		ORDER BY
+			N.G_NUM
+	</select>
+	
+	<select id="reconciliationStockQuery1" resultType="ReconciliationStock">
+		SELECT
+			"SUM"(V.PRICE) AS "price1",
+			N.G_NAME as "gname",
+			N.G_NUM as "gnum",
+			V."SOURCE" as "source"
+		FROM
+			SYS_VACC_RECORD S
+		LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+		LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+		LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+		WHERE
+			V.PRICE != 0
+		AND V."SOURCE" = 1
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND S.CREATEDATE between to_date('${beginTime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>			
+		GROUP BY 
+			N.G_NUM,
+			N.G_NAME,
+			V."SOURCE"
+		ORDER BY
+			N.G_NUM
+	</select>
+	
+	<select id="reconciliationStockQuery2" resultType="ReconciliationStock">
+		SELECT
+			"SUM"(V.PRICE) AS "price2",
+			N.G_NAME as "gname",
+			N.G_NUM as "gnum",
+			V."SOURCE" as "source"
+		FROM
+			SYS_VACC_RECORD S
+		LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+		LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+		LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+		WHERE
+			V.PRICE != 0
+		AND V."SOURCE" = 2
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND S.CREATEDATE between to_date('${beginTime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>			
+		GROUP BY 
+			N.G_NUM,
+			N.G_NAME,
+			V."SOURCE"
+		ORDER BY
+			N.G_NUM
+	</select>
+	
+	<select id="reconciliationStockCount" resultType="ReconciliationStock">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				"COUNT" (G_NUM) AS "countsum",
+				N.G_NAME AS "gname",
+				N.G_NUM AS "gnum"
+			FROM
+				SYS_VACC_RECORD S
+			LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+			LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+			LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+			WHERE
+				1 = 1
+			GROUP BY
+				N.G_NUM,
+				N.G_NAME
+			ORDER BY
+				N.G_NUM
+		)AA
+		LEFT JOIN
+		(
+			SELECT
+				"SUM"(S.NUM) AS "countsum",
+				N.G_NAME AS "gname",
+				N.G_NUM AS "gnum"
+			FROM
+				BS_MANAGE_STOCKIN S
+			LEFT JOIN BS_MANAGE_PRODUCT R ON S.pid = R."ID"
+			LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+			WHERE
+				S."TYPE" = 1
+			GROUP BY
+				N.G_NUM,
+				N.G_NAME
+			ORDER BY
+				N.G_NUM
+		)BB
+		ON AA."gnum" = BB."gnum"
+	</select>
+	
+	<select id="reconciliationStockCount1" resultType="ReconciliationStock">
+		SELECT
+			"COUNT" (G_NUM) AS "countsum",
+			N.G_NAME AS "gname",
+			N.G_NUM AS "gnum"
+		FROM
+			SYS_VACC_RECORD S
+		LEFT JOIN BS_CHILD_VACCINATERECORD V ON S."ID" = V."ID"
+		LEFT JOIN BS_MANAGE_PRODUCT R ON S.PID = R."ID"
+		LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+		<where>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND S.CREATEDATE between to_date('${beginTime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>	
+		</where>
+				
+		GROUP BY
+			N.G_NUM,
+			N.G_NAME
+		ORDER BY
+			N.G_NUM
+	</select>
+	
+	<select id="reconciliationStockCount2" resultType="ReconciliationStock">
+		SELECT
+			"SUM"(S.NUM) AS "countsum",
+			N.G_NAME AS "gname",
+			N.G_NUM AS "gnum"
+		FROM
+			BS_MANAGE_STOCKIN S
+		LEFT JOIN BS_MANAGE_PRODUCT R ON S.pid = R."ID"
+		LEFT JOIN BS_MANAGE_VACCINE N ON R.VACCINEID = N."ID"
+		WHERE
+			S."TYPE" = 1
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND S.INDATE between to_date('${beginTime}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+			</if>		
+		GROUP BY
+			N.G_NUM,
+			N.G_NAME
+		ORDER BY
+			N.G_NUM
+	</select>
+</mapper>

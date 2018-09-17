@@ -1,0 +1,686 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.hepatitisnum.dao.BsHepatitisBNumDao">
+    
+	<sql id="bsHepatitisBNumColumns">
+		a.id AS "id",
+		a.check_id AS "checkId",
+		a.vaccine_num AS "vaccineNum",
+		a.vaccine_date AS "vaccineDate",
+		a.real_date AS "realDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.dose AS "dose",
+		a.pay_status AS "payStatus",
+		a.vaccine_id AS "vaccineId",
+		a.standard AS "standard",
+		a.batch AS "batch",
+		a.manufacturer AS "manufacturer",
+		a.create_name AS "createName",
+		a.signature AS "signature",
+		a.w_status AS "wStatus",
+		a.n_status AS "nStatus",
+		a.s_id AS "sId",
+		a.pid AS "pid",
+		s.signature AS "signatureData",
+		s.stype AS "stype",
+		a.vacctype AS "vaccType",
+		a.status AS "status",
+		a.original_price AS "originalPrice",
+		a.current_price AS "currentPrice",
+		a.fund_status AS "fundStatus"
+	</sql>
+	
+	<sql id="bsHepatitisBNumJoins">
+		LEFT JOIN BS_HEPATITIS_B_SIGNATURE s ON a.s_id = s.id
+	</sql>
+    
+	<select id="get" resultType="BsHepatitisBNum">
+		SELECT 
+			<include refid="bsHepatitisBNumColumns"/>
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins"/>
+		WHERE 
+			a.id = #{id} 	
+		and a.deflag = '0'
+	</select>
+	
+	<!--查询针次信息 接种明细 -->
+	<select id="findList" resultType="BsHepatitisBNum">
+		SELECT DISTINCT xxx.*
+		FROM 
+			(SELECT 
+				b.id AS "kin.id",
+				b.username AS "kin.username",
+				b.sex AS "kin.sex",
+				b.age AS "kin.age",
+				COUNT(b.hepa_b_code) AS "vacciCount",
+				substr(b.hepa_b_code,14) AS "kin.hepaBCode",
+				a.manufacturer AS "manufacturer",
+				a.batch AS "batch",
+				a.standard AS "standard",
+				a.create_name AS "createName",
+				a.vaccine_num AS "vaccineNum",
+				a.signature AS "signature",
+				a.vacctype AS "vaccType"
+	        FROM bs_hepatitis_b_num a
+			LEFT JOIN bs_hepatitis_bcheckin b ON b.id = a.check_id and b.localcode = a.localcode
+			LEFT JOIN SYS_USER su ON su."ID" = a.create_by
+       		<where>
+       		    and a.localcode = #{localCode}
+				<if test="manufacturer != null and manufacturer != ''">
+					AND	a.manufacturer  = #{manufacturer}
+				</if>
+				<if test="createById != null and createById != ''">
+					AND	a.create_by  = #{createById}
+				</if>
+				<if test="vaccType != null and vaccType != ''">
+					AND	a.vacctype  = #{vaccType}
+				</if>
+				<if test="payStatus != null and payStatus != ''">
+					<choose>   
+						<when test="payStatus == 2">    
+				            AND a.status = '1'
+				        </when> 
+				        <when test="payStatus == 3">    
+				            AND a.pay_status = '1'
+				            AND a.status = '0'
+				        </when>
+				        <when test="payStatus == 4">
+				            AND (a.pay_status = '0' OR a.pay_status = '1')
+				            AND a.status = '0'
+				        </when>
+				        <when test="payStatus == 5">
+				            AND a.status = '1'
+				        </when>
+				        <otherwise> 
+				        	AND a.pay_status = #{payStatus}
+				            AND a.status = '0'
+				        </otherwise>    
+				    </choose> 
+				</if>
+				<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					<choose> 
+						<when test="payStatus == 0 or payStatus == 1">    
+				            AND a.vaccine_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>   
+				        <when test="payStatus == 2">    
+				        	AND a.signature = '1'
+				            AND a.real_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="payStatus == 3">    
+				            AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="payStatus == 4">    
+				        	AND a.signature = '1'
+				            AND a.real_date IS NULL
+				            AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <when test="payStatus == 5">    
+				        	AND (a.signature = '0' OR a.signature = '2')
+				            AND a.real_date IS NOT NULL
+				            AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </when>
+				        <otherwise> 
+				        	AND a.create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+				        </otherwise>    
+				    </choose> 
+				</if>
+				AND a.w_status = '0'
+				AND a.deflag = '0'
+			</where>
+			GROUP BY 
+				b.id, b.username, b.sex, b.age , b.hepa_b_code, a.manufacturer, a.batch, a.standard, a.create_name, a.vaccine_num, a.signature, a.vacctype
+			) XXX
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY 
+					xxx."kin.hepaBCode",
+					xxx."kin.username",
+					xxx."vaccineNum",
+					xxx."manufacturer"
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsHepatitisBNum">
+		SELECT 
+			<include refid="bsHepatitisBNumColumns"/>
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins"/>
+		<where>
+			and a.deflag = '0' 
+			and a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_hepatitis_b_num(
+			id,
+			check_id,
+			vaccine_num,
+			vaccine_date,
+			real_date,
+			create_by,
+			create_date,
+			dose,
+			pay_status,
+			vaccine_id,
+			standard,
+			batch,
+			manufacturer,
+			create_name,
+			signature,
+			w_status,
+			n_status,
+			pid,
+			vacctype,
+			localcode,
+			status
+		) VALUES (
+			#{id},
+			#{checkId},
+			#{vaccineNum},
+			#{vaccineDate},
+			#{realDate},
+			#{createBy.id},
+			sysdate,
+			#{dose},
+			#{payStatus},
+			#{vaccineId},
+			#{standard},
+			#{batch},
+			#{manufacturer},
+			#{createBy.loginName},
+			#{signature},
+			#{wStatus},
+			#{nStatus},
+			#{pid},
+			#{vaccType},
+			#{localCode},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_hepatitis_b_num SET 	
+			check_id = #{checkId},
+			vaccine_num = #{vaccineNum},
+			vaccine_date = #{vaccineDate},
+			real_date = #{realDate},
+			dose = #{dose},
+			vaccine_id = #{vaccineId},
+			standard = #{standard},
+			batch = #{batch},
+			manufacturer = #{manufacturer},
+			create_name = #{createBy.loginName},
+			signature = #{signature},
+			w_status = #{wStatus},
+			n_status = #{nStatus},
+			create_by = #{createBy.id},
+			create_date = sysdate,
+			pid = #{pid},
+			vacctype = #{vaccType},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		update bs_hepatitis_b_num SET
+		 	deflag = '1',
+		 	pay_status = '0'
+		WHERE 
+			id = #{id} 
+	</update>
+	
+	<!--查询乙肝疫苗数据  -->
+    <select id="findHepaList" resultType="BsHepatitisBNum">
+		SELECT
+			<include refid="bsHepatitisBNumColumns" />
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins" />
+		<where>
+			<if test="checkId != null and checkId != ''">
+				AND a.check_id = #{checkId}
+			</if>
+			AND a.n_status = '0'
+			AND a.deflag = '0'
+			AND a.w_status = '0'
+			AND a.status != '1'
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			ORDER BY a.vaccine_num
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 查询产品pid -->
+	<select id="findBsProduct" resultType="BsManageProduct">
+		SELECT 
+			a.id AS "id",
+			a.vaccineid AS "vaccineid",
+			a.batchno AS "batchno",
+			a.dosage AS "dosage",
+			a.manufacturer AS "manufacturer",
+			a.isforeign AS "isforeign",
+			a.storenum AS "storenum",
+			a.sellprice AS "sellprice",
+			a.isshow AS "isshow",
+			bv.name AS "name",
+			bv.name AS "vaccName",
+			a.vacc_exp_date AS "vaccExpDate",
+			A .codeall AS "codeall",
+			A .specification AS "specification",
+			A .code AS "code"
+		FROM bs_manage_product a
+		LEFT JOIN BS_MANAGE_VACCINE bv ON bv.id = a.vaccineid
+		WHERE 
+			a.id = #{pid}
+		AND a.DEL_FLAG = '0'
+	</select>
+	
+	<!-- 疫苗实际消耗数 -->
+	<select id="socketlist" resultType="BsHepatitisBSocket">
+		SELECT * FROM(
+			SELECT
+				"vaccine_name",
+				"manufacturer",
+				"standard",
+				"COUNT"("standard") as "vcount"
+			FROM
+			(
+				SELECT
+					bp.manufacturer AS "manufacturer",
+					bp.vacc_name AS "vaccine_name",
+					a.standard AS "standard"
+				FROM
+					bs_hepatitis_b_num A
+				LEFT JOIN VIEW_BS_PRODUCT_NO bp ON bp.vaccineid = A .vaccine_id and bp.localcode = A .localcode
+					AND bp.batchno = A .batch
+				<where>
+				    and a.localcode = #{localCode}
+					<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+					 	AND a.real_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+					<if test="createById != null and createById != ''">
+						AND	a.create_by = #{createById}
+					</if>
+					<if test="vaccType != null and vaccType != ''">
+						AND	a.vacctype  = #{vaccType}
+					</if>
+					AND A .real_date IS NOT NULL
+					AND A .status = '1'
+					AND a.w_status = '0'
+					and a.deflag='0'
+					and bp.officecode = #{officeCode}
+				</where>
+				ORDER BY
+					A .vaccine_num ASC
+			)
+			GROUP BY
+				"vaccine_name",
+				"manufacturer",
+				"standard"
+		)ORDER BY "vaccine_name" DESC
+	</select>
+	
+	<!--接种统计数    显示针次-->
+	<select id="socketlistUp" resultType="BsHepatitisBSocket">
+		SELECT * FROM(
+			SELECT
+				"vaccine_num",
+				"manufacturer",
+				"COUNT"("manufacturer") as "vcount"
+			FROM
+			(
+				SELECT
+					a.vaccine_num AS "vaccine_num",
+					bp.manufacturer AS "manufacturer"
+				FROM
+					bs_hepatitis_b_num A
+				LEFT JOIN VIEW_BS_PRODUCT_NO bp ON bp.vaccineid = A .vaccine_id and bp.localcode = A .localcode
+				AND bp.batchno = A .batch
+				<where>
+				    and a.localcode = #{localCode}
+					<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+						 AND a.real_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+					</if>
+					<if test="createById != null and createById != ''">
+						AND	a.create_by  = #{createById}
+					</if>
+					<if test="vaccType != null and vaccType != ''">
+						AND	a.vacctype  = #{vaccType}
+					</if>
+					AND A .real_date IS NOT NULL
+					AND A .status = '1'
+					AND a.w_status = '0'
+					and a.deflag='0'
+					and bp.officecode = #{officeCode}
+				</where>
+				ORDER BY
+					A .vaccine_num ASC
+			)
+			GROUP BY
+				"vaccine_num",
+				"manufacturer"
+		)ORDER BY "manufacturer", "vaccine_num" DESC
+	</select>
+	
+	<!-- 查询用户id -->
+	<select id="queryCreateById" resultType="java.lang.String">
+		SELECT
+			"LOGIN_NAME"
+		FROM
+			SYS_USER
+		WHERE
+			"ID" = #{value}
+		AND ROWNUM = 1
+	</select>
+	
+	<select id="findListDown" resultType="BsHepatitisBNum">
+		SELECT
+			b.id AS "kin.id",
+			b.username AS "kin.username",
+			b.idcard_no AS "kin.idcardNo",
+			b.sex AS "kin.sex",
+			b.birthday AS "kin.birthday",
+			b.age AS "kin.age",
+			b.link_phone AS "kin.linkPhone", 
+			substr(b.hepa_b_code,14) as "kin.hepaBcode",
+			<include refid="bsHepatitisBNumColumns" />
+		FROM 
+			bs_hepatitis_b_num a
+		LEFT JOIN bs_hepatitis_bcheckin b ON b.id = a.check_id and b.localcode = a.localcode
+		LEFT JOIN SYS_USER su ON su."ID" = a.create_by
+		<include refid="bsHepatitisBNumJoins" />
+		<where>
+		    and a.localcode = #{localCode}
+			 <if test="kin != null and kin.username != null and kin.username != ''">
+				AND b.username = #{username}
+			</if> 
+			 <if test="kin != null and kin.idcardNo != null and kin.idcardNO != ''">
+				AND	b.idcard_no  = #{idcardNo}
+			</if> 
+			<if test="vaccineNum != null and vaccineNum != ''">
+				AND	a.vaccine_num = #{vaccineNum}
+			</if>
+			 <if test="manufacturer != null and manufacturer != ''">
+				AND	a.manufacturer  = #{manufacturer}
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	a.create_by  = #{createById}
+			</if> 
+			<if test="vaccType != null and vaccType != ''">
+				AND	a.vacctype  = #{vaccType}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				 AND a.real_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			AND a.real_date IS NOT NULL
+			AND a.status = '1'
+			AND a.w_status = '0'
+			and a.deflag='0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY 
+					a.manufacturer ASC ,
+					b.hepa_b_code ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 查询全部针次 -->
+	<select id="queryBsNumListOut" resultType="BsHepatitisBNum">
+		SELECT
+			<include refid="bsHepatitisBNumColumns" />
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins" />
+		WHERE 
+			a.check_id = #{checkId}
+		AND trunc(a.vaccine_date) = trunc(#{vaccineDate})
+		AND a.pay_status != '0'
+		AND (a.signature = '0' OR a.signature = '2')
+		AND a.deflag='0'
+	</select>
+	
+	<!--查询乙肝疫苗实际库存 -->
+	<select id="storeList" resultType="BsHepatitisBSocket">
+		SELECT
+			V."NAME" AS "vaccineName",
+			P .MANUFACTURER AS "manufacturer",
+			P .BATCHNO AS "batch",
+			S."LABEL" AS "standard",
+			P .STORENUM AS "storeNum",
+			P .VACCINEID as "vaccineId"
+		FROM
+			VIEW_BS_PRODUCT P
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID
+		LEFT JOIN SYS_DICT s ON s."VALUE" = P."SPECIFICATION" AND s."TYPE" = 'specification'
+		WHERE
+			P .ISSHOW = 'Y'
+			AND P .DEL_FLAG = '0'
+			AND P .STORENUM >= '0'
+			and p.localcode = #{localCode}
+			and p.officecode = #{officeCode}
+		ORDER BY V."NAME"
+	</select>
+	
+	<!--乙肝疫苗  查询已付款总量（但未接种未减库存） -->
+	<select id="vaccineHepaStock2" parameterType="BsHepatitisBNum" resultType="BsHepatitisBSocket">
+		SELECT
+			p .vaccine_id AS "vaccineId",
+			p .batch AS "batch",
+			p .standard AS "standard",
+			"COUNT" (batch) AS "storeNum2"
+		FROM
+			bs_hepatitis_b_num p
+		<where>
+		    and p.localcode = #{localCode}
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND p .create_date between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	p .create_by  = #{createById}
+			</if>
+			<if test="vaccType != null and vaccType != ''">
+				AND	p.vacctype  = #{vaccType}
+			</if>
+			AND p .pay_status = '1'
+			AND p.status = '0'
+			AND p .w_status = '0'
+			AND p .deflag = '0'
+		</where>
+		GROUP BY
+			p .vaccine_id,
+			p .batch,
+			p .standard
+	</select>
+	
+	<!-- 查询已完成并且已减库存记录 -->
+	<select id="findByCheckId" resultType="BsHepatitisBNum">
+		SELECT
+			<include refid="bsHepatitisBNumColumns" />
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins" />
+		WHERE 
+			a.check_id = #{checkId}
+		AND a.n_status  = '1'
+		AND a.real_date IS NOT NULL
+		AND a.status = '1'
+		AND a.deflag='0'
+		and a.localcode = #{localCode}
+	</select>
+	
+	<select id="findByChenkWxId" resultType="java.lang.String">
+		SELECT
+			a.id
+		FROM bs_hepatitis_b_num a
+		<where>
+			(a.signature = '0' OR a.signature = '2')
+			and a.localcode = #{localCode}
+			AND a.w_status = '0'
+			AND a.n_status = '0'
+			AND a.deflag = '0'
+			<if test="checkId != null and checkId != ''">
+				AND a.check_id = #{checkId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查询该记录签字是否存在 -->
+	<select id="querySignature" parameterType="BsHepatitisBNum" resultType="java.lang.Integer">
+		SELECT 
+			COUNT(*) 
+		FROM BS_HEPATITIS_B_SIGNATURE 
+		WHERE 
+			id = #{sId}
+	</select>
+	
+	<!-- 签字插入 -->
+	<insert id="insertSignature">
+		INSERT INTO BS_HEPATITIS_B_SIGNATURE(
+			id,
+			signature,
+			stype
+		) VALUES (
+			#{sId},
+			#{signatureData},
+			#{stype}
+		)
+	</insert>
+	
+	<!-- 用户告知书签字 -->
+	<update id="updateCheckSId">
+		UPDATE BS_HEPATITIS_BCHECKIN 
+		SET
+			s_id = #{sId}
+		WHERE 
+			id = #{checkId} 
+	</update>
+	
+	<!-- 修改签字状态 -->
+	<update id="updateSignatures">
+		UPDATE bs_hepatitis_b_num 
+		SET
+			signature = #{signature},
+			s_id = #{sId},
+			create_date = sysdate
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findById" resultType="BsHepatitisBNum">
+		SELECT
+			<include refid="bsHepatitisBNumColumns" />
+		FROM bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins" />
+		<where>
+			<if test="checkId != null and checkId != ''">
+				AND a.check_id = #{checkId}
+			</if>
+			<if test="nStatus != null and nStatus != ''">
+				AND a.n_status  = #{nStatus}
+			</if>
+			and a.deflag = '0' 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			ORDER BY a.check_id,a.vaccine_num,a.vaccine_date,a.status desc,a.pay_status desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByCheckid" resultType="BsHepatitisBNum">
+		select
+			<include refid="bsHepatitisBNumColumns"/>
+		from bs_hepatitis_b_num a
+			<include refid="bsHepatitisBNumJoins" />
+		<where>
+			<if test="checkId != null and checkId !='' ">
+				 and a.check_id = #{checkId}
+			</if>
+			 and a.deflag = '0' 
+			 and a.localcode = #{localCode}
+		</where>
+		 ORDER BY a.vaccine_num 
+	</select>
+	
+	<update id="deleteByCheckid">
+		update  bs_hepatitis_b_num a 
+		set a.deflag = '1'
+		WHERE 
+			a.check_id = #{id} 
+		and a.localcode = #{localCode}
+	</update>
+	
+	<insert id="insertPay">
+		INSERT INTO BS_RABIES_PAY(
+			"id",
+			"check"
+		) VALUES (
+			#{id},
+			#{check}
+		)
+	</insert>
+	
+	<update id="updateSignStatus">
+		UPDATE bs_hepatitis_b_num 
+		SET
+			signature = '2'
+		WHERE id = #{id}
+	</update>
+	
+	<update id="refundById">
+		UPDATE bs_hepatitis_b_num SET 
+			<if test="realDate != null and realDate !='' ">
+				 real_date = #{realDate},
+			</if>
+			<if test="nStatus != null and nStatus !='' ">
+				 n_status = #{nStatus},
+			</if>
+			<if test="payStatus != null and payStatus !='' ">
+				 pay_status = #{payStatus},
+			</if>
+			<if test="status != null and status !='' ">
+				 status = #{status},
+			</if>
+			<if test="createBy != null and createBy != '' and createBy.loginName != null and createBy.loginName !='' ">
+				 create_name = #{createBy.loginName},
+			</if>
+			<if test="createBy != null and createBy != '' and createBy.id != null and createBy.id !='' ">
+				 create_by = #{createBy.id},
+			</if>
+			create_date = sysdate
+		WHERE id = #{id}
+	</update>
+	
+	<update id="saveAdjustment">
+		UPDATE bs_hepatitis_b_num SET
+			original_price = #{originalPrice},
+			current_price = #{currentPrice},
+			fund_status = '1'
+		WHERE id = #{id}
+	</update>
+</mapper>

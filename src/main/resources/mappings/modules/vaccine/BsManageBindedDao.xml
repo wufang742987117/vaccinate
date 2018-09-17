@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.vaccine.dao.BsManageBindedDao">
+    
+	<sql id="bsManageBindedColumns">
+		a.id AS "id",
+		a.bind_vacc_id AS "bindVaccId",
+		a.bind_vacc_pin AS "bindVaccPin",
+		a.vacc_id AS "vaccId",
+		a.vacc_pin AS "vaccPin",
+		a.default_vacc_id AS "defaultVaccId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a."LEVEL" AS "level",
+		a."BIND" AS "bind",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="bsManageVaccineColumns">
+		v.id AS "vaccine.id",
+		v.g_num AS "vaccine.gNum",
+		v.name AS "vaccine.name",
+		v.pathema AS "vaccine.pathema",
+		v.g_name AS "vaccine.gName",
+		v.ban AS "vaccine.ban",
+		v.g_code AS "vaccine.gCode",
+		v.code AS "vaccine.code",
+		v.name_all AS "vaccine.nameAll",
+		v.code_all AS "vaccine.codeAll",
+		v.status AS "vaccine.status",
+		v.price AS "vaccine.price",
+		v.excep AS "vaccine.excep",
+		v.live AS "vaccine.live",
+		v.type AS "vaccine.type",
+		M.M_NUM AS "vaccine.mNum"
+	</sql>
+	
+	<sql id="bsManageBindedJoins">
+		left join BS_MANAGE_VACCINE v ON a.vacc_id = v."ID" 
+		left join BS_MANAGE_VACCINE_MODEL M ON a.vacc_id = M."ID" and a.localcode = M.localcode
+	</sql>
+    
+	<sql id="bsManageVaccines">
+		left join BS_MANAGE_VACCINE v1 ON a.default_vacc_id = v1."ID" AND A .default_vacc_id IS NOT NULL 
+		left join BS_MANAGE_VACCINE v2 ON a.bind_vacc_id = v2."ID" AND A.bind_vacc_id IS NOT NULL
+	</sql>
+    
+	<select id="get" resultType="BsManageBinded">
+		SELECT 
+			<include refid="bsManageBindedColumns"/>,
+			<include refid="bsManageVaccineColumns"/>
+		FROM bs_manage_binded a
+		<include refid="bsManageBindedJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsManageBinded">
+		SELECT 
+			<include refid="bsManageBindedColumns"/>,
+			<include refid="bsManageVaccineColumns"/>,v1.name AS "defaultName",v2.name AS "bindName"
+		FROM bs_manage_binded a
+		<include refid="bsManageBindedJoins"/>
+		<include refid="bsManageVaccines"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.localcode = #{localCode}
+			<if test="bindVaccId != null and bindVaccId != ''">
+				AND a.bind_vacc_id = #{bindVaccId}
+			</if>
+			<if test="bind != null and bind != ''">
+				AND a.bind = #{bind}
+			</if>
+			<if test="vaccId != null and vaccId != ''">
+				AND a.vacc_id = #{vaccId}
+
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<when test="orderBy !=null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsManageBinded">
+		SELECT 
+			<include refid="bsManageBindedColumns"/>,
+			<include refid="bsManageVaccineColumns"/>
+		FROM bs_manage_binded a
+		<include refid="bsManageBindedJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.localcode = #{localCode}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_manage_binded(
+			id,
+			bind_vacc_id,
+			bind_vacc_pin,
+			vacc_id,
+			vacc_pin,
+			default_vacc_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			localcode
+		) VALUES (
+			#{id},
+			#{bindVaccId},
+			#{bindVaccPin},
+			#{vaccId},
+			#{vaccPin},
+			#{defaultVaccId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_manage_binded SET 	
+			bind_vacc_id = #{bindVaccId},
+			bind_vacc_pin = #{bindVaccPin},
+			vacc_id = #{vaccId},
+			vacc_pin = #{vaccPin},
+			default_vacc_id = #{defaultVaccId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id} and localcode = #{localCode}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_manage_binded SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} and localcode = #{localCode}
+	</update>
+	
+</mapper>

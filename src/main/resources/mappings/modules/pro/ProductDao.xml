@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pro.dao.ProductDao">
+    
+	<sql id="productColumns">
+		a.id AS "id",
+		a.product_type_id AS "productTypeId",
+		a.code AS "code",
+		a.name AS "name",
+		a.is_enable AS "isEnable",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		b.name AS "proName"
+	</sql>
+	<resultMap type="Product" id="Product" >
+		<id column="id" property="id" />	
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="isEnable" property="isEnable" />
+		<result column="createDate" property="createDate" />
+		<result column="proName" property="proName" />
+			<collection property="productTypeId" ofType="productType">
+				<result column="pId" property="pId" />
+				<result column="name" property="name" />
+				<result column="createDate" property="createDate" />
+				<result column="updateDate" property="updateDate" />
+				<result column="isEnable" property="isEnable" />
+				<result column="id" property="id" />
+			</collection>
+	</resultMap>
+	<sql id="productJoins">
+		join product_type b on a.product_type_id =b.id
+	</sql>
+    
+	<select id="get" resultMap="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultMap="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultMap="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product(
+			product_type_id,
+			code,
+			name,
+			is_enable,
+			create_date,
+			update_date
+		) VALUES (
+			#{productTypeId.id},
+			#{code},
+			#{name},
+			#{isEnable},
+			NOW(),
+			NOW()
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product SET 	
+			product_type_id = #{productTypeId.id},
+			code = #{code},
+			name = #{name},
+			is_enable = #{isEnable},
+			update_date = NOW()
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.remind.dao.VacChildRemindDao">
+    
+	<sql id="vacChildRemindColumns">
+		a.id AS "id",
+		a.childcode AS "childcode",
+		a.remind_date AS "remindDate",
+		a.remind_vacc AS "remindVacc",
+		a.vacc_id AS "vaccId",
+		a.com AS "com",
+		a.batch AS "batch",
+		a.spec AS "spec",
+		a.select_date AS "selectDate",
+		a.select_time AS "selectTime",
+		a.status AS "status",
+		a.insurance_id AS "insuranceId",
+		a.sign AS "sign",
+		a.code AS "code",
+		a.localcode AS "localCode",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="vacChildRemindJoins">
+	</sql>
+    
+	<select id="get" resultType="VacChildRemind">
+		SELECT 
+			<include refid="vacChildRemindColumns"/>
+		FROM vac_child_remind a
+		<include refid="vacChildRemindJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="VacChildRemind">
+		SELECT 
+			<include refid="vacChildRemindColumns"/>
+		FROM vac_child_remind a
+		<include refid="vacChildRemindJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and localcode = #{localCode}
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode = #{childcode}
+			</if>
+			<if test="beginRemindDate != null and beginRemindDate != ''">
+				AND a.remind_date &gt;= #{beginRemindDate}
+			</if>
+			<if test="endRemindDate != null and endRemindDate != ''">
+				AND a.remind_date &lt;= #{endRemindDate}
+			</if>
+			<if test="beginSelectDate != null and beginSelectDate != ''">
+				AND a.select_date &gt;= #{beginSelectDate}
+			</if>
+			<if test="endSelectDate != null and endSelectDate != ''">
+				AND a.select_date &lt;= #{endSelectDate}
+			</if>
+			
+			<if test="vaccId != null and vaccId != ''">
+				AND a.vacc_id = #{vaccId}
+			</if>
+			<if test="batch != null and batch != ''">
+				AND a.batch LIKE '%'||#{batch}||'%'
+			</if>
+			<if test="selectDate != null and selectDate != ''">
+				AND a.select_date = #{selectDate}
+			</if>
+			<if test="remindDate != null and remindDate != ''">
+				AND a.remind_date = #{remindDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="VacChildRemind">
+		SELECT 
+			<include refid="vacChildRemindColumns"/>
+		FROM vac_child_remind a
+		<include refid="vacChildRemindJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO vac_child_remind(
+			id,
+			childcode,
+			remind_date,
+			remind_vacc,
+			vacc_id,
+			com,
+			batch,
+			spec,
+			code,
+			select_date,
+			select_time,
+			insurance_id,
+			localcode,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			pay_price,
+			pay_status
+		) VALUES (
+			#{id},
+			#{childcode},
+			#{remindDate},
+			#{remindVacc},
+			#{vaccId},
+			#{com},
+			#{batch},
+			#{spec},
+			#{code},
+			#{remindDate},
+			#{selectTime},
+			#{insuranceId},
+			#{localCode},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{payPrice},
+			#{PAY_STATUS_NO}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE vac_child_remind SET 	
+			childcode = #{childcode},
+			remind_date = #{remindDate},
+			remind_vacc = #{remindVacc},
+			vacc_id = #{vaccId},
+			com = #{com},
+			batch = #{batch},
+			spec = #{spec},
+			code = #{code},
+			select_date = #{selectDate},
+			select_time = #{selectTime},
+			status = #{status},
+			insurance_id = #{insuranceId},
+			sign = #{sign},
+			localcode = #{localCode},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pay_price = #{payPrice},
+			pay_status = #{payStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE vac_child_remind SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 完成预约 -->
+	<update id="finsihRemind">
+		UPDATE vac_child_remind SET 
+			status = '1' 
+		WHERE id = #{value} 
+	</update>
+	
+	<update id="clearOldRemind">
+		UPDATE vac_child_remind SET 
+			del_flag = '1' 
+		WHERE CHILDCODE = #{childcode} and LOCALCODE = #{localCode} and create_date &lt; TRUNC(SYSDATE,'dd')
+	</update>
+	
+	<select id="getWxSignFromLocal" resultType="VacChildRemind">
+		SELECT * FROM (
+			select 
+				SIGNATURE "signatureByte",
+				STYPE "stype",
+				VID "vid",
+				CHILDCODE "childcode"
+			from VAC_CHILD_SIGN where vid = #{rid}
+			ORDER BY CREATE_DATE DESC
+		)WHERE ROWNUM &lt;= 1
+	</select>
+	
+	<insert id="insertWxSign">
+		insert into VAC_CHILD_SIGN (
+			ID,
+			SIGNATURE,
+			STYPE,
+			VID,
+			CHILDCODE	
+		)VALUES(
+			#{id},
+			#{signatureByte},
+			#{stype},
+			#{vid},
+			#{childcode} 
+		)
+	</insert>
+	
+	<delete id="clearSignJob">
+		delete from VAC_CHILD_SIGN where CREATE_DATE &lt; (SYSDATE-7)
+	</delete>
+	
+	<select id="getRemindCount" resultType="Integer">
+		SELECT COUNT(*) FROM VAC_CHILD_REMIND WHERE DEL_FLAG = 0 AND  TRUNC(CREATE_DATE) = TRUNC(SYSDATE)
+	</select>
+	
+</mapper>

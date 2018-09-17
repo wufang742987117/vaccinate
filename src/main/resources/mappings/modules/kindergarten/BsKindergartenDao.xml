@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.kindergarten.dao.BsKindergartenDao">
+    
+	<sql id="bsKindergartenColumns">
+		a.id AS "id",
+		a.kindergarten_code AS "kindergartenCode",
+		a.name_all AS "nameAll",
+		a.name AS "name",
+		a.address AS "address",
+		a.contacts AS "contacts",
+		a.teletephone AS "teletephone",
+		a.moblie AS "moblie",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag
+	</sql>
+	
+	<sql id="bsKindergartenJoins">
+	</sql>
+    
+	<select id="get" resultType="BsKindergarten">
+		SELECT 
+			<include refid="bsKindergartenColumns"/>
+		FROM bs_kindergarten a
+		<include refid="bsKindergartenJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsKindergarten">
+		SELECT 
+			<include refid="bsKindergartenColumns"/>
+		FROM bs_kindergarten a
+		<include refid="bsKindergartenJoins"/>
+		<where>
+			<if test="kindergartenCode != null and kindergartenCode != ''">
+				AND a.kindergarten_code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{kindergartenCode}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{kindergartenCode}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{kindergartenCode},'%')</if>
+			</if>
+			<if test="nameAll != null and nameAll != ''">
+				AND a.name_all LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nameAll}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nameAll}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nameAll},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE 
+					<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
+			<if test="contacts != null and contacts != ''">
+				AND a.contacts LIKE 
+					<if test="dbName == 'oracle'">'%'||#{contacts}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{contacts}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{contacts},'%')</if>
+			</if>
+			<if test="teletephone != null and teletephone != ''">
+				AND a.teletephone LIKE 
+					<if test="dbName == 'oracle'">'%'||#{teletephone}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{teletephone}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{teletephone},'%')</if>
+			</if>
+			<if test="moblie != null and moblie != ''">
+				AND a.moblie LIKE 
+					<if test="dbName == 'oracle'">'%'||#{moblie}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{moblie}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{moblie},'%')</if>
+			</if>
+			AND a.localcode = #{localCode}
+			AND a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsKindergarten">
+		SELECT 
+			<include refid="bsKindergartenColumns"/>
+		FROM bs_kindergarten a
+		<include refid="bsKindergartenJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_kindergarten(
+			id,
+			kindergarten_code,
+			name_all,
+			name,
+			address,
+			contacts,
+			teletephone,
+			moblie,
+			remarks,
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date,
+			del_flag,
+			localcode
+		) VALUES (
+			#{id},
+			#{kindergartenCode},
+			#{nameAll},
+			#{name},
+			#{address},
+			#{contacts},
+			#{teletephone},
+			#{moblie},
+			#{remarks},
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{delFlag},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_kindergarten SET 	
+			kindergarten_code = #{kindergartenCode},
+			name_all = #{nameAll},
+			name = #{name},
+			address = #{address},
+			contacts = #{contacts},
+			teletephone = #{teletephone},
+			moblie = #{moblie},
+			remarks = #{remarks},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id} AND localcode = #{localCode}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_kindergarten SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} AND localcode = #{localCode}
+	</update>
+	
+</mapper>

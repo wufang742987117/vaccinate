@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.shequ.dao.SysCommunityDao">
+    
+	<sql id="sysCommunityColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.remarks AS "remarks",
+		a.localcode AS "localCode"
+	</sql>
+	
+	<sql id="sysCommunityJoins">
+	</sql>
+    
+	<select id="get" resultType="SysCommunity">
+		SELECT 
+			<include refid="sysCommunityColumns"/>
+		FROM sys_community a
+		<include refid="sysCommunityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysCommunity">
+		SELECT 
+			a.id AS "id", a.code AS "code", a.name AS "name", a.remarks AS "remarks" ,b.COUNT AS "count" 
+		FROM sys_community a LEFT JOIN (select t.area,COUNT(*) AS COUNT from bs_child_baseinfo t GROUP BY t.area) b ON a.code=b.area
+		<include refid="sysCommunityJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+			AND A.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.code
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysCommunity">
+		SELECT 
+			<include refid="sysCommunityColumns"/>
+		FROM sys_community a
+		<include refid="sysCommunityJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_community(
+			id,
+			code,
+			name,
+			remarks,
+			localcode
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{remarks},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_community SET 	
+			code = #{code},
+			name = #{name},
+			remarks = #{remarks},
+			localcode = #{localCode}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_community
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

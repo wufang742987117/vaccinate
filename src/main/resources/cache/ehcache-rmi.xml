@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="defaultCache">
+	<!-- <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory" properties="peerDiscovery=manual, socketTimeoutMillis=2000, 
+		rmiUrls=//localhost:40001/defaultCache" /> <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory" properties="hostName=localhost, 
+		port=40000, socketTimeoutMillis=2000"/> -->
+
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		properties="peerDiscovery=automatic,multicastGroupAddress=230.0.0.1,multicastGroupPort=4446,timeToLive=1,hostName=localhost" />
+	<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+		properties="hostName=localhost,port=40001" />
+
+	<diskStore path="../temp/qbkj/ehcache" />
+
+	<!-- 默认缓存配置. -->
+	<defaultCache maxEntriesLocalHeap="100" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"
+		maxEntriesLocalDisk="100000" />
+
+	<!-- 系统缓存 -->
+	<cache name="sysCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" />
+		<bootstrapCacheLoaderFactory class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"/>
+	</cache>
+
+	<!-- 用户缓存 -->
+	<cache name="userCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true" />
+
+	<!-- 工作流模块缓存 -->
+	<cache name="actCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true" />
+	
+	<!-- toke缓存 -->
+	<cache name="tokenCache" maxEntriesLocalHeap="20" eternal="false" timeToLiveSeconds="7000" diskSpoolBufferSizeMB="2" overflowToDisk="true" />
+	<!-- 签字缓存 -->
+	<cache name="signCache" maxEntriesLocalHeap="0" eternal="false" timeToLiveSeconds="3600" diskSpoolBufferSizeMB="100" overflowToDisk="true" />
+
+	<!-- 系统活动会话缓存 -->
+	<cache name="activeSessionsCache" maxEntriesLocalHeap="10000" overflowToDisk="true" eternal="true" timeToLiveSeconds="0" timeToIdleSeconds="0"
+		diskPersistent="true" diskExpiryThreadIntervalSeconds="600" />
+
+</ehcache>

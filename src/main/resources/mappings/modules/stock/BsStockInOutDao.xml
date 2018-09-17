@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.stock.dao.BsStockInOutDao">
+    
+	<sql id="bsStockInOutColumns">
+		a.id AS "id",
+		a.year AS "year",
+		a.mouth AS "mouth",
+		a.vaccine_id AS "vaccineId",
+		a.com_id AS "comId",
+		a.vaccine_name AS "vaccineName",
+		a.com_name AS "comName",
+		a.stock_old AS "stockOld",
+		a.num_in AS "numIn",
+		a.num_out AS "numOut",
+		a.num_return AS "numReturn",
+		a.num_scrap AS "numScrap",
+		a.stock_now AS "stockNow",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="bsStockInOutJoins">
+	</sql>
+    
+	<select id="get" resultType="BsStockInOut">
+		SELECT 
+			<include refid="bsStockInOutColumns"/>
+		FROM bs_stock_in_out a
+		<include refid="bsStockInOutJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsStockInOut">
+		SELECT 
+			<include refid="bsStockInOutColumns"/>
+		FROM bs_stock_in_out a
+		<include refid="bsStockInOutJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="mouth != null and mouth != ''">
+				AND a.mouth = #{mouth}
+			</if>
+			<if test="vaccineId != null and vaccineId != ''">
+				AND a.vaccine_id = #{vaccineId}
+			</if>
+			<if test="comId != null and comId != ''">
+				AND a.com_id = #{comId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsStockInOut">
+		SELECT 
+			<include refid="bsStockInOutColumns"/>
+		FROM bs_stock_in_out a
+		<include refid="bsStockInOutJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_stock_in_out(
+			id,
+			year,
+			mouth,
+			vaccine_id,
+			com_id,
+			vaccine_name,
+			com_name,
+			stock_old,
+			num_in,
+			num_out,
+			num_return,
+			num_scrap,
+			stock_now,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			remarks
+		) VALUES (
+			#{id},
+			#{year},
+			#{mouth},
+			#{vaccineId},
+			#{comId},
+			#{vaccineName},
+			#{comName},
+			#{stockOld},
+			#{numIn},
+			#{numOut},
+			#{numReturn},
+			#{numScrap},
+			#{stockNow},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_stock_in_out SET 	
+			year = #{year},
+			mouth = #{mouth},
+			vaccine_id = #{vaccineId},
+			com_id = #{comId},
+			vaccine_name = #{vaccineName},
+			com_name = #{comName},
+			stock_old = #{stockOld},
+			num_in = #{numIn},
+			num_out = #{numOut},
+			num_return = #{numReturn},
+			num_scrap = #{numScrap},
+			stock_now = #{stockNow},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_stock_in_out SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

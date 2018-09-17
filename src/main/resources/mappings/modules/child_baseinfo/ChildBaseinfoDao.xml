@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.thinkgem.jeesite.modules.child_baseinfo.dao.ChildBaseinfoDao">
+
+	<sql id="childBaseinfoColumns">
+		a.id AS "id",
+		a.childcode AS "childcode",
+		a.cardcode AS "cardcode",
+		a.birthcode AS "birthcode",
+		a.childname AS "childname",
+		a.gender AS "gender",
+		a.birthday AS "birthday",
+		a.birthhostipal AS "birthhostipal",
+		a.birthweight AS "birthweight",
+		a.guardianname AS "guardianname",
+		a.paradoxicalreaction AS "paradoxicalreaction",
+		a.officeinfo AS "officeinfo",
+		a.createdate AS "createdate",
+		a.localtype AS "localtype",
+		a.remarks AS "remarks",
+		a.creater AS "creater",
+		a.guardianmobile AS "guardianmobile",
+		a.guardianidentificationnumber AS "guardianidentificationnumber",
+		a.province AS "province",
+		a.city AS "city",
+		a.county AS "county",
+		a.address AS "address",
+		a.pr AS "pr",
+		a.ci AS "ci",
+		a.co AS "co",
+		a.nation AS "nation",
+		a.childorder AS "childorder",
+		a.situation AS "situation",
+		a.properties AS "properties",
+		a.reside AS "reside",
+		a.area AS "area",
+		a.father AS "father",
+		a.fatherphone AS "fatherphone",
+		a.mailingaddress AS "mailingaddress",
+		a.fathercard AS "fathercard",
+		a.tempid AS "tempid",
+		a."REGADDRESS" AS "add",
+		a.kindergartencode AS "kindergartencode",
+		a.officecode,
+		a.localCode AS "localCode"
+	</sql>
+
+	<sql id="childBaseinfoJoins">
+	</sql>
+
+	<select id="get" resultType="ChildBaseinfo">
+		SELECT
+		<include refid="childBaseinfoColumns" />
+		FROM bs_child_baseinfo a
+		<include refid="childBaseinfoJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="findList" resultType="ChildBaseinfo">
+		SELECT
+		<include refid="childBaseinfoColumns" />
+		FROM bs_child_baseinfo a
+		<include refid="childBaseinfoJoins" />
+		<where>
+			AND A."LOCALCODE" = #{localCode}
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode LIKE '%'||#{childcode}
+			</if>
+			<if test="cardcode != null and cardcode != ''">
+				AND a.cardcode LIKE '%'||#{cardcode}||'%'
+			</if>
+			<if test="birthcode != null and birthcode != ''">
+				AND a.birthcode LIKE '%'||#{birthcode}||'%'
+			</if>
+			<if test="childname != null and childname != ''">
+				AND a.childname LIKE '%'||#{childname}||'%'
+			</if>
+			<if test="guardianname != null and guardianname != ''">
+				AND a.guardianname LIKE '%'||#{guardianname}||'%'
+			</if>
+			<if
+				test="guardianidentificationnumber != null and guardianidentificationnumber != ''">
+				AND a.guardianidentificationnumber = #{guardianidentificationnumber}
+			</if>
+			<if
+				test="guardianmobile != null and guardianmobile != ''">
+				AND a.guardianmobile =
+				#{guardianmobile}
+			</if>
+			<if test="gender != null and gender != ''">
+				AND a.gender = #{gender}
+			</if>
+			<if test="father != null and father != ''">
+				AND a.father = #{father}
+			</if>
+			<if test="fathercard != null and fathercard != ''">
+				AND a.fathercard = #{fathercard}
+			</if>
+			<if test="fatherphone != null and fatherphone != ''">
+				AND a.fatherphone = #{fatherphone}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND a.birthday = #{birthday}
+			</if>
+			<if test="birthhostipal != null and birthhostipal != ''">
+				AND a.birthhostipal = #{birthhostipal}
+			</if>
+			<if test="birthweight != null and birthweight != ''">
+				AND a.birthweight = #{birthweight}
+			</if>
+			<if test="paradoxicalreaction != null and paradoxicalreaction != ''">
+				AND a.paradoxicalreaction = #{paradoxicalreaction}
+			</if>
+			<if test="officeinfo != null and officeinfo != ''">
+				AND a.officeinfo = #{officeinfo}
+			</if>
+			<if test="createdate != null and createdate != ''">
+				AND a.createdate = #{createdate}
+			</if>
+			<if test="situation != null and situation != ''">
+				AND a.situation = #{situation}
+			</if>
+			<if test="creater != null and creater != ''">
+				AND a.creater = #{creater}
+			</if>
+			<if test="area != null and area != ''">
+				AND a.area= #{area}
+			</if>
+			<if test="properties != null and properties != ''">
+				AND a.properties = #{properties}
+			</if>
+			<if test="reside != null and reside != ''">
+				AND a.reside = #{reside}
+			</if>
+			<if test="resides != null and resides != ''">
+				AND a.reside in (${resides})
+			</if>
+			<if test="situations != null and situations != ''">
+				AND a.situation in (${situations})
+			</if>
+			<if test="areas != null and areas != ''">
+				AND a.area in (${areas})
+			</if>
+			<if test="propertiess != null and propertiess != ''">
+				AND a.properties in (${propertiess})
+			</if>
+
+			<if
+				test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.createdate between to_date('${begin}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if
+				test="birthbeginTime != null and birthbeginTime != '' and birthendTime != null and birthendTime != ''">
+				AND a.birthday between to_date('${birthbegin}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${birthend}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="searchBirth != null and searchBirth != ''">
+				OR (a.birthday LIKE to_date( '${searchBirth}','yyyy-MM-dd') and  a.situation &lt;&gt; '5'  AND A."LOCALCODE" = #{localCode})
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 根据儿童编码或者身份证号码查询儿童信息 -->
+	<select id="findListByCode" resultType="ChildBaseinfo">
+		SELECT
+		<include refid="childBaseinfoColumns" />
+		FROM bs_child_baseinfo a
+		<include refid="childBaseinfoJoins" />
+		<where>
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode LIKE '%'||#{childcode}||'%'
+			</if>
+			<if test="guardianidentificationnumber != null and guardianidentificationnumber != '' and fathercard != null and fathercard != ''">
+				AND (a.guardianidentificationnumber = #{guardianidentificationnumber} AND A."LOCALCODE" = #{localCode}) OR (a.fathercard = #{fathercard} AND A."LOCALCODE" = #{localCode})
+			</if>
+			AND A."LOCALCODE" = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ChildBaseinfo">
+		SELECT
+		<include refid="childBaseinfoColumns" />
+		FROM bs_child_baseinfo a
+		<include refid="childBaseinfoJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO bs_child_baseinfo(
+		id,
+		childcode,
+		cardcode,
+		birthcode,
+		childname,
+		gender,
+		birthday,
+		birthhostipal,
+		birthweight,
+		guardianname,
+		paradoxicalreaction,
+		officeinfo,
+		officecode,
+		createdate,
+		creater,
+		guardianmobile,
+		guardianidentificationnumber,
+		province,
+		city,
+		county,
+		address,
+		pr,
+		ci,
+		co,
+		nation,
+		childorder,
+		situation,
+		properties,
+		reside,
+		area,
+		father,
+		fatherphone,
+		mailingaddress,
+		fathercard,
+		updatedate,
+		upstatus,
+		localtype,
+		remarks,
+		tempid,
+		kindergartencode,
+		"REGADDRESS",
+		"LOCALCODE"
+		)
+		VALUES (
+		#{id},
+		#{childcode},
+		#{cardcode},
+		#{birthcode},
+		#{childname},
+		#{gender},
+		#{birthday},
+		#{birthhostipal},
+		#{birthweight},
+		#{guardianname},
+		#{paradoxicalreaction},
+		#{officeinfo},
+		#{officecode},
+		sysdate,
+		#{creater},
+		#{guardianmobile},
+		#{guardianidentificationnumber},
+		#{province},
+		#{city},
+		#{county},
+		#{address},
+		#{pr},
+		#{ci},
+		#{co},
+		#{nation},
+		#{childorder},
+		#{situation},
+		#{properties},
+		#{reside},
+		#{area},
+		#{father},
+		#{fatherphone},
+		#{mailingaddress},
+		#{fathercard},
+		sysdate,
+		'0',
+		#{localtype},
+		#{remarks},
+		#{tempid},
+		#{kindergartencode},
+		#{add},
+		#{localCode}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE bs_child_baseinfo SET
+		childcode = #{childcode},
+		cardcode = #{cardcode},
+		birthcode = #{birthcode},
+		childname =#{childname},
+		gender = #{gender},
+		birthday = #{birthday},
+		birthhostipal =#{birthhostipal},
+		birthweight = #{birthweight},
+		guardianname =#{guardianname},
+		paradoxicalreaction = #{paradoxicalreaction},
+		officeinfo =#{officeinfo},
+		officecode =#{officecode},
+		<!-- createdate = sysdate,
+		creater = #{creater}, -->
+		guardianmobile = #{guardianmobile},
+		guardianidentificationnumber =#{guardianidentificationnumber},
+		province =#{province},
+		city =#{city},
+		county =#{county},
+		address =#{address},
+		pr =#{pr},
+		ci =#{ci},
+		co = #{co},
+		nation = #{nation},
+		childorder = #{childorder},
+		situation = #{situation},
+		properties =
+		#{properties},
+		reside = #{reside},
+		area = #{area},
+		father = #{father},
+		fatherphone = #{fatherphone},
+		mailingaddress = #{mailingaddress},
+		fathercard = #{fathercard},
+		"REGADDRESS" = #{add},
+		updatedate =sysdate,
+		localtype =#{localtype},
+		kindergartencode=#{kindergartencode},
+		remarks =#{remarks},
+		upstatus = '0'
+		WHERE id = #{id} AND "LOCALCODE" = #{localCode}
+	</update>
+
+
+	<update id="delete">
+		DELETE FROM bs_child_baseinfo
+		WHERE id = #{id} AND A."LOCALCODE" = #{localCode}
+	</update>
+
+	<select id="getByNo" resultType="ChildBaseinfo">
+		SELECT
+		<include refid="childBaseinfoColumns" />
+		FROM bs_child_baseinfo a
+		<include refid="childBaseinfoJoins" />
+		WHERE a.childcode =#{childcode} AND A.localcode = #{localCode}
+	</select>
+
+	<!-- 根据开始时间和结束时间以及间隔天数查询儿童信息 -->
+	<select id="sel1" resultType="ChildBaseinfo">
+		<if test="name == null or name == ''">
+			SELECT DISTINCT
+			<include refid="childBaseinfoColumns" />
+			FROM
+			BS_CHILD_BASEINFO a
+			LEFT JOIN (
+				SELECT "MAX"(VACCINATEDATE)
+				VACCINATEDATE , CHILDID 
+				FROM BS_CHILD_VACCINATERECORD
+				WHERE STATUS= '1' and localcode = #{localCode}
+				GROUP BY CHILDID
+			) v ON A . ID = v.CHILDID
+			WHERE
+			a.localcode = #{localCode} and
+			FLOOR (SYSDATE - v.VACCINATEDATE) &gt; #{distanceDay}
+			<if test="begin != null and begin!=''">
+				AND a.BIRTHDAY BETWEEN to_date('${begin}','yyyy-MM-dd') and
+				to_date('${end}','yyyy-MM-dd')
+			</if>
+		</if>
+		<if test="name != null and name != ''">
+			SELECT
+			info.*
+			FROM
+			(
+				SELECT
+				"MAX" (VACCINATEDATE) AS vacc,
+				CHILDID,
+				VACCINEID
+				FROM
+					BS_CHILD_VACCINATERECORD
+				where localcode = #{localCode}
+				GROUP BY
+				CHILDID,
+				VACCINEID
+			) aa
+			LEFT JOIN BS_MANAGE_VACCINE bv ON BV."ID" = AA.VACCINEID and BV.localcode = AA.localcode
+			LEFT JOIN BS_CHILD_BASEINFO info ON aa.CHILDID = info. ID and aa.localcode = info.localcode
+			WHERE
+			aa.localcode = #{localCode}
+			and BV."NAME" = #{name}
+			AND FLOOR (SYSDATE - vacc) &gt;#{distanceDay}
+			<if test="begin != null and begin != ''">
+				AND BIRTHDAY BETWEEN to_date('${begin}','yyyy-MM-dd') and
+				to_date('${end}','yyyy-MM-dd')
+			</if>
+		</if>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	
+	<!-- 根据儿童id查询儿童接种记录并根据疫苗名称和针次排序 (一类疫苗) -->
+	<select id="one" resultType="Nursery">
+		SELECT
+			V."ID" AS ID,
+			v.VACC_BIGNAME AS NAME,
+			V.DOSAGE AS pin,
+			v.VACCINATEDATE AS VACCINATEDATE,
+			v.VACC_NAME AS VACCNAME,
+			v.remarks AS inocUnionCode
+		FROM
+			BS_CHILD_VACCINATERECORD v
+			LEFT JOIN BS_CHILD_BASEINFO b ON b."ID" = v.CHILDID and b.localcode = v.localcode
+			JOIN BS_MANAGE_VACCINENUM n ON n."ID" = v.nid AND n.localcode = v.localcode
+		WHERE
+			b.CHILDCODE = #{childcode} and b.localcode = #{localCode}
+		AND n. TYPE = '1'
+		AND v.status &lt;&gt; '9'
+		ORDER BY
+			"SUBSTR"(v.VACCINEID,'0', '2'),
+			v.DOSAGE ASC
+	</select>
+	<!-- 根据儿童id查询儿童接种记录并根据疫苗名称和针次排序 (二类疫苗) -->
+	<select id="two" resultType="Nursery">
+		SELECT
+			VV."ID" AS ID,
+			VV.VACC_BIGNAME AS NAME,
+			VV.DOSAGE AS PIN,
+			VV.VACCINATEDATE AS VACCINATEDATE,
+			VV.VACC_NAME AS VACCNAME,
+			VV.VACCINEID,
+			VV.remarks AS inocUnionCode
+		FROM
+			BS_CHILD_VACCINATERECORD VV
+		LEFT JOIN BS_CHILD_BASEINFO B ON B."ID" = VV.CHILDID and B.localcode = VV.localcode
+		WHERE
+			B.CHILDCODE = #{childcode} and VV.localcode = #{localCode}
+			<if
+			test="notid != null and notid != ''">
+				AND VV."ID" NOT IN (${notid})
+		</if>
+		
+		AND VV.STATUS &lt;&gt; 9 AND VV.SOURCE &lt;&gt; 4
+		ORDER BY
+			"SUBSTR"(vv.VACCINEID,'0', '2'),
+			VV.DOSAGE ASC
+
+	</select>
+	<!-- 儿童编码后四位生成规则 -->
+	<select id="bianma" resultType="java.lang.String">
+		select nvl(lpad(max(substr(t.childcode,15,4))+1,4,0),'0001')
+		as max_code 
+		from bs_child_baseinfo t 
+		where
+		substr(t.childcode,11,4)=#{year}
+		AND t.LOCALTYPE!=1 and t.localcode = #{localCode}
+	</select>
+	
+		<!-- 儿童编码后四位生成规则 -->
+	<select id="bianmadog" resultType="java.lang.String">
+		SELECT NVL ( LPAD ( MAX (SUBSTR(T ."rabiescode", 16, 4)) + 1, 4, 0 ), '0001' ) AS max_code
+		FROM
+			BS_RABIES_CHECKIN T
+		WHERE
+			SUBSTR (T."rabiescode", 12, 4) =#{year} and t.localcode = #{localCode}
+	</select>
+
+
+	<insert id="insertRoot" parameterType="baseinfoRoot">
+		INSERT INTO bs_child_baseinfo(
+		id,
+		childcode,
+		cardcode,
+		birthcode,
+		childname,
+		gender,
+		birthday,
+		birthhostipal,
+		birthweight,
+		guardianname,
+		paradoxicalreaction,
+		officeinfo,
+		officecode,
+		createdate,
+		creater,
+		guardianmobile,
+		guardianidentificationnumber,
+		province,
+		city,
+		county,
+		address,
+		pr,
+		ci,
+		co,
+		nation,
+		childorder,
+		situation,
+		properties,
+		reside,
+		area,
+		father,
+		fatherphone,
+		mailingaddress,
+		fathercard,
+		updatedate,
+		upstatus,
+		localtype,
+		remarks,
+		tempid,
+		"REGADDRESS",
+		"LOCALCODE"
+		)
+		VALUES (
+		#{id},
+		#{childcode},
+		#{cardcode},
+		#{birthcode},
+		#{childname},
+		#{gender},
+		to_date('${birthday}','yyyy-MM-dd HH24:mi:ss') ,
+		#{birthhostipal},
+		#{birthweight},
+		#{guardianname},
+		#{paradoxicalreaction},
+		#{officeinfo},
+		#{officecode},
+		sysdate,
+		#{creater},
+		#{guardianmobile},
+		#{guardianidentificationnumber},
+		#{province},
+		#{city},
+		#{county},
+		#{address},
+		#{pr},
+		#{ci},
+		#{co},
+		#{nation},
+		#{childorder},
+		#{situation},
+		#{properties},
+		#{reside},
+		#{area},
+		#{father},
+		#{fatherphone},
+		#{mailingaddress},
+		#{fathercard},
+		sysdate,
+		'0',
+		#{localtype},
+		#{remarks},
+		'',
+		#{regaddress},
+		#{localCode}
+		)
+	</insert>
+	
+	<select id="getIdByCode" resultType="java.lang.String">
+		select id from BS_CHILD_BASEINFO where CHILDCODE = #{code} and localcode = #{localCode}
+	</select>
+	
+	<insert id="insertAefi">
+		insert into BS_AEFI (
+			AEFI_CHIL_ID,
+			AEFI_BACT_CODE,
+			AEFI_CODE,
+			AEFI_DATE,
+			localcode
+		) VALUES (
+			#{aefi_bact_code},
+			#{aefi_chil_id},
+			#{aefi_code},
+			<!-- to_date('${aefi_date}','yyyy-MM-dd HH24:mi:ss'), -->
+			#{aefi_date},
+			#{localCode)
+		)
+	</insert>
+	
+	<insert id="insertChhe">
+		insert into BS_CHILDHERE (
+			"CHHE_CHIL_ID",
+			"CHHE_HERE",
+			"CHHE_PREHERE",
+			"CHHE_CHANGEDATE",
+			"CHHE_CHIL_PROVINCE",
+			"CHHE_CHIL_PROVINCEREMARK",
+			"CHHE_CHGCODE",
+			"CHHE_DEPA_ID",
+			"CHHE_EDITSTATE",
+			localcode
+		) VALUES (
+			#{chhe_chil_id},
+			#{chhe_here},
+			#{chhe_prehere},
+			to_date('${chhe_changedate}','yyyy-MM-dd HH24:mi:ss') ,
+			#{chhe_chil_province},
+			#{chhe_chil_provinceremark},
+			#{chhe_chgcode},
+			#{chhe_depa_id},
+			#{chhe_editstate},
+			#{localCode}
+		)
+	</insert>
+	
+	<delete id="clearBaseInfo">
+		DELETE FROM BS_CHILD_BASEINFO WHERE "ID" = #{id} and localcode = #{localCode}
+	</delete>
+	<delete id="clearRecord">
+		DELETE FROM BS_CHILD_VACCINATERECORD WHERE "CHILDID" = #{id} and localcode = #{localCode}
+	</delete>
+	<delete id="clearAefi">
+		DELETE FROM BS_AEFI WHERE "AEFI_CHIL_ID" = #{code} and localcode = #{localCode}
+	</delete>
+	<delete id="clearHere">
+		DELETE FROM BS_CHILDHERE WHERE "CHHE_CHIL_ID" = #{code} and localcode = #{localCode}
+	</delete>
+	
+
+	<!--查询去年儿童的总数  -->
+	<select id="findYesteryearAllchi" resultType="int">
+	select 
+		count(id)
+	from bs_child_baseinfo 
+	<where>
+		<if test="startdate!=null and startdate !='' and enddate !=null and enddate !=''">
+		and birthday between #{startdate} and #{enddate}
+		</if>
+		and 
+	</where>
+	</select>
+	
+	<!-- 根据开始时间和结束时间以及间隔天数查询儿童信息 -->
+	<select id="findOD" resultType="ChildBaseinfo">
+		SELECT *
+		FROM (SELECT A.*,MONTHS_BETWEEN(SYSDATE, SDATE) AS OVMONTH, ROW_NUMBER() OVER(PARTITION BY A.ID ORDER BY A.MOUAGE) AS_LEVEL
+		FROM (SELECT D.*,
+		GREATEST(ADD_MONTHS(NVL(TRUNC(E.VACCINATEDATE),
+		TO_DATE('1900-01-01','yyyy-mm-dd')),
+		D.PINTIME),
+		TRUNC(VDATE)) AS SDATE
+		FROM (SELECT TT.*,BMV.*,ADD_MONTHS(TT.BIRTHDAY, BMV.MOUAGE) AS VDATE
+		FROM (SELECT MONTHS_BETWEEN(TRUNC(SYSDATE), TRUNC(T.BIRTHDAY)) || '' AS MON_AGE,T.*
+		FROM BS_CHILD_BASEINFO T
+		<where>
+			<if
+				test="birthbeginTime!=null and birthbeginTime !='' and birthendTime !=null and birthendTime !=''">
+				AND t.birthday between to_date('${birthbegin}','yyyy-MM-dd
+				HH24:mi:ss') and to_date('${birthend}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="resides != null and resides != ''">
+				AND t.reside in (${resides})
+			</if>
+			<if test="situations != null and situations != ''">
+				AND t.situation in(${situations})
+			</if>
+			<if test="areas != null and areas != ''">
+				AND t.area in (${areas})
+			</if>
+			<if test="officeinfo != null and officeinfo != '' and officeinfo !=0">
+				AND t.officeinfo=#{officeinfo}
+			</if>
+		</where>
+		) TT,
+		(SELECT T.ID AS NID,T.MOUAGE,NVL(T.LASTTIME, 888) AS LT,NVL(T.PINTIME, 0) AS PINTIME,T.NAME as vaccinate,LPAD(T.ID - 1, 3, '0') AS LNID,T.VACCGROUP
+		FROM BS_MANAGE_VACCINENUM T
+		<where>
+			<if test="vaccinates!=null and vaccinates !=''">
+				 AND t.vaccgroup in(${vaccinates})
+			</if>
+		</where>
+		) BMV
+		WHERE TT.MON_AGE >= BMV.MOUAGE
+		AND LT>TT.MON_AGE) D
+		LEFT JOIN BS_CHILD_VACCINATERECORD E ON D.LNID = E.NID
+		AND E.CHILDID = D.ID
+		AND E.STATUS = 1) A
+		LEFT JOIN (SELECT BCB.ID, BCV.NID
+		FROM BS_CHILD_BASEINFO BCB
+		LEFT JOIN BS_CHILD_VACCINATERECORD BCV ON BCB.ID =
+		BCV.CHILDID AND BCV.STATUS=1) B ON A.ID = B.ID
+		AND A.NID = B.NID
+		WHERE B.ID IS NULL) EE
+		WHERE EE.AS_LEVEL = 1
+		<if test="ovmonth!=null and ovmonth!=''">
+			and EE.ovmonth>=${ovmonth}
+		</if>
+		order by EE.area
+	</select>
+	
+	<select id="findFinishInDay" resultType="ChildBaseinfo">
+		SELECT r.childcode "hasRemind", a.* FROM BS_CHILD_BASEINFO a RIGHT  JOIN (
+			SELECT
+				"MAX"(VACCINATEDATE) MV,
+				CHILDID	
+			FROM
+				BS_CHILD_VACCINATERECORD rcv
+			WHERE
+				rcv.VACCINATEDATE &gt; (SYSDATE -1) AND rcv.VACCINATEDATE &lt; (SYSDATE +1) and rcv."SOURCE" &lt;&gt; '4' and rcv.localcode = #{localCode}
+			GROUP BY 	
+				CHILDID
+			) c ON c.CHILDID = a."ID" 
+			LEFT JOIN (
+				SELECT DISTINCT CHILDCODE FROM VAC_CHILD_REMIND WHERE REMIND_DATE &gt;= SYSDATE AND localcode = #{localCode} AND DEL_FLAG = '0' AND STATUS = '0'
+			)r ON r.CHILDCODE = a.CHILDCODE
+		<where>
+			a.localcode = #{localCode}
+			<if test="childcode != null and childcode != ''">
+				AND a.childcode LIKE '%'||#{childcode}
+			</if>
+			<if test="childname != null and childname != ''">
+				AND a.childname LIKE '%'||#{childname}||'%'
+			</if>
+			<if test="guardianname != null and guardianname != ''">
+				AND a.guardianname LIKE '%'||#{guardianname}||'%'
+			</if>
+			<if
+				test="guardianidentificationnumber != null and guardianidentificationnumber != ''">
+				AND a.guardianidentificationnumber = #{guardianidentificationnumber}
+			</if>
+			<if test="guardianmobile != null and guardianmobile != ''">
+				AND a.guardianmobile = #{guardianmobile}
+			</if>
+			<if test="gender != null and gender != ''">
+				AND a.gender = #{gender}
+			</if>
+			<if test="father != null and father != ''">
+				AND a.father = #{father}
+			</if>
+			<if test="fathercard != null and fathercard != ''">
+				AND a.fathercard = #{fathercard}
+			</if>
+			<if test="fatherphone != null and fatherphone != ''">
+				AND a.fatherphone = #{fatherphone}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND a.birthday = #{birthday}
+			</if>
+			<if test="paradoxicalreaction != null and paradoxicalreaction != ''">
+				AND a.paradoxicalreaction = #{paradoxicalreaction}
+			</if>
+			<if test="officeinfo != null and officeinfo != ''">
+				AND a.officeinfo = #{officeinfo}
+			</if>
+			<if test="createdate != null and createdate != ''">
+				AND a.createdate = #{createdate}
+			</if>
+			<if test="situation != null and situation != ''">
+				AND a.situation = #{situation}
+			</if>
+			<if test="creater != null and creater != ''">
+				AND a.creater = #{creater}
+			</if>
+			<if test="area != null and area != ''">
+				AND a.area= #{area}
+			</if>
+			<if test="properties != null and properties != ''">
+				AND a.properties = #{properties}
+			</if>
+			<if test="reside != null and reside != ''">
+				AND a.reside = #{reside}
+			</if>
+			<if test="resides != null and resides != ''">
+				AND a.reside in (${resides})
+			</if>
+			<if test="situations != null and situations != ''">
+				AND a.situation in (${situations})
+			</if>
+			<if test="areas != null and areas != ''">
+				AND a.area in (${areas})
+			</if>
+			<if test="propertiess != null and propertiess != ''">
+				AND a.properties in (${propertiess})
+			</if>
+			<if test="!hasRemindOption">
+				AND r.CHILDCODE IS NULL
+			</if>
+		</where>
+			ORDER BY r.CHILDCODE DESC, a.CHILDCODE
+	</select>
+	
+</mapper>

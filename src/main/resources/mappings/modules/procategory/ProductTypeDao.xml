@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.procategory.dao.ProductTypeDao">
+    
+	<sql id="productTypeColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.p_id AS "pId",
+		a.is_enable AS "isEnable",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="productTypeJoins">
+	</sql>
+	
+		<select id="findtree" resultType="ProductType">
+		SELECT 
+			<include refid="productTypeColumns"/>
+		FROM product_type a
+	</select>
+	<select id="get" resultType="ProductType">
+		SELECT 
+			<include refid="productTypeColumns"/>
+		FROM product_type a
+		<include refid="productTypeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProductType">
+		SELECT 
+			<include refid="productTypeColumns"/>
+		FROM product_type a
+		<include refid="productTypeJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProductType">
+		SELECT 
+			<include refid="productTypeColumns"/>
+		FROM product_type a
+		<include refid="productTypeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product_type(
+			id,
+			name,
+			p_id,
+			is_enable,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{name},
+			#{pId},
+			#{isEnable},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product_type SET 	
+			name = #{name},
+			p_id = #{pId},
+			is_enable = #{isEnable},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM product_type
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

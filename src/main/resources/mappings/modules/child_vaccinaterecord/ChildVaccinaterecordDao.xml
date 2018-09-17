@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.child_vaccinaterecord.dao.ChildVaccinaterecordDao">
+    
+	<sql id="childVaccinaterecordColumns">
+		a.id AS "id",
+		a.iseffect AS "iseffect",
+		a.remarks AS "remarks",
+		a.source AS "source",
+		a.childid AS "childid",
+		a.vaccineid AS "vaccineid",
+		a.dosage AS "dosage",
+		a.vaccinatedate AS "vaccinatedate",
+		a.bodypart AS "bodypart",
+		a.batch AS "batch",
+		a.office AS "office",
+		a.doctor AS "doctor",
+		a.createdate AS "createdate",
+		a.price AS "price",
+		a.status AS "status", 
+		a.vacc_bigname AS "vaccCode", 
+		a.vacc_name AS "vaccName",
+		a.nid AS "nid",
+		a.insurance AS "insurance",
+		a.manufacturer AS "manufacturer",
+		a.manufacturercode AS "manufacturercode",
+		a.productid AS "productid",
+		a.orderno AS "orderNO",
+		a.signature AS "signature",
+		a."sign" AS "sign",
+		a.vacctype AS "vacctype",
+		a.PAYSTATUS,
+		a.inoc_union_code AS "inocUnionCode",
+		a.inoc_union_record AS "inocUnionRecord",
+		a.vacc_exp_date AS "vaccExpDate",
+		a.original_price AS "originalPrice",
+		a.current_price AS "currentPrice",
+		a.fund_status AS "fundStatus",
+		b.childcode AS  "childcode",
+		b.childname AS  "childname",
+		b.birthday AS "birthday",
+		b.gender AS "gender",
+		b.guardianmobile AS "parentsMoblie",
+		b.guardianname AS "parentsName",
+		b.paradoxicalreaction AS "childAbnormalReaction",
+		b.remarks AS "childRemarks",
+		m.NAME AS "name",
+		m.PIN AS "dose",
+		v.live AS "vaccine.live",
+		v.type AS "vaccine.type",
+		s.signature AS "signatureList",
+		s.stype AS "stype"
+	</sql>
+	
+	<sql id="ChildVaccRecordColumns">
+		a.id AS "id",
+		a.vaccineid AS "vaccineid",
+		a.dosage AS "dosage",
+		a.vaccinatedate AS "vaccinatedate",
+		a.bodypart AS "bodypart",
+		a.batch AS "batch",
+		a.status AS "status", 
+		a.vacc_name AS "vaccName",
+		a.vacctype AS "vacctype"
+	</sql>
+	
+	<sql id="childVaccinaterecordJoins">
+		LEFT JOIN bs_child_baseinfo b on b.id = a.childid and b.localcode = a.localcode
+		LEFT JOIN bs_manage_vaccine v on v.id = a.vaccineid 
+		LEFT JOIN BS_MANAGE_VACCINE_MODEL vm on vm.id = a.vaccineid and vm.localcode = a.localcode
+		LEFT JOIN bs_manage_vaccinenum m on m.id = a.dosage and m.localcode = a.localcode
+		LEFT JOIN bs_child_signature s on s.id = a."ID"
+	</sql>
+	
+	<select id="get" resultType="ChildVaccinaterecord">
+		SELECT 
+			<include refid="childVaccinaterecordColumns"/>
+		FROM bs_child_vaccinaterecord a
+		<include refid="childVaccinaterecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ChildVaccinaterecord">
+		SELECT 
+			<include refid="childVaccinaterecordColumns"/>
+		FROM bs_child_vaccinaterecord a
+			<include refid="childVaccinaterecordJoins"/>
+		<where>
+			a.localcode = #{localCode}
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="status == null or status == ''">
+				AND a.status &lt;&gt; '9'
+			</if>			
+			<if test="childid != null and childid != ''">
+				AND a.childid = #{childid}
+			</if>
+			<if test="childname != null and childname != ''">
+				AND b.childname LIKE '%'||#{childname}||'%' 
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND a.vacc_name = #{vaccName}
+			</if>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="vaccinatedate != null and vaccinatedate != ''">
+				AND a.vaccinatedate = #{vaccinatedate}
+			</if>
+			<if test="vaccinatedateAfter != null and vaccinatedateAfter != ''">
+				AND a.vaccinatedate &gt; #{vaccinatedateAfter}
+			</if>
+			<if test="vaccinatedateBefore != null and vaccinatedateBefore != ''">
+				AND a.vaccinatedate &lt; #{vaccinatedateBefore}
+			</if>
+			<if test="bodypart != null and bodypart != ''">
+				AND a.bodypart = #{bodypart}
+			</if>
+			<if test="batch != null and batch != ''">
+				AND a.batch = #{batch}
+			</if>
+			<if test="office != null and office != ''">
+				AND a.office = #{office}
+			</if>
+			<if test="doctor != null and doctor != ''">
+				AND a.doctor = #{doctor}
+			</if>
+			<if test="createdate != null and createdate != ''">
+				AND a.createdate = #{createdate}
+			</if>
+			<if test="price != null and price != ''">
+				AND a.price = #{price}
+			</if>
+			<if test="productid != null and productid != ''">
+				AND a.productid = #{productid}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer = #{manufacturer}
+			</if>
+			<if test="inocUnionRecord != null and inocUnionRecord != ''">
+				AND a.inoc_union_record = #{inocUnionRecord}
+			</if>
+			<if test="vacctype != null and vacctype != ''">
+				AND a.vacctype = #{vacctype}
+			</if>
+			<if test="childcode != null and childcode != ''">
+				AND b.childcode LIKE '%'||#{childcode}
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND	a.vaccinatedate between to_date('${begin}','yyyy-MM-dd HH24:mi:ss') and to_date('${end}','yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="nid != null and nid != ''">
+				AND a.nid LIKE #{nid}||'%'
+			</if>
+			<if test="nidEq != null and nidEq != ''">
+				AND a.nid = #{nid}
+			</if>
+			<if test="vaccineidlike != null and vaccineid != ''">
+				AND a.vaccineid LIKE #{vaccineidlike}||'%'
+			</if>
+			<if test="sign != null and sign == 1 ">
+				AND a."sign" =#{sign}
+			</if>
+			<if test="open != null and open != ''">
+				AND a.source &lt;&gt; 3
+			</if>
+			<if test="openSource != null and openSource != ''">
+				AND a.source &lt;&gt; 4
+			</if>
+			<if test="sourceIn != null and sourceIn != ''">
+				AND a.source in (${sourceIn})
+			</if>
+			<if test="createById != null and createById != ''">
+				AND	a.doctor  = #{createById}
+			</if>
+			<!-- 接种台查询条件 -->
+			<if test="queneWhere != null and queneWhere != ''">
+				AND (a.status &lt;&gt; 0 or a.nid = #{queneWhere})
+			</if>
+			<if test="vacselected != null and vacselected != ''">
+				AND (a.VACCINEID in (${vacselected}) or vm.M_NUM in (${vacselected}) )
+			</if>
+		</where>
+		 <choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ChildVaccinaterecord">
+		SELECT 
+			<include refid="childVaccinaterecordColumns"/>
+		FROM bs_child_vaccinaterecord a
+		<include refid="childVaccinaterecordJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_child_vaccinaterecord(
+			id,
+			childid,
+			vaccineid,
+			dosage,
+			vaccinatedate,
+			bodypart,
+			batch,
+			office,
+			doctor,
+			createdate,
+			price,
+			status,
+			vacc_bigname,
+			vacc_name,
+			manufacturer,
+			productid,
+			nid,
+			"sign",
+			manufacturercode,
+			insurance,
+			source,
+			orderno,
+			payStatus,
+			vacctype,
+			iseffect,
+			remarks,
+			signature,
+			"LOCALCODE",
+			inoc_union_code,
+			inoc_union_record,
+			upstatus,
+			vaccinatedate_str
+		) VALUES (
+			#{id},
+			#{childid},
+			#{vaccineid},
+			#{dosage},
+			#{vaccinatedate},
+			#{bodypart},
+			#{batch},
+			#{office},
+			#{doctor},
+			sysdate,
+			#{price},
+			#{status},
+			#{vaccCode},
+			#{vaccName},
+			#{manufacturer},
+			#{productid},
+			#{nid},
+			#{sign},
+			#{manufacturercode},
+			#{insurance},
+			#{source},
+			#{orderNO},
+			#{payStatus},
+			#{vacctype},
+			#{iseffect},
+			#{remarks},
+			#{signature},
+			#{localCode},
+			#{inocUnionCode},
+			#{inocUnionRecord},
+			'0',
+			#{vaccinatedateStr}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_child_vaccinaterecord SET 	
+			childid = #{childid},
+			vaccineid = #{vaccineid},
+			dosage = #{dosage},
+			vaccinatedate = #{vaccinatedate},
+			bodypart = #{bodypart},
+			batch = #{batch},
+			office = #{office},
+			doctor = #{doctor},
+			status=#{status},
+			vacc_bigname = #{vaccCode},
+			vacc_name = #{vaccName},
+			manufacturer=#{manufacturer},
+			price=#{price},
+			nid=#{nid},
+			productid=#{productid},
+			manufacturercode=#{manufacturercode},
+			insurance=#{insurance},
+			source=#{source},
+			signature=#{signature},
+			payStatus=#{payStatus},
+			vacctype=#{vacctype},
+			iseffect=#{iseffect},
+			remarks=#{remarks},
+			inoc_union_code = #{inocUnionCode},
+			upstatus = '0',
+			vaccinatedate_str=#{vaccinatedateStr},
+			vacc_exp_date = #{vaccExpDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM bs_child_vaccinaterecord
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 根据儿童编码查询儿童的最近的接种记录 -->
+	<select id="date" resultType="ChildVaccinaterecord">
+		SELECT VACCINATEDATE  
+		FROM BS_CHILD_VACCINATERECORD   
+		WHERE CHILDID = #{childid} AND VACCINATEDATE IS NOT NULL AND STATUS='1' and localcode = #{localCode}
+		ORDER BY VACCINATEDATE DESC
+	</select>
+	
+	<!--  查看签字内容 -->
+	<select id="signature"  resultType="java.lang.String">
+		SELECT C.CONTEXT 
+		FROM BS_CHILD_VACCINATERECORD r
+			LEFT JOIN BS_MANAGE_VACCINE v ON v."ID"=r.VACCINEID 
+			LEFT JOIN CMS_DISCLOSURE c ON v.g_num=c."ID"
+		WHERE R.ID=#{signature} and r.localcode = #{localCode}
+	</select>
+	
+	<insert id="insertBcv" parameterType="bcv">
+		INSERT INTO bs_child_vaccinaterecord(
+			id,
+			childid,
+			vaccineid,
+			dosage,
+			vaccinatedate,
+			bodypart,
+			batch,
+			office,
+			doctor,
+			createdate,
+			price,
+			status,
+			vacc_bigname,
+			vacc_name,
+			manufacturer,
+			productid,
+			nid,
+			"sign",
+			manufacturercode,
+			insurance,
+			source,
+			payStatus,
+			vacctype,
+			iseffect,
+			remarks,
+			signature,
+			"LOCALCODE"
+		) VALUES (
+			#{id},
+			#{childid},
+			#{vaccineid},
+			#{dosage},
+			#{vaccinatedate},
+			#{bodypart},
+			#{batch},
+			#{office},
+			#{doctor},
+			sysdate,
+			#{price},
+			#{status},
+			#{vaccCode},
+			#{vacc_name},
+			#{manufacturer},
+			#{productid},
+			#{nid},
+			#{sign},
+			#{manufacturercode},
+			#{insurance},
+			#{source},
+			#{paystatus},
+			#{vacctype},
+			#{iseffect},
+			#{remarks},
+			'0',
+			#{localCode}
+		)
+	</insert>
+	
+	<insert id="insertSignature">
+		INSERT INTO BS_CHILD_SIGNATURE(
+			id,
+			signature,
+			stype
+		) VALUES (
+			#{id},
+			#{signatureList},
+			#{stype}
+		)
+	</insert>
+	
+	<insert id="insertSignatures">
+		INSERT INTO BS_CHILD_SIGNATURE(
+			id,
+			signature,
+			stype
+		) VALUES (
+			#{id},
+			#{signatureData},
+			#{stype}
+		)
+	</insert>
+	
+	<update id="updateSignature">
+		UPDATE BS_CHILD_SIGNATURE SET 	
+			signature = #{signatureList},
+			stype = #{stype}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSignTest">
+		UPDATE BS_CHILD_SIGNATURE SET 	
+			signature = #{signatureData}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getLastLiveDays" resultType="java.lang.Integer">
+		SELECT nvl(TRUNC(SYSDATE)-NVL(TRUNC(TT.MA),TRUNC(SYSDATE)-32),32) FROM (		
+		select "MAX"(vaccinatedate) AS "MA"
+				from BS_CHILD_VACCINATERECORD t left join BS_MANAGE_VACCINE v ON t.VACCINEID = v.id
+				where t.CHILDID=#{id}and v.LIVE = '1' AND t.VACCINATEDATE IS NOT NULL  AND t.status= '1' and t.localcode = #{localCode}
+				ORDER BY VACCINATEDATE DESC) tt
+	</select>
+	
+
+	
+	<!-- 查询记录签字是否存在 -->
+	<select id="querySignature" parameterType="ChildVaccinaterecord" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM BS_CHILD_SIGNATURE WHERE id = #{id}
+	</select>
+	
+	<!-- 更新签字状态 -->
+	<update id="updateSignatures">
+		UPDATE bs_child_vaccinaterecord 
+		SET 	
+			signature=#{signature}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="cancelRemind">
+		delete from VAC_CHILD_REMIND where id=#{value}
+	</update>
+	
+	<update id="deleteRemind">
+		UPDATE VAC_CHILD_REMIND SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteWhere" parameterType="java.util.Map">
+		delete from bs_child_vaccinaterecord
+		<where>
+			AND CHILDID = #{childid}
+			AND SOURCE = #{source}
+			AND localcode = #{localCode}
+		</where>
+	</delete>
+	
+	<update id="refundById">
+		UPDATE bs_child_vaccinaterecord 
+		SET 	
+			payStatus = #{payStatus}
+		WHERE 
+			nid = #{nid}
+		AND childid = #{childid}
+		AND localcode = #{localCode}
+		AND status != 9
+	</update>
+	
+	<update id="saveAdjustment">
+		UPDATE bs_child_vaccinaterecord 
+		SET 	
+			original_price = #{originalPrice},
+			current_price = #{currentPrice},
+			fund_status = '1'
+		WHERE 
+			id = #{id}
+	</update>
+	
+	
+	<!-- 根据筛选条件查询记录总条数 -->
+	<select id="getYQWZChildBaseInfoCount" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			(SELECT
+				DISTINCT CHILDCODE,
+				CHILDNAME,
+				GENDER,
+				RESIDE,
+				BIRTHDAY,
+				GUARDIANNAME,
+				GUARDIANMOBILE,
+				FATHER,
+				FATHERPHONE,
+				ADDRESS,
+				COMMNAME,
+				"NAME",
+				DOSAGE
+			FROM (
+			SELECT
+				DISTINCT T1.CHILDCODE,
+				T2.CHILDNAME,
+				T2.GENDER,
+				T2.RESIDE,
+				T2.BIRTHDAY,
+				T2.GUARDIANNAME,
+				T2.GUARDIANMOBILE,
+				T2.FATHER,
+				T2.FATHERPHONE,
+				T2.ADDRESS,
+				T4.NAME AS COMMNAME,
+				T3."NAME",
+				T1.DOSAGE
+			FROM
+			EXP_ROUTINEVACC_6_1_DETAIL T1 
+			INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+			INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+			INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+			WHERE
+			<!-- TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM') AND  -->
+			(T1."TYPE"='1' OR T1."TYPE" = '3') 
+			<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+				AND T2.OFFICEINFO = #{searchMap.officeCode} 
+				AND T4.LOCALCODE = #{searchMap.officeCode} 
+			</if>
+			<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+				and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+				AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+				AND trunc(#{searchMap.baseinfo.birthendTime}) 
+			</if>
+			<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+				AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+					open="(" close=")" separator=",">
+					#{resideItem}
+				</foreach>
+			</if>
+			<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+				AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+					open="(" close=")" separator=",">
+					#{situationsItem}
+				</foreach> 
+			</if> 
+			<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+				AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+					open="(" close=")" separator=",">
+					#{areasItem}
+				</foreach>
+			</if>
+			<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+				AND T1.VACC_CODE IN
+				<foreach collection="searchMap.vaccNums" index="index" item="item" 
+					open="(" close=")" separator=",">
+					#{item.id}
+				</foreach>	
+			</if>))
+	</select>
+	
+	<!-- 根据筛选条件查询儿童个案详情 -->
+	<select id="getYQWZChildBaseInfo" resultType="java.util.Map">
+		SELECT DISTINCT
+			CHILDCODE,
+			CHILDNAME,
+			GENDER,
+			RESIDE,
+			BIRTHDAY,
+			GUARDIANNAME,
+			GUARDIANMOBILE,
+			FATHER,
+			FATHERPHONE,
+			ADDRESS,
+			COMMNAME,
+			"NAME",
+			DOSAGE
+		FROM
+			(SELECT
+				DISTINCT CHILDCODE,
+				CHILDNAME,
+				GENDER,
+				RESIDE,
+				BIRTHDAY,
+				GUARDIANNAME,
+				GUARDIANMOBILE,
+				FATHER,
+				FATHERPHONE,
+				ADDRESS,
+				COMMNAME,
+				"NAME",
+				DOSAGE,
+				ROWNUM  AS rowno
+			FROM (
+			SELECT
+				DISTINCT T1.CHILDCODE,
+				T2.CHILDNAME,
+				T2.GENDER,
+				T2.RESIDE,
+				T2.BIRTHDAY,
+				T2.GUARDIANNAME,
+				T2.GUARDIANMOBILE,
+				T2.FATHER,
+				T2.FATHERPHONE,
+				T2.ADDRESS,
+				T4.NAME AS COMMNAME,
+				T3."NAME",
+				T1.DOSAGE
+			FROM
+			EXP_ROUTINEVACC_6_1_DETAIL T1 
+			INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+			INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+			INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+			WHERE
+			<!-- TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM') AND  -->
+			(T1."TYPE"='1' OR T1."TYPE" = '3') 
+			<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+				AND T2.OFFICEINFO = #{searchMap.officeCode} 
+				AND T4.LOCALCODE = #{searchMap.officeCode} 
+			</if>
+			<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+				and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+				AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+				AND trunc(#{searchMap.baseinfo.birthendTime}) 
+			</if>
+			<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+				AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+					open="(" close=")" separator=",">
+					#{resideItem}
+				</foreach>
+			</if>
+			<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+				AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+					open="(" close=")" separator=",">
+					#{situationsItem}
+				</foreach> 
+			</if> 
+			<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+				AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+					open="(" close=")" separator=",">
+					#{areasItem}
+				</foreach>
+			</if>
+			<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+				AND T1.VACC_CODE IN
+				<foreach collection="searchMap.vaccNums" index="index" item="item" 
+					open="(" close=")" separator=",">
+					#{item.id}
+				</foreach>	
+			</if>
+			)
+			<where>
+				ROWNUM  &lt;= #{page.pageSize} *  #{page.pageNo} ) TT
+			</where>
+			<where>
+				TT.rowno &gt; #{page.pageSize} *  (#{page.pageNo}-1)
+			</where>
+	</select>
+	
+	
+	<!-- 导出报表数据结果：根据筛选条件查询儿童个案详情 -->
+	<select id="getYQWZChildBaseInfoExcel" resultType="java.util.Map">
+		SELECT
+			DISTINCT CHILDCODE,
+			CHILDNAME,
+			GENDER,
+			RESIDE,
+			BIRTHDAY,
+			GUARDIANNAME,
+			GUARDIANMOBILE,
+			FATHER,
+			FATHERPHONE,
+			ADDRESS,
+			COMMNAME,
+			"NAME",
+			DOSAGE
+		FROM (
+		SELECT
+			DISTINCT T1.CHILDCODE,
+			T2.CHILDNAME,
+			T2.GENDER,
+			T2.RESIDE,
+			T2.BIRTHDAY,
+			T2.GUARDIANNAME,
+			T2.GUARDIANMOBILE,
+			T2.FATHER,
+			T2.FATHERPHONE,
+			T2.ADDRESS,
+			T4.NAME AS COMMNAME,
+			T3."NAME",
+			T1.DOSAGE,
+		ROWNUM  AS rowno
+		FROM
+		EXP_ROUTINEVACC_6_1_DETAIL T1 
+		INNER JOIN BS_CHILD_BASEINFO T2 ON T1.CHILDCODE = T2.CHILDCODE
+		INNER JOIN BS_MANAGE_VACCINENUM T3 ON T1.VACC_CODE = T3.ID
+		INNER JOIN SYS_COMMUNITY T4 ON T2.AREA = T4.CODE
+		WHERE
+		<!-- TO_DATE (T1.YEAR_MONTH, 'yyyy-MM') &lt; "TO_DATE"(#{searchMap.endSearchMonth},'yyyy-MM') AND  -->
+		(T1."TYPE"='1' OR T1."TYPE" = '3') 
+		<if test="searchMap.officeCode != null and searchMap.officeCode != ''">
+			AND T2.OFFICEINFO = #{searchMap.officeCode} 
+			AND T4.LOCALCODE = #{searchMap.officeCode} 
+		</if>
+		<if test="searchMap.baseinfo.birthbeginTime != null and searchMap.baseinfo.birthbeginTime != '' 
+			and searchMap.baseinfo.birthendTime != null and searchMap.baseinfo.birthendTime != ''">
+			AND T2.BIRTHDAY BETWEEN trunc(#{searchMap.baseinfo.birthbeginTime})
+			AND trunc(#{searchMap.baseinfo.birthendTime}) 
+		</if>
+		<if test="searchMap.baseinfo.resides != null and searchMap.baseinfo.resides != ''">
+			AND T2.RESIDE IN<foreach collection="searchMap.baseinfo.resides" index="index" item="resideItem" 
+				open="(" close=")" separator=",">
+				#{resideItem}
+			</foreach>
+		</if>
+		<if test="searchMap.baseinfo.situations != null and searchMap.baseinfo.situations != ''">
+			AND T2.SITUATION IN <foreach collection="searchMap.baseinfo.situations" item="situationsItem" index="index"
+				open="(" close=")" separator=",">
+				#{situationsItem}
+			</foreach> 
+		</if> 
+		<if test="searchMap.baseinfo.areas != null and searchMap.baseinfo.areas != ''">
+			AND T2.AREA IN <foreach collection="searchMap.baseinfo.areas" item="areasItem" index="index"
+				open="(" close=")" separator=",">
+				#{areasItem}
+			</foreach>
+		</if>
+		<if test="searchMap.vaccNums != null and searchMap.vaccNums != ''">
+			AND T1.VACC_CODE IN
+			<foreach collection="searchMap.vaccNums" index="index" item="item" 
+				open="(" close=")" separator=",">
+				#{item.id}
+			</foreach>	
+		</if>)
+	</select>
+	
+	<select id="getRecordCount" resultType="Integer">
+		SELECT COUNT(*) FROM BS_CHILD_VACCINATERECORD WHERE STATUS != 9 AND "SOURCE" NOT IN (3 ,4) AND TRUNC(CREATEDATE) = TRUNC(SYSDATE)
+	</select>
+
+	<select id="getLastFinishRecord" resultType="ChildVaccinaterecord">
+		select * from  (select * from bs_child_vaccinaterecord where VACCINATEDATE is not null order by VACCINATEDATE DESC) WHERE ROWNUM &lt; 2
+	</select>
+	
+</mapper>

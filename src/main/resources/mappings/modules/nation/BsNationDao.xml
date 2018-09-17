@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.nation.dao.BsNationDao">
+    
+	<sql id="bsNationColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.sort AS "sort"
+	</sql>
+	
+	<sql id="bsNationJoins">
+	</sql>
+    
+	<select id="get" resultType="BsNation">
+		SELECT 
+			<include refid="bsNationColumns"/>
+		FROM bs_nation a
+		<include refid="bsNationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsNation">
+		SELECT 
+			<include refid="bsNationColumns"/>
+		FROM bs_nation a
+		<include refid="bsNationJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsNation">
+		SELECT 
+			<include refid="bsNationColumns"/>
+		FROM bs_nation a
+		<include refid="bsNationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_nation(
+			id,
+			code,
+			name,
+			sort
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_nation SET 	
+			code = #{code},
+			name = #{name},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM bs_nation
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

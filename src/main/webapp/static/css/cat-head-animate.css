@@ -1,0 +1,47 @@
+@-webkit-keyframes music-move
+{
+0% { 
+  -webkit-transform: rotate(-5deg);
+  transform: rotate(-5deg);
+}
+100% {  
+  -webkit-transform: rotate(5deg);
+  transform: rotate(5deg);
+}
+}
+
+@-moz-keyframes music-move
+{
+0% { 
+  -moz-transform: rotate(-5deg);
+  transform: rotate(-5deg);
+}
+100% {  
+  -moz-transform: rotate(5deg);
+  transform: rotate(5deg);
+}
+}
+
+@-ms-keyframes music-move
+{
+0% { 
+  -ms-transform: rotate(-5deg);
+  transform: rotate(-5deg);
+}
+100% {  
+  -ms-transform: rotate(5deg);
+  transform: rotate(5deg);
+}
+}
+
+@keyframes music-move
+{
+0% { 
+  transform: rotate(-5deg);
+  transform: rotate(-5deg);
+}
+100% {  
+  transform: rotate(5deg);
+  transform: rotate(5deg);
+}
+}

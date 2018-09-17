@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.SysBadsqlDao">
+    
+	<sql id="sysBadsqlColumns">
+		a.sql_time AS "sqlTime",
+		a.sql_context AS "sqlContext",
+		a.sql_status AS "sqlStatus",
+		a.id AS "id"
+	</sql>
+	
+	<sql id="sysBadsqlJoins">
+	</sql>
+    
+	<select id="get" resultType="SysBadsql">
+		SELECT 
+			<include refid="sysBadsqlColumns"/>
+		FROM sys_badsql a
+		<include refid="sysBadsqlJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysBadsql">
+		SELECT 
+			<include refid="sysBadsqlColumns"/>
+		FROM sys_badsql a ORDER BY a.SQL_TIME
+		<include refid="sysBadsqlJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysBadsql">
+		SELECT 
+			<include refid="sysBadsqlColumns"/>
+		FROM sys_badsql a
+		<include refid="sysBadsqlJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_badsql(
+			sql_time,
+			sql_context,
+			sql_status,
+			id
+		) VALUES (
+			#{sqlTime},
+			#{sqlContext},
+			#{sqlStatus},
+			#{id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_badsql SET 	
+			sql_time = #{sqlTime},
+			sql_context = #{sqlContext},
+			sql_status = #{sqlStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_badsql
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

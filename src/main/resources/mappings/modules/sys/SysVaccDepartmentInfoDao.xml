@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.SysVaccDepartmentInfoDao">
+    
+	<sql id="sysVaccDepartmentInfoColumns">
+		a.id AS "id",
+		a.localcode AS "localcode",
+		a.localname AS "localname",
+		a.jobstime AS "jobstime",
+		a.phonenumber AS "phonenumber",
+		a.remarks AS "remarks",
+		a.address AS "address",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="sysVaccDepartmentInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="SysVaccDepartmentInfo">
+		SELECT 
+			<include refid="sysVaccDepartmentInfoColumns"/>
+		FROM sys_vacc_department_info a
+		<include refid="sysVaccDepartmentInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysVaccDepartmentInfo">
+		SELECT 
+			<include refid="sysVaccDepartmentInfoColumns"/>
+		FROM sys_vacc_department_info a
+		<include refid="sysVaccDepartmentInfoJoins"/>
+		WHERE a.localcode = #{localCode}
+		ORDER BY a.create_date ASC
+	</select>
+	
+	<select id="findAllList" resultType="SysVaccDepartmentInfo">
+		SELECT 
+			<include refid="sysVaccDepartmentInfoColumns"/>
+		FROM sys_vacc_department_info a
+		<include refid="sysVaccDepartmentInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_vacc_department_info(
+			id,
+			localcode,
+			localname,
+			jobstime,
+			phonenumber,
+			remarks,
+			address,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{localCode},
+			#{localname},
+			#{jobstime},
+			#{phonenumber},
+			#{remarks},
+			#{address},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_vacc_department_info SET 	
+			localname = #{localname},
+			jobstime = #{jobstime},
+			phonenumber = #{phonenumber},
+			remarks = #{remarks},
+			address = #{address},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_vacc_department_info
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

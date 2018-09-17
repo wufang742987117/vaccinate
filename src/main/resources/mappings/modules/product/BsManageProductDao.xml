@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.product.dao.BsManageProductDao">
+    
+	<sql id="bsManageProductColumns">
+		a.id AS "id",
+		a.vaccineid AS "vaccineid",
+		a.batchno AS "batchno",
+		a.dosage AS "dosage",
+		a.manufacturer AS "manufacturer",
+		a.isforeign AS "isforeign",
+		a.storenum AS "storenum",
+		a.sellprice AS "sellprice",
+		a.isshow AS "isshow",
+		bv.name AS "name",
+		bv.name AS "vaccName",
+		bv.G_NAME AS "gname",
+		a.vacc_exp_date AS "vaccExpDate",
+		A .codeall AS "codeall",
+		A .specification AS "specification",
+		A .code AS "code",
+		A.spec,
+		bv.live as "vaccinate.live",
+		m.M_NUM as "vaccinate.mNum",
+		a.costprice as "costprice",
+		a.rest,
+		a.applicable_max as "applicableMax",
+		a.applicable_min as "applicableMin",
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.from_id,
+		a.officeCode as "officeCodeDb"
+	</sql>
+	
+	<sql id="bsManageProductViewColumns">
+		a.id AS "id",
+		a.vaccineid AS "vaccineid",
+		a.batchno AS "batchno",
+		a.dosage AS "dosage",
+		a.manufacturer AS "manufacturer",
+		a.isforeign AS "isforeign",
+		a.storenum AS "storenum",
+		a.sellprice AS "sellprice",
+		a.isshow AS "isshow",
+		bv.name AS "name",
+		bv.name AS "vaccName",
+		bv.G_NAME AS "gname",
+		a.vacc_exp_date AS "vaccExpDate",
+		A .codeall AS "codeall",
+		A .specification AS "specification",
+		A .code AS "code",
+		A.spec,
+		A.REST,
+		bv.live as "vaccinate.live",
+		m.M_NUM as "vaccinate.mNum",
+		a.costprice as "costprice",
+		a.rest,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.APPLICABLE_MAX as "applicableMax",
+		a.APPLICABLE_MIN as "applicableMin"
+	</sql>
+	
+	<sql id="bsManageProductNoColumns">
+		a.id AS "id",
+		a.vaccineid AS "vaccineid",
+		a.batchno AS "batchno",
+		a.dosage AS "dosage",
+		a.manufacturer AS "manufacturer",
+		a.isforeign AS "isforeign",
+		a.storenum AS "storenum",
+		a.sellprice AS "sellprice",
+		a.isshow AS "isshow",
+		bv.name AS "name",
+		bv.name AS "vaccName",
+		bv.G_NAME AS "gname",
+		a.vacc_exp_date AS "vaccExpDate",
+		A .codeall AS "codeall",
+		A .specification AS "specification",
+		A .code AS "code",
+		A.spec,
+		A.REST,
+		bv.live as "vaccinate.live",
+		m.M_NUM as "vaccinate.mNum",
+		a.costprice as "costprice",
+		a.rest,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date
+	</sql>
+	
+	<sql id="bsManageProductJoins">
+		LEFT JOIN BS_MANAGE_VACCINE bv ON bv.id = a.vaccineid
+		LEFT JOIN BS_MANAGE_VACCINE_MODEL m ON m.id = a.vaccineid and m.localcode = a.localcode
+	</sql>
+    
+	<select id="get" resultType="BsManageProduct">
+		SELECT 
+			<include refid="bsManageProductColumns"/>
+		FROM bs_manage_product a
+			<include refid="bsManageProductJoins"/>
+		WHERE 
+			a.id = #{id} 
+		AND a.DEL_FLAG = '0' 
+	</select>
+	
+	<select id="findList" resultType="BsManageProduct">
+		SELECT 
+			<include refid="bsManageProductColumns"/>
+		FROM bs_manage_product a
+			<include refid="bsManageProductJoins"/>
+		<where>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="name != null and name != ''">
+				AND	a."VACC_NAME"  = #{name}
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND	a."VACC_NAME"  = #{vaccName}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer LIKE '%'||#{manufacturer}||'%'
+			</if>
+			<if test="isforeign != null and isforeign != ''">
+				AND a.isforeign = #{isforeign}
+			</if>
+			<if test="storenum != null and storenum != ''">
+				AND a.storenum = #{storenum}
+			</if>
+			<if test="bs != null and bs != ''">
+				AND a.storenum > 0
+			</if>
+			<if test="sellprice != null and sellprice != ''">
+				AND a.sellprice = #{sellprice}
+			</if>
+			<if test="isshow != null and isshow != ''">
+				AND a.isshow = #{isshow}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="batchnoLike != null and batchnoLike != ''">
+				AND a.batchno Like '%'||#{batchnoLike}||'%'
+			</if>
+			<if test="storenumIsNull">
+				AND a.storenum > 0
+			</if>
+			<if test="showAll != SHOWALL_YES">
+			    and a.officecode = #{officeCode}
+			</if>
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+			and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.CREATE_DATE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsManageProduct">
+		SELECT 
+			<include refid="bsManageProductColumns"/>
+		FROM bs_manage_product a
+		<include refid="bsManageProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		AND a.DEL_FLAG = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_manage_product(
+			id,
+			vaccineid,
+			batchno,
+			dosage,
+			manufacturer,
+			isforeign,
+			storenum,
+			sellprice,
+			isshow,
+			vacsiteno,
+			VACC_NAME,
+			vacc_exp_date,
+			codeall,
+			specification,
+			code,
+			"LOCALCODE",
+			spec,
+			costprice,
+			applicable_min,
+			applicable_max,
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date,
+			officecode,
+			from_id,
+			epi_id
+		) VALUES (
+			#{id},
+			#{vaccineid},
+			#{batchno},
+			#{dosage},
+			#{manufacturer},
+			#{isforeign},
+			#{storenum},
+			#{sellprice},
+			#{isshow},
+			#{vacsiteno},
+			#{vaccName},
+			#{vaccExpDate},
+			#{codeall},
+			#{specification},
+			#{code},
+			#{localCode},
+			#{spec},
+			#{costprice},
+			#{applicableMin},
+			#{applicableMax},
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate},
+			#{officeCode},
+			#{fromId},
+			#{epiId} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_manage_product SET 	
+			vaccineid = #{vaccineid},
+			batchno = #{batchno},
+			dosage = #{dosage},
+			manufacturer = #{manufacturer},
+			isforeign = #{isforeign},
+			storenum = #{storenum},
+			sellprice = #{sellprice},
+			isshow = #{isshow},
+			VACC_NAME = #{vaccName},
+			vacc_exp_date = #{vaccExpDate},
+			codeall = #{codeall},
+			specification = #{specification},
+			code = #{code},
+			spec = #{spec},
+			costprice=#{costprice},
+			rest=#{rest},
+			applicable_min=#{applicableMin},
+			applicable_max=#{applicableMax},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id} and localcode = #{localCode}
+	</update>
+	
+	<update id="updateStock">
+		UPDATE bs_manage_product SET 	
+			storenum = #{storenum},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id} and localcode = #{localCode}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_manage_product
+		SET DEL_FLAG = '1'
+		WHERE id = #{id} and localcode = #{localCode} 
+	</update>
+	
+	<!-- 查询可以领用的疫苗种类 -->
+	<select id="type" resultType="BsManageProduct">
+		SELECT DISTINCT
+			v ."ID",
+			v."NAME" AS "NAME"
+		FROM
+			BS_MANAGE_PRODUCT P
+		JOIN BS_MANAGE_VACCINE v ON v."ID" = P .VACCINEID 
+		AND P .DEL_FLAG = '0'
+		AND P .ISSHOW = 'Y'
+		and p.localcode = #{localCode}
+<!-- 		and p.officecode = #{officeCode} -->
+		ORDER BY "NAME"
+	</select>
+	
+	<!-- 查询可以领用的疫苗种类 -->
+	<select id="getQueneHeadNumPad" resultType="BsManageProduct">
+		SELECT
+			tt."gname" AS NAME,
+			"SUM" (tt.STORENUM) AS storenum,
+			tt."gnum" AS vaccineid,
+			tt.BATCHNO,
+			tt."ID"
+		FROM
+			(
+				SELECT
+					v.name "gname",
+					P .STORENUM,
+					v.g_num "gnum",
+					p."BATCHNO",
+					p."ID"
+				FROM
+					VIEW_BS_PRODUCT P
+				LEFT JOIN BS_MANAGE_VACCINE v ON V. ID = P .VACCINEID 
+<!-- 				LEFT JOIN BS_MANAGE_VACCINE_MODEL M ON M."ID" = P .VACCINEID and M.localcode = P .localcode -->
+				WHERE
+<!-- 					M .M_NUM IN(${vaccineStr}) -->
+					p.officecode = #{officeCode}
+					and p.localcode = #{localCode}
+				AND P .DEL_FLAG = '0'
+			) tt
+		GROUP BY
+			tt."gname",
+			tt."gnum",
+			tt.BATCHNO,
+			tt."ID"
+		HAVING "SUM" (tt.STORENUM) > 0
+		ORDER BY tt."gnum", "SUM" (tt.STORENUM)
+	</select>
+	
+	<!-- 根据疫苗大类查询疫苗的所有小类,并且库存大于0 -->
+	<select id="findByMnum" resultType="BsManageProduct">
+		SELECT DISTINCT
+			p.VACC_NAME AS vaccName,
+			p.VACCINEID AS "ID",
+			vv.live AS "vaccinate.live"
+		FROM
+			BS_MANAGE_PRODUCT P 
+			LEFT JOIN BS_MANAGE_VACCINE_MODEL mm ON p.VACCINEID=MM."ID" and p.localcode=MM.localcode
+			LEFT JOIN BS_MANAGE_VACCINE vv ON p.VACCINEID=vv."ID"
+			LEFT JOIN SYS_OFFICE SO ON SO.CODE = P.OFFICECODE
+		WHERE
+			SO.queueable = '1'
+			AND MM.M_NUM = #{code}
+			AND P .DEL_FLAG = '0'
+			AND P .ISSHOW = 'Y'
+			AND p .STORENUM > 0
+			and p.localcode = #{localCode}
+			<if test="showAll != SHOWALL_YES">
+			    and p.officecode = #{officeCode}
+			</if>
+			<if test="obligate > 0">
+			    and p .STORENUM &gt; #{obligate}
+			</if>
+	</select>
+	
+	<!-- 库存统计，根据大类 -->
+	<select id="repertorySumBig" resultType="RepertorySum">
+		SELECT
+			"SUM"(PP.storenum) AS storenum,
+			v.G_NAME AS "NAME"
+		FROM
+		(
+			SELECT
+				p.VACCINEID AS VACCINEID,
+				"SUM"(P .STORENUM) AS storenum,
+				p.localcode
+			FROM
+				BS_MANAGE_PRODUCT P
+				WHERE p.VACCINEID LIKE #{bigcode}||'%'
+					AND p.DEL_FLAG = #{DEL_FLAG_NORMAL}
+					and p.localcode = #{localCode}
+					and p.officecode = #{officeCode}
+			
+		) pp
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = PP .VACCINEID 
+		GROUP BY v.G_NAME
+	</select>
+	
+	<!-- 库存统计，根据小类-->
+	<select id="repertorySumSmall" resultType="RepertorySum">
+		SELECT
+			v."NAME" as "name",
+			PP.storenum as storenum
+		FROM
+			(
+				SELECT
+					p.VACCINEID AS VACCINEID,
+					"SUM"(P .STORENUM) AS storenum,
+					p.localcode
+				FROM
+					BS_MANAGE_PRODUCT P
+				WHERE p.VACCINEID=#{vaccineid}
+					AND p.DEL_FLAG = #{DEL_FLAG_NORMAL}
+					and p.localcode = #{localCode}
+				GROUP BY p.VACCINEID,p.localcode
+			) pp
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = PP .VACCINEID 
+	</select>
+	
+	<!-- 库存统计，根据批次-->
+	<select id="repertorySumBatch" resultType="RepertorySum">
+		SELECT
+			"SUM" (PP.STORENUM) AS STORENUM,
+			pp."BATCH" as batchno
+		FROM
+			(
+				SELECT
+					P .VACCINEID AS VACCINEID,
+					P .VACC_NAME AS NAME,
+					P .STORENUM AS storenum,
+					P .BATCHNO AS BATCH
+				FROM
+					BS_MANAGE_PRODUCT P
+				WHERE
+					P .BATCHNO = #{batchno}
+					AND p.DEL_FLAG = #{DEL_FLAG_NORMAL}
+					and p.localcode = #{localCode}
+				ORDER BY
+					P .VACCINEID
+			) pp
+		GROUP BY
+			PP."BATCH"
+	</select>
+	
+	<!-- 库存统计，根据疫苗大类或者小类 和批次-->
+	<select id="repertorySum" resultType="RepertorySum">
+		SELECT
+			"SUM" (PP.STORENUM) AS STORENUM,
+			pp."BATCH" as batchno,
+		PP."NAME" AS name
+		FROM
+			(
+				SELECT
+					P .VACCINEID AS VACCINEID,
+					P .VACC_NAME AS NAME,
+					P .STORENUM AS storenum,
+					P .BATCHNO AS BATCH
+				FROM
+					BS_MANAGE_PRODUCT P
+				WHERE
+					P .BATCHNO = #{batchno}
+					and p.localcode = #{localCode}
+					AND p.DEL_FLAG = #{DEL_FLAG_NORMAL}
+					<if test="vaccineid != null and vaccineid != ''">
+						AND p.vaccineid = #{vaccineid}
+					</if>
+					<if test="bigcode != null and bigcode != ''">
+						AND P.VACCINEID LIKE #{bigcode}||'%'
+					</if>
+		
+				ORDER BY
+					P .VACCINEID
+			) pp
+		GROUP BY
+			PP."BATCH",
+		PP."NAME"
+	</select>
+	
+	<!-- 查询所有的小类库存 -->
+	<select id="repertorySum1" resultType="RepertorySum">
+		SELECT
+			v."NAME",
+			PP.storenum as storenum
+		FROM
+			(
+				SELECT
+					p.VACCINEID AS VACCINEID,
+					"SUM"(P .STORENUM) AS storenum,
+					p.localcode
+				FROM
+					BS_MANAGE_PRODUCT P
+				WHERE 
+					p.DEL_FLAG ='0'
+					and p.localcode = #{localCode}
+				GROUP BY p.VACCINEID,p.localcode
+		
+			) pp
+		LEFT JOIN BS_MANAGE_VACCINE v ON v."ID" = PP .VACCINEID 
+	</select>
+	
+	<!-- 查询所有的批号 -->
+	<select id="batch" resultType="BsManageProduct">
+		SELECT DISTINCT p.BATCHNO 
+		FROM  BS_MANAGE_PRODUCT p 
+		WHERE 
+			p.DEL_FLAG = '0'
+			and p.localcode = #{localCode}
+		ORDER BY p.BATCHNO DESC
+	</select>
+	
+	<select id="findUseCount" resultType="BsManageProduct">
+		SELECT t1.*,T2."countUse" , PP.STORENUM FROM
+			(
+				SELECT
+					p."ID", v.G_NUM AS "bigcode",v.G_NAME AS "gname",v."NAME" as "vaccName",p.BATCHNO, p.MANUFACTURER, "COUNT"(T.ISNEW) AS "countAll", v.G_NUM || '_' || p.BATCHNO AS "FLAG", t.localcode AS "LOCALCODE"
+				FROM
+					SYS_VACC_RECORD t 
+					LEFT JOIN BS_MANAGE_PRODUCT p ON t.pid = p."ID" AND t.localcode = p.localcode
+					LEFT JOIN BS_MANAGE_VACCINE v ON p.VACCINEID = v."ID" 
+				WHERE
+					t.localcode = #{localCode}
+					AND "TO_CHAR" (t.CREATEDATE, 'yyyy-MM-dd') = "TO_CHAR" (SYSDATE, 'yyyy-MM-dd')
+					<if test="vacselected != null and vacselected != ''">
+						AND (p.VACCINEID in (${vacselected}) or substr( p.VACCINEID,0,2) in (${vacselected}) )
+					</if>
+				GROUP BY v.G_NAME,v."NAME",p.BATCHNO, p.MANUFACTURER, v.G_NUM ,v.G_NUM || '_' || p.BATCHNO ,p."ID"
+			) t1
+			LEFT JOIN(
+				SELECT
+					p."ID", v.G_NUM AS "bigcode",v.G_NAME AS "gname",v."NAME" as "vaccName",p.BATCHNO, p.MANUFACTURER, "COUNT"(T.ISNEW) AS "countUse", v.G_NUM || '_' || p.BATCHNO AS "FLAG", t.localcode AS "LOCALCODE"
+				FROM
+					SYS_VACC_RECORD t 
+					LEFT JOIN BS_MANAGE_PRODUCT p ON t.pid = p."ID" AND t.localcode = p.localcode
+					LEFT JOIN BS_MANAGE_VACCINE v ON p.VACCINEID = v."ID" AND v.localcode = p.localcode
+				WHERE
+					t.localcode = #{localCode}
+					AND "TO_CHAR" (t.CREATEDATE, 'yyyy-MM-dd') = "TO_CHAR" (SYSDATE, 'yyyy-MM-dd') AND T.ISNEW = '1'
+					<if test="vacselected != null and vacselected != ''">
+						AND (p.VACCINEID in (${vacselected}) or substr( p.VACCINEID,0,2) in (${vacselected}) )
+					</if>
+				GROUP BY v.G_NAME,v."NAME",p.BATCHNO, p.MANUFACTURER, v.G_NUM ,v.G_NUM || '_' || p.BATCHNO , p."ID" 
+			) t2
+			ON t1.FLAG = t2.FLAG
+			LEFT JOIN BS_MANAGE_PRODUCT PP ON T1."ID"=PP."ID" and PP.LOCALCODE = T1."LOCALCODE"
+		ORDER BY T1."bigcode",T1."vaccName",T1.BATCHNO, t1."ID"
+	</select>
+	
+	<update id="clearRest">
+		update bs_manage_product set rest = 0 where rest &lt;&gt; 0
+	</update>
+	
+	<select id="findViewList" resultType="BsManageProduct">
+		SELECT 
+			<include refid="bsManageProductViewColumns"/>
+		FROM VIEW_BS_PRODUCT a
+			<include refid="bsManageProductJoins"/>
+		<where>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="name != null and name != ''">
+				AND	a."VACC_NAME"  = #{name}
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND	a."VACC_NAME"  = #{vaccName}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="bigcode != null and bigcode != ''">
+				AND	a.vaccineid  LIKE #{bigcode}||'%'
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer LIKE '%'||#{manufacturer}||'%'
+			</if>
+			<if test="isforeign != null and isforeign != ''">
+				AND a.isforeign = #{isforeign}
+			</if>
+			<if test="storenum != null and storenum != ''">
+				AND a.storenum = #{storenum}
+			</if>
+			<if test="bs != null and bs != ''">
+				AND a.storenum > 0
+			</if>
+			<if test="sellprice != null and sellprice != ''">
+				AND a.sellprice = #{sellprice}
+			</if>
+			<if test="isshow != null and isshow != ''">
+				AND a.isshow = #{isshow}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="storenumIsNull">
+				AND a.storenum > 0
+			</if>
+			<if test="showAll != SHOWALL_YES">
+			    and a.officecode = #{officeCode}
+			</if>
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} and a.localcode = #{localCode} 
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findViewListNo" resultType="BsManageProduct">
+		SELECT 
+			<include refid="bsManageProductNoColumns"/>
+		FROM VIEW_BS_PRODUCT_NO a
+			<include refid="bsManageProductJoins"/>
+		<where>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="name != null and name != ''">
+				AND	a."VACC_NAME"  = #{name}
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND	a."VACC_NAME"  = #{vaccName}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer LIKE '%'||#{manufacturer}||'%'
+			</if>
+			<if test="isforeign != null and isforeign != ''">
+				AND a.isforeign = #{isforeign}
+			</if>
+			<if test="storenum != null and storenum != ''">
+				AND a.storenum = #{storenum}
+			</if>
+			<if test="bs != null and bs != ''">
+				AND a.storenum > 0
+			</if>
+			<if test="sellprice != null and sellprice != ''">
+				AND a.sellprice = #{sellprice}
+			</if>
+			<if test="isshow != null and isshow != ''">
+				AND a.isshow = #{isshow}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="storenumIsNull">
+				AND a.storenum > 0
+			</if>
+			<if test="showAll != SHOWALL_YES">
+			    and a.officecode = #{officeCode}
+			</if>
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} and a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="updateRest">
+		update bs_manage_product 
+		set rest = #{rest} 
+		where VACCINEID=#{vaccineid} and BATCHNO = #{batchno} and CODE = #{code}
+	</update>
+	
+	<select id="findVaccinateAble"  resultType="BsManageProduct">
+		SELECT DISTINCT VACC_NAME, VACCINEID 
+		FROM BS_MANAGE_PRODUCT 
+		WHERE DEL_FLAG = '0' 
+			AND storenum > 0 
+			and localcode = #{localCode}
+			<if test="showAll != SHOWALL_YES">
+			    and officecode = #{officeCode}
+			</if>
+	 </select>
+	
+	<select id="findAllBatch" resultType="BsManageProduct">
+		SELECT DISTINCT VACCINEID, MANUFACTURER, CODE, BATCHNO, VACC_NAME 
+		FROM BS_MANAGE_PRODUCT
+		<where>
+		    and localcode = #{localCode}
+			<if test="vaccineid != null and vaccineid != ''">
+				AND vaccineid = #{vaccineid}
+			</if>
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getMaxPriceByMNum" resultType="java.lang.Double">
+		SELECT "NVL"("MAX"(SELLPRICE),0) 
+		FROM (
+			SELECT
+				p.SELLPRICE "SELLPRICE"
+			FROM
+				"BS_MANAGE_PRODUCT" P
+			LEFT JOIN BS_MANAGE_VACCINE_MODEL M ON M."ID" = P.VACCINEID and M.localcode = P.localcode
+			WHERE P .STORENUM > '0' AND m.M_NUM = #{mMun} and p.del_flag = '0' and p.localcode = #{localCode}
+			<if test="showAll != SHOWALL_YES">
+			    and p.officecode = #{officeCode}
+			</if>
+		)
+	</select>
+	
+	<select id="getPriceByMNum" resultType="java.lang.Double">
+		SELECT
+			p.SELLPRICE "SELLPRICE"
+		FROM
+			"BS_MANAGE_PRODUCT" P
+		LEFT JOIN BS_MANAGE_VACCINE_MODEL M ON M ."ID" = P .VACCINEID and M.localcode = P.localcode
+		WHERE P .STORENUM > '0' AND m.M_NUM = #{group}  and p.del_flag = '0' and p.localcode = #{localCode}
+	</select>
+	
+	<select id="findQueueViewListApi" resultType="BsManageProduct">
+		SELECT 
+			DISTINCT
+			<include refid="bsManageProductViewColumns"/>
+		FROM VIEW_BS_PRODUCT a
+			<include refid="bsManageProductJoins"/>
+			LEFT JOIN SYS_OFFICE so ON SO.CODE = a.OFFICECODE
+		<where>
+		    SO.queueable = '1'
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="name != null and name != ''">
+				AND	a."VACC_NAME"  = #{name}
+			</if>
+			<if test="vaccName != null and vaccName != ''">
+				AND	a."VACC_NAME"  = #{vaccName}
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="bigcode != null and bigcode != ''">
+				AND	a.vaccineid  LIKE #{bigcode}||'%'
+			</if>
+			<if test="dosage != null and dosage != ''">
+				AND a.dosage = #{dosage}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				AND a.manufacturer LIKE '%'||#{manufacturer}||'%'
+			</if>
+			<if test="isforeign != null and isforeign != ''">
+				AND a.isforeign = #{isforeign}
+			</if>
+			<if test="storenum != null and storenum != ''">
+				AND a.storenum = #{storenum}
+			</if>
+			<if test="bs != null and bs != ''">
+				AND a.storenum > 0
+			</if>
+			<if test="sellprice != null and sellprice != ''">
+				AND a.sellprice = #{sellprice}
+			</if>
+			<if test="isshow != null and isshow != ''">
+				AND a.isshow = #{isshow}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="storenumIsNull">
+				AND a.storenum > 0
+			</if>
+			<if test="obligate > 0">
+				AND a.storenum &gt; #{obligate}
+			</if>
+			<if test="showAll != SHOWALL_YES">
+			    and a.officecode = #{officeCode}
+			</if>
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} and a.localcode = #{localCode} 
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findViewListMan" resultType="BsManageProduct">
+		SELECT 
+			a.batchno AS "batchno"
+		FROM VIEW_BS_PRODUCT a
+		<where>
+			AND a.vaccineid = #{vaccineid}
+			AND a.manufacturer = (
+				SELECT 
+					manufacturer AS "manufacturer"
+				FROM VIEW_BS_PRODUCT_NO
+				<where>
+					AND vaccineid = #{vaccineid}
+					AND batchno = #{batchno}
+					AND DEL_FLAG = #{DEL_FLAG_NORMAL} 
+					and localcode = #{localCode}
+					and rownum = 1 
+				</where>
+			)
+			AND a.DEL_FLAG = #{DEL_FLAG_NORMAL} 
+			and a.localcode = #{localCode}
+			and rownum = 1 
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.VACC_EXP_DATE,a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="productUseList" resultType="ProductUseList">
+	   SELECT pv.* , rcv.USESUM FROM (
+			SELECT "COUNT"(1) "USESUM" , "BATCH", VACCINEID "ID", MANUFACTURERCODE FROM BS_CHILD_VACCINATERECORD r 
+			WHERE "SOURCE" &lt;&gt; '3' AND "SOURCE" &lt;&gt; '4' AND STATUS = '1'
+			GROUP BY VACCINEID, "BATCH", MANUFACTURERCODE
+			ORDER BY VACCINEID , MANUFACTURERCODE, "BATCH"
+		) rcv RIGHT JOIN (
+			SELECT
+				"SUM" (STORENUM) "STORESUM",
+				BATCHNO,
+				VACCINEID "ID",
+				CODE "MANUFACTURERCODE",
+				VACC_NAME "name" ,
+				MANUFACTURER,
+				CREATE_DATE
+			FROM
+				BS_MANAGE_PRODUCT P
+			<where>
+				<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+					AND P.CREATE_DATE BETWEEN #{beginCreateDate} AND #{endCreateDate}
+				</if>
+	            <if test="id != null and id != ''">
+					AND p.vaccineid = #{id}
+				</if>
+				<if test="name != null and name != ''">
+					AND	p.VACC_NAME = #{name}
+				</if>
+				<if test=" nameIn != null and nameIn != ''">
+				AND p.VACC_NAME in 
+					<foreach collection="nameIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			    </if>
+				<if test="manufacturer != null and manufacturer != ''">
+					AND p.manufacturer LIKE '%'||#{manufacturer}||'%'
+				</if>
+				<if test="batchno != null and batchno != ''">
+					AND p.batchno = #{batchno}
+				</if>  
+			</where>
+			GROUP BY
+				BATCHNO,
+				VACCINEID,
+				CODE,
+				VACC_NAME,
+				MANUFACTURER,
+				CREATE_DATE
+		) pv ON RCV."BATCH" = PV.BATCHNO AND RCV.MANUFACTURERCODE = PV.MANUFACTURERCODE AND RCV.ID = PV.ID
+	</select>
+	
+	<select id="childVaccinatereCord" resultType="ProductUseList">
+		      SELECT
+					r.VACC_NAME "name",
+					r.MANUFACTURER,
+					r.DOSAGE,
+					r.BATCH "batchno",
+					r.PRICE,
+					r.DOCTOR,
+					r.VACCINEID "id",
+					r.MANUFACTURERCODE,
+					r.BODYPART,
+					r.VACCINATEDATE "vaccinateDate",
+					b.CHILDCODE,
+					b.CHILDNAME
+				FROM
+					BS_CHILD_VACCINATERECORD r
+				LEFT JOIN BS_CHILD_BASEINFO b ON r.CHILDID = b."ID"
+			<where>
+					AND "SOURCE" &lt;&gt; '3'
+					AND "SOURCE" &lt;&gt; '4'
+					AND STATUS = '1'
+					<if test="id != null and id != ''">
+					AND r.vaccineid = #{id}
+					</if>
+					<if test="manufacturerCode != null and manufacturerCode != ''">
+					AND r.MANUFACTURERCODE = #{manufacturerCode}
+					</if>
+					<if test="batchno != null and batchno != ''">
+					AND r.BATCH = #{batchno}
+					</if>
+					<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+					AND r.VACCINATEDATE BETWEEN #{beginCreateDate} AND #{endCreateDate}
+				    </if>
+			</where>
+			<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			  ORDER BY r.VACCINATEDATE
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getQueneProduct" resultType="BsManageProduct">
+		SELECT "COUNT"(1) "storenum", PID "id" FROM BS_QUENE WHERE LOCALCODE = #{localCode} AND (STATUS = '0' OR STATUS = '3') GROUP BY PID
+	</select>
+</mapper>

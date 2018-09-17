@@ -1,0 +1,86 @@
+{
+	"data": [
+		{
+			"dayName": "星期一",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":10
+				},
+				{
+					"time":"9:00-10:00",
+					"count":10
+				}
+				]
+		}, {
+			"dayName": "星期二",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":9
+				},
+				{
+					"time":"9:00-10:00",
+					"count":9
+				}
+				]
+		}, {
+			"dayName": "星期三",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":8
+				},
+				{
+					"time":"9:00-10:00",
+					"count":8
+				}
+				]
+		},
+		{
+			"dayName": "星期四",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":7
+				},
+				{
+					"time":"9:00-10:00",
+					"count":7
+				}
+				]
+		},
+		{
+			"dayName": "星期五",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":6
+				},
+				{
+					"time":"9:00-10:00",
+					"count":6
+				}
+				]
+		},
+		{
+			"dayName": "星期六",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":5
+				},
+				{
+					"time":"9:00-10:00",
+					"count":5
+				}
+				]
+		},
+		{
+			"dayName": "星期日",
+			"timeEvent":[{
+					"time":"8:00-9:00",
+					"count":4
+				},
+				{
+					"time":"9:00-10:00",
+					"count":4
+				}
+				]
+		}
+	]
+}

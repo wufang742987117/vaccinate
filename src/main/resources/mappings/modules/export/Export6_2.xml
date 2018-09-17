@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.export.dao.Export6_2Dao">
+
+	<sql id="export6_2Columns">
+		a.id AS "id",
+		a.year_month AS "yearMonth",
+		a.vacc_name AS "vaccName",
+		a.vacc_num AS "vaccNum"
+	</sql>
+	
+	<sql id="export6_2Joins">
+	</sql>
+    
+	<select id="get" resultType="export6_2">
+		SELECT 
+			<include refid="export6_2Columns"/>
+		FROM exp_routinevacc_6_2 a
+		<include refid="export6_2Joins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="export6_2">
+		SELECT 
+			<include refid="export6_2Columns"/>
+		FROM exp_routinevacc_6_2 a
+		<include refid="export6_2Joins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="export6_2">
+		SELECT 
+			<include refid="export6_2Columns"/>
+		FROM exp_routinevacc_6_2 a
+		<include refid="export6_2Joins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO exp_routinevacc_6_2(
+			id,
+			year_month,
+			vacc_name,
+			vacc_num
+		) VALUES (
+			#{id},
+			#{yearMonth},
+			#{vaccName},
+			#{vaccNum}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE exp_routinevacc_6_2 SET 	
+			year_month = #{yearMonth},
+			vacc_name = #{vaccName},
+			vacc_num = #{vaccNum}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM exp_routinevacc_6_2
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 第二类疫苗接种情况报表6-2 开始-->
+	<select id="selectVaccData6_2" resultType="java.util.HashMap" >
+		SELECT
+			aa."NAME" as "name",
+			aa."ID" as "id",
+			NVL(bb."nums", 0) as "num"
+		FROM
+			BS_MANAGE_VACCINE aa
+		LEFT JOIN(
+			SELECT
+				d."NAME" AS "name",
+				d."ID" AS "id",
+				NVL(COUNT(*), 0) AS "nums"
+			FROM
+				BS_MANAGE_VACCINE d
+			LEFT JOIN BS_CHILD_VACCINATERECORD a ON a.VACCINEID = d."ID"
+			LEFT JOIN BS_MANAGE_VACCINENUM f ON f."ID" = a.NID
+			<where>
+				 <if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+					and a.vaccinatedate between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+						to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+				 </if> 
+				AND A.LOCALCODE = #{localCode}
+				AND f.TYPE = '2'
+		        AND a.STATUS = '1'
+			</where>
+			GROUP BY
+				d."NAME",
+				d."ID"	
+			) bb
+		ON aa."ID" = bb."id"
+		WHERE
+			aa."ID" IN 
+		        <foreach collection="list" item="vaccCode" index="index"
+		            open="(" close=")" separator=",">
+		            #{vaccCode}
+		        </foreach>
+			ORDER BY
+			aa."ID"
+	</select>
+	
+	<select id="typeTwoVaccReport6_2" resultType="java.util.HashMap">
+		SELECT
+		aa."NAME" as "name",
+		aa."ID" as "id",
+		NVL(bb."nums", 0) as "num"
+	FROM
+		BS_MANAGE_VACCINE aa
+	LEFT JOIN
+	(
+	SELECT
+		d."NAME" AS "name",
+		d."ID" AS "id",
+		NVL(COUNT(*), 0) AS "nums"
+	FROM
+		BS_MANAGE_VACCINE d
+	LEFT JOIN BS_CHILD_VACCINATERECORD a ON a.VACCINEID = d."ID"
+	<!-- LEFT JOIN BS_MANAGE_VACCINENUM f ON f."ID" = a.NID -->
+	<where>
+		 <if test="startTime !=null  and startTime !='' and endTime !=null and endTime !=''">
+			and a.vaccinatedate between to_date('${startTime}','yyyy-MM-dd HH24:mi:ss') and
+				to_date('${endTime}','yyyy-MM-dd HH24:mi:ss')
+		 </if> 
+		 <if test="localCode !=null  and localCode !=''">
+		 	AND A.LOCALCODE = #{localCode}
+		 </if>
+		 and d.TYPE = '2'
+		<!-- and f.TYPE = '2' -->
+        AND  a.STATUS = '1'
+        AND A.SOURCE != '4'
+	</where>
+	GROUP BY
+		d."NAME",
+		d."ID"	
+	) bb
+	ON aa."ID" = bb."id"
+	WHERE
+		aa."ID" IN 
+	        <foreach collection="list" item="vaccCode" index="index"
+	            open="(" close=")" separator=",">
+	            #{vaccCode}
+	        </foreach>
+		ORDER BY
+		aa."ID"
+	</select>	
+	<!-- 第二类疫苗接种情况报表6-2 结束-->
+
+</mapper>

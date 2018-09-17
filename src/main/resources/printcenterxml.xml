@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<printcenters>
+    <printcenter>
+        <id>1</id>
+        <name>首次/末次会议签到表</name>
+        <addr>111</addr>
+    </printcenter>
+
+    <printcenter>
+        <id>2</id>
+        <name>审查计划表</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>3</id>
+        <name>工业产品生产许可现场核查通知书</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>4</id>
+        <name>证明性文件确认单</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>5</id>
+        <name>生产许可证企业实地核查报告</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>6</id>
+        <name>企业实地核查轻微缺陷项汇总表</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>7</id>
+        <name>不合格项整改通知书</name>
+        <addr></addr>
+    </printcenter>
+
+    <printcenter>
+        <id>8</id>
+        <name>产品生产许可证抽样单</name>
+        <addr></addr>
+    </printcenter>
+</printcenters>

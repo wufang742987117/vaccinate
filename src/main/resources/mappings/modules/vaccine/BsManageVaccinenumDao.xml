@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.vaccine.dao.BsManageVaccinenumDao">
+    
+	<sql id="bsManageVaccinenumColumns">
+		A . ID AS "id",
+		A .weight AS "weight",
+		A .mouage AS "mouage",
+		A .code AS "code",
+		A . "NAME" AS "name",
+		A .pin AS "pin",
+		A .intype AS "intype",
+		A .status AS "status",
+		A . "TYPE" AS "type",
+		A .pintime AS "pintime",
+		A .lasttime AS "lasttime",
+		A .pentrep AS "pentrep",
+		A . "VACCGROUP" AS "group"		
+	</sql>
+	
+	<sql id="bsManageVaccinenumJoins">
+		
+	</sql>
+    
+	<select id="get" resultType="BsManageVaccinenum">
+		SELECT 
+			<include refid="bsManageVaccinenumColumns"/>
+		FROM bs_manage_vaccinenum a
+		<include refid="bsManageVaccinenumJoins"/>
+		WHERE a.id = #{id} AND a.localcode = #{localCode}
+	</select>
+	
+	<select id="findList" resultType="BsManageVaccinenum">
+		SELECT 
+			<include refid="bsManageVaccinenumColumns"/>
+		FROM bs_manage_vaccinenum a
+		<include refid="bsManageVaccinenumJoins"/>
+		<where>
+			
+			<if test="weight != null and weight != ''">
+				AND a.weight = #{weight}
+			</if>
+			<if test="vaccineid != null and vaccineid != ''">
+				AND a.vaccineid = #{vaccineid}
+			</if>
+			<if test="mouage != null">
+				AND a.mouage = #{mouage}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="pin != null and pin != ''">
+				AND a.pin = #{pin}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="group != null and group != ''">
+				AND a."VACCGROUP" = #{group}
+			</if>
+			<if test="pentrep != null ">
+				AND a."PENTREP" = #{pentrep}
+			</if>
+			AND a.localcode = #{localCode}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsManageVaccinenum">
+		SELECT 
+			<include refid="bsManageVaccinenumColumns"/>
+		FROM bs_manage_vaccinenum a
+		<include refid="bsManageVaccinenumJoins"/>
+		<where>
+		    
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_manage_vaccinenum(
+			id,
+			weight,
+			mouage,
+			code,
+			name,
+			pin,
+			status,
+			type,
+			"VACCGROUP",
+			PENTREP,
+			pintime,
+			intype,
+			lasttime,
+			"LOCALCODE"
+		) VALUES (
+			#{id},
+			#{weight},
+			#{mouage},
+			#{code},
+			#{name},
+			#{pin},
+			#{status},
+			#{type},
+			#{group},
+			#{pentrep},
+			#{pintime},
+			#{intype},
+			#{lasttime},
+			#{localCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_manage_vaccinenum SET 	
+			weight = #{weight},
+			mouage = #{mouage},
+			code = #{code},
+			name = #{name},
+			"VACCGROUP" = #{group},
+			pentrep = #{pentrep},
+			pin = #{pin},
+			status = #{status},
+			type = #{type},
+			pintime = #{pintime},
+			intype = #{intype},
+			lasttime = #{lasttime}
+		WHERE id = #{id} and "LOCALCODE" = #{localCode}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM bs_manage_vaccinenum
+		WHERE id = #{id} and "LOCALCODE" = #{localCode}
+	</update>
+	
+	
+	<!-- 获取儿童已经接种完成的计划编号 -->
+	<select id="findFinish" resultType="BsManageVaccinenum">
+		SELECT
+			NUM."ID" "ID"
+		FROM
+			BS_MANAGE_VACCINENUM num
+		LEFT JOIN BS_CHILD_VACCINATERECORD r ON r.NID = NUM."ID" and r.localcode = NUM.localcode
+		LEFT JOIN BS_CHILD_BASEINFO info ON r.childid = info."ID" and r.localcode = info.localcode
+		WHERE
+			r."STATUS" &lt;&gt; 9  AND info.childcode = #{param1} and num.localcode = #{param3}
+			<if test="param2 == 1">
+				AND r."STATUS" = 1
+			</if>
+	</select>
+	
+	<select id="getVaccList" resultType="BsManageVaccinenum">
+		select t.*,t.vaccgroup as "group",nvl(bmp.s_num,0) as "stock" ,nvl(bmp.maxPrice,0) as "maxPrice" ,nvl(bmp.minPrice,0) as "minPrice" 
+		from BS_MANAGE_VACCINENUM t 
+		left join (
+				SELECT 
+				M.M_NUM AS vacc_group, SUM (tt.storenum) AS s_num, MAX (tt.SELLPRICE) AS maxPrice, MIN (tt.SELLPRICE) AS minPrice 
+				FROM bs_manage_product tt 
+					LEFT JOIN BS_MANAGE_VACCINE_MODEL M ON tt.vaccineid = M."ID" AND m.localcode = #{localCode}
+					LEFT JOIN SYS_OFFICE so ON SO.CODE = tt.OFFICECODE
+				WHERE tt.DEL_FLAG = 0 and tt.localcode = #{localCode} and so.queueable = '1'
+				GROUP BY M.M_NUM 
+			) bmp on bmp.vacc_group =  t."VACCGROUP"
+ 		<where>
+ 		    AND T.localCode = #{localCode}
+ 			<if test="monage != null and monage != ''">
+ 				and t."MOUAGE" &lt;= #{monage}
+ 			</if> 			
+ 			AND  case when t."LASTTIME" IS NOT NULL THEN  t."LASTTIME" ELSE 100000 end &gt;= #{monage} 
+	 		AND t."STATUS" = '1' 
+			<if test="type != null and type != ''">
+				AND t."TYPE" = #{type}
+			</if>
+			<if test="vacccease != null and vacccease != ''"> 
+				and t.id not in(${vacccease})
+				<if test="rownum != null and rownum != ''">
+					 and rownum &lt; ${rownum}
+				</if>
+			</if>
+			<if test="lives != null and lives != ''">
+				and t.VACCGROUP not in(${lives})
+			</if>
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+		 		order by t.type,t.weight,t.mouage,t.pin
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 打印入托证明 查询儿童所有未接种的一类疫苗 -->
+	<select id="getVaccNameList" resultType="BsManageVaccinenum">
+		select t.*,t.vaccgroup as "group",nvl(bmp.s_num,0) as "stock" 
+		from BS_MANAGE_VACCINENUM t 
+		left join (
+			select 
+				substr(tt.vaccineid, 0, 2) as vacc_group,  sum(tt.storenum) as s_num  
+			from bs_manage_product tt 
+			where tt.DEL_FLAG = 0 and tt.localcode = #{localCode}
+			group by substr(tt.vaccineid, 0, 2)
+		) bmp on bmp.vacc_group =  t."VACCGROUP"
+		
+		where  T.localCode = #{localCode} and t."STATUS" = '1'	 
+		<if test="type != null and type != ''">
+			AND t."TYPE" = #{type}
+		</if>	
+		 <if test="vacccease != null and vacccease != ''"> 
+			and t.id not in(${vacccease})
+		</if> 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				order by ${orderBy}
+			</when>
+			<otherwise>
+				 order by t.name,t.pin
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	
+	<select id="findReservedList" resultType="ChildVaccinaterecord">
+
+		SELECT
+			tv.intype "intype",
+			T .*,
+			n ."TYPE" "vaccnum.type",
+			n ."NAME" "vaccnum.name"
+		FROM
+			bs_child_vaccinaterecord T
+		LEFT JOIN bs_manage_vaccine tv ON tv. ID = T .vaccineid 
+		LEFT JOIN BS_MANAGE_VACCINENUM n ON t.nid = n."ID" and t.localCode = n.localCode
+		WHERE
+			T .status = '0' AND
+			T."SOURCE" &lt;&gt; '3'
+		AND T .childid = (
+			SELECT
+				tf.id　
+			FROM
+				bs_child_baseinfo tf
+			WHERE
+				tf.childcode = #{code} and t.localCode = #{officeCode}
+		)
+		ORDER BY n."WEIGHT",n.pin
+	</select>
+	
+	<select id="findNotFinishNum" resultType="BsManageVaccinenum">
+	    SELECT 
+	    <include refid="bsManageVaccinenumColumns"/>
+	    from BS_MANAGE_VACCINENUM a 
+	    left join BS_CHILD_VACCINATERECORD bcv on bcv.nid = a.id and bcv.CHILDID = #{id} AND bcv.STATUS &lt;&gt; '9' and bcv.localcode = a.localcode
+	    where bcv .NID IS NULL and a.localcode = #{localCode}
+	</select>
+	
+	<select id="getQueneStock" resultType="BsManageVaccinenum">
+		SELECT "COUNT"(1) "stock", "SUBSTR"(VACCINEID,0,2) "group" 
+		FROM BS_QUENE 
+		WHERE LOCALCODE = #{localCode} AND (STATUS = '0' OR STATUS = '3') 
+		GROUP BY "SUBSTR"(VACCINEID,0,2) 
+	</select>
+</mapper>

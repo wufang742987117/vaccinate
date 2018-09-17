@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.BadSqlDao">
+    
+	<sql id="areaColumns">
+		a."ID",
+		a.SQL_TIME,
+		a.SQL_CONTEXT,
+		a.SQL_STATUS		
+	</sql>
+	
+	<sql id="areaJoins">
+    </sql>
+    
+	<select id="findList" resultType="BadSql">
+		SELECT
+			<include refid="areaColumns"/>
+		FROM sys_badsql a		
+		ORDER BY a.SQL_TIME DESC
+	</select>
+		
+	
+	<insert id="insert">
+		<selectKey resultType="String" keyProperty="id" order="BEFORE">  
+            SELECT sys_guid() FROM DUAL  
+   		</selectKey> 
+		INSERT INTO sys_badsql(
+			"ID",
+			SQL_TIME,
+			SQL_CONTEXT,
+			SQL_STATUS
+		) VALUES (
+			#{id},
+			#{sqlTime}, 
+			#{sqlContext}, 
+			#{sqlStatus}
+		)
+	</insert>
+	
+	<update id="delete">
+		DELETE FROM SYS_BADSQL where id = #{id}
+	</update>
+	
+</mapper>

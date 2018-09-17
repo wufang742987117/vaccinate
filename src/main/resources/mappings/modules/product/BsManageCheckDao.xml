@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.product.dao.BsManageCheckDao">
+    
+	<sql id="bsManageCheckColumns">
+		a.id AS "id",
+		a.last_date AS "lastDate",
+		a.last_num AS "lastNum",
+		a.in_num AS "inNum",
+		a.out_num AS "outNum",
+		a.use_num AS "useNum",
+		a.rest_num AS "restNum",
+		a.scrap_num AS "scrapNum",
+		a.exchange_num AS "exchangeNum",
+		a.check_date AS "checkDate",
+		a.check_type AS "checkType",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		u.name AS "createBy.name"
+	</sql>
+	
+	<sql id="bsManageProductColumns">
+		p.id AS "product.id",
+		p.vaccineid AS "product.vaccineid",
+		p.vacc_name AS "product.name", 
+		p.batchno AS "product.batchno",
+		p.dosage AS "product.dosage",
+		p.manufacturer AS "product.manufacturer",
+		p.isforeign AS "product.isforeign",
+		p.storenum AS "product.storenum",
+		p.sellprice AS "product.sellprice",
+		p.isshow AS "product.isshow",		
+		p.vacc_exp_date AS "product.vaccExpDate",
+		p.codeall AS "product.codeall",
+		p.specification AS "product.specification",
+		p.code AS "product.code",
+		p.spec AS "product.spec",
+		p.costprice as "product.costprice",
+		p.rest as "product.rest",
+		p.applicable_max as "product.applicableMin",
+		p.applicable_min as "product.applicableMax",
+		p.create_by AS "product.createBy.id",
+		p.create_date "product.create_date",
+		p.update_by AS "product.updateBy.id",
+		p.update_date as "product.update_date",
+		p.epi_id as "product.epiId"
+	</sql>
+	
+	<sql id="bsManageProductVaccineColumns">
+		v.name AS "product.vaccName",
+		v.G_NAME AS "product.gname",
+		v.live as "product.vaccinate.live"
+	</sql>
+	
+	<sql id="bsManageCheckJoins">
+		left join bs_manage_product p on p.id = a.product_id
+		left join bs_manage_vaccine v ON v.id = p.vaccineid
+		left join sys_user u on u.id = a.create_by
+	</sql>
+    
+	<select id="get" resultType="BsManageCheck">
+		SELECT 
+			<include refid="bsManageCheckColumns"/>,
+			<include refid="bsManageProductColumns"/>,
+			<include refid="bsManageProductVaccineColumns"/>
+		FROM bs_manage_check a
+		<include refid="bsManageCheckJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BsManageCheck">
+		SELECT 
+			<include refid="bsManageCheckColumns"/>,
+			<include refid="bsManageProductColumns"/>,
+			<include refid="bsManageProductVaccineColumns"/>
+		FROM bs_manage_check a
+		<include refid="bsManageCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND A.LOCALCODE = #{localCode}
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+			<if test="product != null and product.batchno != null and product.batchno != ''">
+				AND p.batchno = #{product.batchno}
+			</if>
+			<if test="product != null and product.vaccineid != null and product.vaccineid != ''">
+				AND p.vaccineid = #{product.vaccineid}
+			</if>
+			<if test="product != null and product.vaccineidIn != null">
+				AND p.vaccineid in 
+					<foreach collection="product.vaccineidIn" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="checkType != null and checkType != ''">
+				AND a.check_type = #{checkType}
+			</if>
+			<if test="checkDate != null and checkDate != ''">
+				AND a.check_date = #{checkDate}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="showAll">
+ 				AND p.officecode = #{product.officeCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BsManageCheck">
+		SELECT 
+			<include refid="bsManageCheckColumns"/>,
+			<include refid="bsManageProductColumns"/>,
+			<include refid="bsManageProductVaccineColumns"/>
+		FROM bs_manage_check a
+		<include refid="bsManageCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bs_manage_check(
+			id,
+			product_id,
+			last_date,
+			last_num,
+			in_num,
+			out_num,
+			use_num,
+			scrap_num,
+			exchange_num,
+			rest_num,
+			check_date,
+			check_type,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			del_flag,
+			remarks,
+			localcode
+		) VALUES (
+			#{id},
+			#{product.id},
+			#{lastDate},
+			#{lastNum},
+			#{inNum},
+			#{outNum},
+			#{useNum},
+			#{scrapNum},
+			#{exchangeNum},
+			#{restNum},
+			#{checkDate},
+			#{checkType},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{delFlag},
+			#{remarks},
+			#{localCode} 
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bs_manage_check SET 	
+			product_id = #{product.id},
+			last_date = #{lastDate},
+			last_num = #{lastNum},
+			in_num = #{inNum},
+			out_num = #{outNum},
+			use_num = #{useNum},
+			scrap_num = #{scrapNum},
+			exchange_num = #{exchangeNum},
+			rest_num = #{restNum},
+			check_date = #{checkDate},
+			check_type = #{checkType},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE bs_manage_check SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="genCheckTable" resultType="BsManageCheck">
+		SELECT <include refid="bsManageProductColumns"/>, 
+			p.storenum "REST_NUM",  
+			l.LAST_DATE, 
+			l.LAST_NUM "LAST_NUM", 
+			"NVL"(i.IN_NUM,'0') "IN_NUM",
+			"NVL"(O.OUT_NUM,'0') "OUT_NUM" , 
+			"NVL"(s.OUT_NUM,'0') "SCRAP_NUM" , 
+			"NVL"(e.OUT_NUM,'0') "EXCHANGE_NUM" , 
+			"NVL"(R.USE_NUM,'0') "USE_NUM" , 
+			#{checkDate} AS "CHECK_DATE" 
+		FROM 
+		(<!-- 当前库存 -->
+			SELECT * FROM BS_MANAGE_PRODUCT WHERE localcode = #{localCode}
+				<if test="!showNull">AND STORENUM > 0</if>
+				<if test="!showAll">AND OFFICECODE = #{product.officeCode} </if>
+				<if test="product.vaccineid != null and product.vaccineid != ''">AND vaccineid = #{product.vaccineid} </if>
+				<if test="product.batchno != null and product.batchno != ''">AND batchno = #{product.batchno} </if>
+				<if test="product.code != null and product.code != ''">AND code = #{product.code} </if>
+		 )p 
+		LEFT JOIN
+			(<!-- 上期盘库 -->
+				<!-- SELECT "MAX"(create_date) "LAST_DATE", PRODUCT_ID, REST_NUM "LAST_NUM" FROM BS_MANAGE_CHECK 
+				WHERE CREATE_BY = #{createBy.id} and  localcode = #{localCode}
+				GROUP BY  PRODUCT_ID, REST_NUM -->
+				
+				SELECT TL.CREATE_DATE "LAST_DATE", TL.PRODUCT_ID, TL.REST_NUM "LAST_NUM" FROM BS_MANAGE_CHECK TL
+				RIGHT JOIN (
+				SELECT
+						"MAX" (create_date) "LAST_DATE",
+						PRODUCT_ID,
+				LOCALCODE
+						
+					FROM
+						BS_MANAGE_CHECK
+					WHERE
+						localcode = #{localCode}
+					<!-- AND CREATE_BY = #{createBy.id} -->
+					GROUP BY
+						PRODUCT_ID,
+						LOCALCODE
+				) tp ON TL.CREATE_DATE = TP.LAST_DATE AND TL.LOCALCODE = TP.LOCALCODE AND TL.PRODUCT_ID = TP.PRODUCT_ID
+			) l ON l.PRODUCT_ID = p."ID"
+		LEFT JOIN
+			(<!-- 入库 -->
+				SELECT "SUM"(NUM) "IN_NUM", PID FROM BS_MANAGE_STOCKIN WHERE "TYPE" = '0' AND INDATE &gt; 
+				(
+	 				SELECT nvl("MAX"(create_date),sysdate-1) "LAST_DATE"
+	 				FROM BS_MANAGE_CHECK RC 
+	 				WHERE RC.PRODUCT_ID = BS_MANAGE_STOCKIN.PID AND RC.LOCALCODE = #{localCode}
+	 			)
+				and localcode = #{localCode} GROUP BY PID
+			) i ON i.PID = P."ID"
+		LEFT JOIN
+			(<!-- 报损 -->
+				SELECT "SUM"(NUM) "OUT_NUM", PID FROM BS_MANAGE_STOCKIN WHERE "TYPE" = '1' AND INDATE &gt; 
+				(
+	 				SELECT nvl("MAX"(create_date),sysdate-1) "LAST_DATE"
+	 				FROM BS_MANAGE_CHECK RC 
+	 				WHERE RC.PRODUCT_ID = BS_MANAGE_STOCKIN.PID AND RC.LOCALCODE = #{localCode}
+	 			)
+				and localcode = #{localCode} AND state = '1' GROUP BY PID
+			) s ON s.pid = p."ID"
+		LEFT JOIN
+			(<!-- 报废 -->
+				SELECT "SUM"(NUM) "OUT_NUM", PID FROM BS_MANAGE_STOCKIN WHERE "TYPE" = '1' AND INDATE &gt; 
+				(
+	 				SELECT nvl("MAX"(create_date),sysdate-1) "LAST_DATE"
+	 				FROM BS_MANAGE_CHECK RC 
+	 				WHERE RC.PRODUCT_ID = BS_MANAGE_STOCKIN.PID AND RC.LOCALCODE = #{localCode}
+	 			)
+				and localcode = #{localCode} AND state = '3' GROUP BY PID
+			) o ON o.pid = p."ID"
+		LEFT JOIN
+			(<!-- 调剂 -->
+				SELECT "SUM"(NUM) "OUT_NUM", PID FROM BS_MANAGE_STOCKIN WHERE "TYPE" = '1' AND INDATE &gt; 
+				(
+	 				SELECT nvl("MAX"(create_date),sysdate-1) "LAST_DATE"
+	 				FROM BS_MANAGE_CHECK RC 
+	 				WHERE RC.PRODUCT_ID = BS_MANAGE_STOCKIN.PID AND RC.LOCALCODE = #{localCode}
+	 			)
+				and localcode = #{localCode} AND state = '2' GROUP BY PID
+			) e ON e.pid = p."ID"
+		LEFT JOIN 
+			(<!-- 使用记录 -->
+		 		SELECT "SUM"(1) AS "USE_NUM", PRODUCTID FROM BS_CHILD_VACCINATERECORD WHERE VACCINATEDATE &gt; 
+		 			(
+		 				SELECT nvl("MAX"(create_date),sysdate-1) "LAST_DATE"
+		 				FROM BS_MANAGE_CHECK RC 
+		 				WHERE RC.PRODUCT_ID = BS_CHILD_VACCINATERECORD.PRODUCTID AND RC.LOCALCODE = #{localCode}
+		 			)
+		 		 and localcode = #{localCode} and STATUS = '1' and SOURCE &lt;&gt; '3' and SOURCE &lt;&gt; '4' GROUP BY PRODUCTID
+			) r ON r.PRODUCTID = p."ID"
+		order by p.vaccineid , p.batchno, p.create_date
+	</select>
+	
+</mapper>
